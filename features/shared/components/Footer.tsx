@@ -1,0 +1,90 @@
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import logo from "@/public/home-page/logo.svg";
+import { Mail, Phone } from "lucide-react";
+import Facebook from "@/public/home-page/fb.svg";
+import Twitter from "@/public/home-page/twitter.svg";
+import { MapPin } from "lucide-react";
+import LinkedIn from "@/public/home-page/linkedin.svg";
+
+const Footer = () => {
+  return (
+    <div className="mt-[100px] bg-[#1A1A1A]">
+      {/* Blue Section */}
+      <div className="border-b-[8px] border-[#3385FF]"></div>
+      {/* Footer Content */}
+      <div className="py-[60px] px-[40px] lg:px-[100px] w-full max-w-[1440px] mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-8 items-center justify-between">
+          {/* Logo Section */}
+          <div className="text-white">
+            <Link href="/">
+              <Image
+                src={logo}
+                alt="logo"
+                width={100}
+                height={100}
+                className="w-[80px] h-[80px]"
+              />
+            </Link>
+            <div className="space-y-2 mt-4">
+              <div className="flex items-center gap-4">
+                <Mail className="w-[20px] h-[20px]" />
+                <p className="text-[16px] font-normal">info@journal.com</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <Phone className="w-[20px] h-[20px]" />
+                <p className="text-[16px] font-normal">+123 456 7890</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <MapPin className="w-[20px] h-[20px]" />
+                <p className="text-[16px] font-normal">
+                  New York, United States
+                </p>
+              </div>
+            </div>
+          </div>
+          {/* Home Section */}
+          <div className="text-white capitalize space-y-2">
+            <h1 className="text-[24px] font-semibold">home</h1>
+            <p className="text-[16px] font-normal">why [Journal Name]?</p>
+            <p className="text-[16px] font-normal">issues</p>
+            <p className="text-[16px] font-normal">submit</p>
+            <p className="text-[16px] font-normal">call of paper</p>
+          </div>
+          {/* Other Section */}
+          <div className="text-white capitalize space-y-2">
+            <h1 className="text-[24px] font-semibold">other</h1>
+            <p className="text-[16px] font-normal">current issue</p>
+            <p className="text-[16px] font-normal">about us</p>
+            <p className="text-[16px] font-normal">contact us</p>
+          </div>
+          {/* Links Section */}
+          <div className="text-white capitalize space-y-2">
+            <h1 className="text-[24px] font-semibold">social profiles</h1>
+            <div className="flex items-center gap-4">
+              <div className="w-[40px] h-[40px] bg-[#F7F7F880] rounded-full flex items-center justify-center">
+                <Image src={Facebook} alt="facebook" />
+              </div>
+              <div className="w-[40px] h-[40px] bg-[#F7F7F880] rounded-full flex items-center justify-center">
+                <Image src={Twitter} alt="twitter" />
+              </div>
+              <div className="w-[40px] h-[40px] bg-[#F7F7F880] rounded-full flex items-center justify-center">
+                <Image src={LinkedIn} alt="linkedin" />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Copyright Section */}
+        <div className="space-y-[40px]">
+          <div className="border-b-[2px] border-[#F7F7F880] mt-[30px]"></div>
+          <p className="text-[14px] text-center font-normal text-white">
+            Copyright © 2025 [Journal Name]. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Footer;

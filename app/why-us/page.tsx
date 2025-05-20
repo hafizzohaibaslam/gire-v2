@@ -1,0 +1,38 @@
+import HeroSection from "@/features/shared/components/HeroSection";
+import Footer from "@/features/shared/components/Footer";
+import React from "react";
+import Research from "@/features/why-us/components/Research";
+import Benefits from "@/features/why-us/components/Benefits";
+import Benefits2 from "@/features/why-us/components/Benefits2";
+import ResearchInHighSchool from "@/features/why-us/components/ResearchInHighSchool";
+import ResearchCardsList from "@/features/why-us/components/ResearchCardsList";
+
+const WhyUsPage = () => {
+  return (
+    <div className="w-full">
+      <HeroSection.Root
+        backgroundImage="why-us-page/background-img.png"
+        className="pb-[200px] lg:pb-[400px]"
+      >
+        <HeroSection.Title>Why Us</HeroSection.Title>
+        <HeroSection.Description>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
+          ever since the 1500s, when an unknown printer took a galley of type
+          and scrambled it to make a type specimen book.
+        </HeroSection.Description>
+      </HeroSection.Root>
+
+      <div className="relative z-10">
+        <Research />
+      </div>
+      <Benefits />
+      <Benefits2 />
+      <ResearchInHighSchool />
+      <ResearchCardsList />
+      <Footer />
+    </div>
+  );
+};
+
+export default WhyUsPage;
