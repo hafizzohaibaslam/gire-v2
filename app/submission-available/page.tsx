@@ -17,10 +17,7 @@ const SubmissionAvailable = () => {
           findings.
         </HeroSection.Description>
       </HeroSection.Root>
-
-      <div className="relative z-10">
-        <SubmissionAvailableChecklist />
-      </div>
+      <SubmissionAvailableChecklist />
       <Footer />
     </>
   );

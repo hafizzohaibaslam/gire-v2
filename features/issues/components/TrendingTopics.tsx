@@ -34,6 +34,7 @@ const TrendingTopics = () => {
         {trendingTopics.map((topic) => (
           <TrendingTopicCard
             key={topic.id}
+            id={topic.id}
             image={topic.image}
             author={topic.author}
             date={topic.date}

@@ -1,27 +1,32 @@
 export const brands = [
   {
     id: 1,
-    name: "Brand 1",
-    image: "/home-page/waverio.svg",
+    name: "/home-page/waverio-text.svg",
+    Logo: "/home-page/waverio-logo.svg",
+    logoPosition: "left",
   },
   {
     id: 2,
-    name: "Brand 2",
-    image: "/home-page/square-stone.svg",
+    name: "/home-page/square-stone-text.svg",
+    Logo: "/home-page/square-stone-logo.svg",
+    logoPosition: "left",
   },
   {
     id: 3,
-    name: "Brand 3",
-    image: "/home-page/martino.svg",
+    name: "/home-page/martino-text.svg",
+    Logo: "/home-page/martino-logo.svg",
+    logoPosition: "right",
   },
   {
     id: 4,
-    name: "Brand 4",
-    image: "/home-page/virogan.svg",
+    name: "/home-page/virogan-text.svg",
+    Logo: "/home-page/virogan-logo.svg",
+    logoPosition: "left",
   },
   {
     id: 5,
-    name: "Brand 5",
-    image: "/home-page/vertex.svg",
+    name: "/home-page/vertex-text.svg",
+    Logo: "/home-page/vertex-logo.svg",
+    logoPosition: "left",
   },
 ];

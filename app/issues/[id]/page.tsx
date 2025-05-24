@@ -14,9 +14,7 @@ const OpenIssuesPage = () => {
           Enhancing Student Engagement through Gamified Learning Platforms.
         </HeroSection.Title>
       </HeroSection.Root>
-      <div className="relative z-10">
-        <IssueDetails />
-      </div>
+      <IssueDetails />
       <Footer />
     </>
   );

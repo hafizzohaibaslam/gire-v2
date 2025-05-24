@@ -19,8 +19,8 @@ const KeyFeatures = () => {
             text ever since the 1500s.
           </p>
         </div>
-        <button className="w-fit self-end flex items-center gap-2 text-[16px] lg:text-[18px] leading-[32px] font-medium text-[#3385FF] lg:px-[26px] lg:py-[21px] px-[16px] py-[12px] border-[1px] border-[#3385FF] rounded-[48px]">
-          view more about <ArrowRight className="w-[16px] h-[16px]" />
+        <button className="w-fit self-end flex items-center gap-2 text-[16px] leading-[100%] font-medium text-[#3385FF] lg:px-[26px] lg:py-[21px] px-[16px] py-[12px] border-[1px] border-[#3385FF] rounded-[48px]">
+          view more about <ArrowRight className="w-[17px] h-[17px]" />
         </button>
       </div>
       {/* Features Card Section */}

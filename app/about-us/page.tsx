@@ -17,9 +17,7 @@ const AboutUsPage = () => {
           and scrambled it to make a type specimen book.
         </HeroSection.Description>
       </HeroSection.Root>
-      <div className="relative z-10">
-        <ChiefEditor />
-      </div>
+      <ChiefEditor />
       <AdvisoryBoard />
       <EditorialTeam />
       <Footer />

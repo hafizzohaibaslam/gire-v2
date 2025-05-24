@@ -7,7 +7,7 @@ import Benefits2 from "@/features/why-us/components/Benefits2";
 import ResearchInHighSchool from "@/features/why-us/components/ResearchInHighSchool";
 import ResearchCardsList from "@/features/why-us/components/ResearchCardsList";
 
-const WhyUsPage = () => {
+const OurMissionPage = () => {
   return (
     <div className="w-full">
       <HeroSection.Root
@@ -22,10 +22,7 @@ const WhyUsPage = () => {
           and scrambled it to make a type specimen book.
         </HeroSection.Description>
       </HeroSection.Root>
-
-      <div className="relative z-10">
-        <Research />
-      </div>
+      <Research />
       <Benefits />
       <Benefits2 />
       <ResearchInHighSchool />
@@ -35,4 +32,4 @@ const WhyUsPage = () => {
   );
 };
 
-export default WhyUsPage;
+export default OurMissionPage;

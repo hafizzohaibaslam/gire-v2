@@ -14,7 +14,7 @@ const HeroSectionComponent = ({
   return (
     <div
       className={clsx(
-        "bg-cover bg-center bg-no-repeat brightness pb-[200px]",
+        "bg-cover bg-center bg-no-repeat bg-black/50 [background-blend-mode:darken] pb-[200px]",
         `bg-[url('/${backgroundImage}')]`,
         className
       )}

@@ -18,9 +18,7 @@ const SubmitPage = () => {
           instructions and detailed feedback to help you refine your work.
         </HeroSection.Description>
       </HeroSection.Root>
-      <div className="relative z-10">
-        <SubmitFeatures />
-      </div>
+      <SubmitFeatures />
       <Footer />
     </>
   );

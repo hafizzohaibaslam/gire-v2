@@ -31,8 +31,8 @@ const ChiefEditor = () => {
             <h1 className="capitalize text-[#5C6168] text-[20px] lg:text-[37px] font-bold leading-[100%]">
               daniel <br /> caesar
             </h1>
-            <div className="space-y-[8px]">
-              <div className="text-[#5C6168] text-[18px] font-normal leading-[100%] flex items-center gap-2">
+            <div className="w-full space-y-[8px]">
+              <div className="text-[#5C6168] text-[18px] font-normal leading-[100%] flex items-center gap-2 w-full">
                 <Image src={EmptyDiv} alt="Empty div" width={20} height={20} />
                 <p>Professor of Environmental Science</p>
               </div>
@@ -55,80 +55,90 @@ const ChiefEditor = () => {
         {/* Right Section */}
         <div className="w-full space-y-[40px]">
           {/* Profile Card */}
-          <div className="flex flex-col lg:flex-row mx-[45px] mt-[72px] lg:items-center gap-[40px]">
+          <div className="flex flex-col items-start lg:flex-row mt-[72px] lg:items-center gap-[40px]">
             <Image
               src={ChiefEditorImage}
               alt="Chief Editor"
               width={100}
               height={100}
-              className="rounded-full w-[200px] h-[200px]"
+              className="rounded-full w-[200px] h-[200px] lg:ml-[44px]"
             />
 
-            <div className="space-y-[8px]">
-              <div className="text-[#5C6168] text-[18px] font-normal leading-[100%] flex items-center gap-2">
+            <div className="w-full space-y-[8px]">
+              <div className="text-[#5C6168] text-[18px] font-normal leading-[100%] flex items-center gap-2 w-full">
                 <Image
                   src={Email}
                   alt="Email"
                   width={20}
                   height={20}
-                  className="w-[20px] h-[20px]"
+                  className="w-[20px] h-[20px] flex-shrink-0"
                 />
-                <p>hi.robyn.kingsley@gmail.com</p>
+                <p className="break-all">hi.robyn.kingsley@gmail.com</p>
               </div>
-              <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%]">
-                <Image src={Mobile} alt="Mobile" width={20} height={20} />
-                <p>+1 234 567 890</p>
+              <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%] w-full">
+                <Image
+                  src={Mobile}
+                  alt="Mobile"
+                  width={20}
+                  height={20}
+                  className="flex-shrink-0"
+                />
+                <p className="break-all">+1 234 567 890</p>
               </div>
-              <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%]">
-                <Image src={Linkedin} alt="Linkedin" width={20} height={20} />
-                <p>linkedin.com/in/danielcaesar</p>
+              <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%] w-full">
+                <Image
+                  src={Linkedin}
+                  alt="Linkedin"
+                  width={20}
+                  height={20}
+                  className="flex-shrink-0"
+                />
+                <p className="break-all">linkedin.com/in/danielcaesar</p>
               </div>
             </div>
           </div>
+
           {/* Biography */}
-          <div className="">
-            <div className="w-fit space-y-[20px]">
-              <h3 className="text-[#5C6168] text-[24px] font-bold leading-[100%] text-center">
-                Bio
-              </h3>
-              <div className="h-[3px] w-[200px] bg-[#5C6168]"></div>
-            </div>
-            <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] max-w-lg">
-              <p>
-                Daniel Caesar brings extensive experience in academic publishing
-                and education.
-              </p>
-              <p>
-                As a current professor at a top-tier university, he possesses a
-                deep understanding of the academic landscape and the challenges
-                faced by young researchers.
-              </p>
-              <p>
-                With a passion for nurturing talent, he leads our editorial team
-                in promoting high-quality research.
-              </p>
-            </div>
+          <div className="w-fit space-y-[20px]">
+            <h3 className="text-[#5C6168] text-[24px] font-bold leading-[100%] text-center">
+              Bio
+            </h3>
+            <div className="h-[3px] w-[200px] bg-[#5C6168]"></div>
           </div>
+          <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] max-w-lg">
+            <p>
+              Daniel Caesar brings extensive experience in academic publishing
+              and education.
+            </p>
+            <p>
+              As a current professor at a top-tier university, he possesses a
+              deep understanding of the academic landscape and the challenges
+              faced by young researchers.
+            </p>
+            <p>
+              With a passion for nurturing talent, he leads our editorial team
+              in promoting high-quality research.
+            </p>
+          </div>
+
           {/* Additional Information */}
-          <div className="">
-            <div className="w-fit space-y-[20px]">
-              <h3 className="text-[#5C6168] text-[24px] font-bold leading-[100%] text-center">
-                Additional Info
-              </h3>
-              <div className="h-[3px] w-[200px] bg-[#5C6168]"></div>
-            </div>
-            <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] max-w-lg">
-              <p>
-                Our Chief Editors are dedicated educators and scholars from
-                prestigious institutions, ensuring that our journal maintains
-                the highest academic standards. Their expertise not only
-                enhances the quality of the submissions we receive but also
-                provides invaluable mentorship to our authors, guiding them
-                through the publication process and fostering their development
-                as researchers.
-              </p>
-            </div>
+          <div className="w-fit space-y-[20px]">
+            <h3 className="text-[#5C6168] text-[24px] font-bold leading-[100%] text-center">
+              Additional Info
+            </h3>
+            <div className="h-[3px] w-[200px] bg-[#5C6168]"></div>
           </div>
+          <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] max-w-lg">
+            <p>
+              Our Chief Editors are dedicated educators and scholars from
+              prestigious institutions, ensuring that our journal maintains the
+              highest academic standards. Their expertise not only enhances the
+              quality of the submissions we receive but also provides invaluable
+              mentorship to our authors, guiding them through the publication
+              process and fostering their development as researchers.
+            </p>
+          </div>
+
           {/* Signature */}
           <div className="mx-[45px]">
             <p className="capitalize text-black text-[18px] lg:text-[22px] leading-[24px] lg:leading-[28px] font-semibold">

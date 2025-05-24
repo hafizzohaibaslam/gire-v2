@@ -3,6 +3,7 @@ import React from "react";
 import Button from "./Button";
 import { Download } from "lucide-react";
 import Tags from "@/features/shared/components/Tags";
+import Link from "next/link";
 
 type TrendingTopicCardProps = {
   image: string;
@@ -11,6 +12,7 @@ type TrendingTopicCardProps = {
   title: string;
   tags: string[];
   doi: string;
+  id: string;
 };
 
 const TrendingTopicCard = ({
@@ -20,6 +22,7 @@ const TrendingTopicCard = ({
   title,
   tags,
   doi,
+  id,
 }: TrendingTopicCardProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-[32px]">
@@ -53,8 +56,11 @@ const TrendingTopicCard = ({
         <p className="font-figtree my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
           {doi}
         </p>
-        <Button icon={<Download className="w-[18px] h-[18px]" />}>
-          Download PDF
+        <Button
+          className="!max-w-full w-full flex justify-center items-center"
+          icon={<Download className="w-[18px] h-[18px]" />}
+        >
+          <Link href={`/issues/${id}`}>Download PDF</Link>
         </Button>
       </div>
     </div>

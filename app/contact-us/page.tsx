@@ -14,9 +14,7 @@ const ContactUsPage = () => {
           process, or any other concerns.
         </HeroSection.Description>
       </HeroSection.Root>
-      <div className="relative z-10">
-        <CustomerService />
-      </div>
+      <CustomerService />
       <Footer />
     </>
   );

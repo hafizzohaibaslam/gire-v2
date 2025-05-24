@@ -7,6 +7,7 @@ import {
   Poppins,
 } from "next/font/google";
 import "./globals.css";
+import Providers from "@/features/shared/components/Providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,7 +54,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${beVietnamPro.variable} ${playfairDisplay.variable} ${figtree.variable} ${poppins.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

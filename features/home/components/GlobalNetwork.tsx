@@ -20,11 +20,11 @@ const GlobalNetwork = () => {
             </p>
           </div>
           {/* Cards */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 border-t-[4px] border-[#3385FF] shadow-lg max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-4 text-center border-t-[4px] border-[#3385FF] rounded-tl-lg rounded-tr-lg shadow-lg max-w-7xl mx-auto">
             {globalNetworks.map((network) => (
               <div
                 key={network.id}
-                className="flex flex-col items-center justify-center  border-[#E5EAF4] py-[48px] px-[31px] space-y-[16px]"
+                className="flex flex-col items-center justify-center py-[48px] px-[31px] space-y-[16px] lg:border-r-[1px] lg:border-[#E5EAF4]"
               >
                 <div className="flex items-center justify-center bg-[#3385FF] rounded-[100px] p-[10px]">
                   <Globe className="w-[20px] h-[20px] text-white" />

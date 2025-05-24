@@ -6,7 +6,7 @@ const WelcomeToJournal = () => {
       <div className="bg-[#3385FF] h-[20px]"></div>
       <div className="pt-[86px] pb-[100px] px-[40px] lg:px-[100px] w-full max-w-[1440px] mx-auto">
         <div className=" text-[#D9D9D9] space-y-[21px]">
-          <h2 className="font-playfair-display text-[25px] lg:text-[36px] leading-[100%] font-medium">
+          <h2 className="font-playfair-display text-[25px] lg:text-[36px] leading-[100%] font-bold">
             Welcome to [Journal Name]
           </h2>
           <p className="text-[16px] lg:text-[24px] leading-[20px] lg:leading-[32px] font-normal">

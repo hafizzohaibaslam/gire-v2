@@ -1,6 +1,6 @@
 export const trendingTopics = [
   {
-    id: 1,
+    id: "1",
     image: "/issues-page/card1.svg",
     author: "Dr. Emily Richards",
     date: "March 14, 2024",
@@ -9,7 +9,7 @@ export const trendingTopics = [
     doi: "10.5678/edu.tech.2024.0314",
   },
   {
-    id: 2,
+    id: "2",
     image: "/issues-page/card2.svg",
     author: "Dr. Emily Richards",
     date: "March 14, 2024",
@@ -23,7 +23,7 @@ export const trendingTopics = [
     doi: "10.5678/edu.tech.2024.0314",
   },
   {
-    id: 3,
+    id: "3",
     image: "/issues-page/card3.svg",
     author: "Dr. Emily Richards",
     date: "March 14, 2024",

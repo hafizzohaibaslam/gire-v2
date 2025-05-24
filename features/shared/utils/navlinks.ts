@@ -11,8 +11,8 @@ export const navlinks = [
   },
 
   {
-    label: "Why Us",
-    href: routes.whyUs,
+    label: "Our Mission",
+    href: routes.ourMission,
   },
   {
     label: "Issues",

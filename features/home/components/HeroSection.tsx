@@ -10,7 +10,7 @@ const HeroSection = () => {
   return (
     <div
       className={clsx(
-        "min-h-screen bg-[url('/home-page/hero-section.png')] bg-cover bg-center bg-no-repeat brightness"
+        "min-h-screen bg-[url('/home-page/hero-section.png')] bg-cover bg-black/70 bg-center bg-no-repeat [background-blend-mode:darken]"
       )}
     >
       {/* Header */}

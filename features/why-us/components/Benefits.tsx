@@ -48,7 +48,7 @@ const Benefits = () => {
               description={benefit.description}
               className={clsx(
                 "relative",
-                index === 1 ? "lg:left-[150px]" : "",
+                index === 1 ? "lg:left-[50px]" : "",
                 index === 2 ? "lg:left-[80px]" : ""
               )}
             />
