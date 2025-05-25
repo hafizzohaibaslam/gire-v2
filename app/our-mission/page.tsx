@@ -16,10 +16,9 @@ const OurMissionPage = () => {
       >
         <HeroSection.Title>Why Us</HeroSection.Title>
         <HeroSection.Description>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type
-          and scrambled it to make a type specimen book.
+          At [Journal Name], we believe high school students are capable of
+          serious academic inquiry. Our mission is to support their voices and
+          encourage meaningful engagement with research from an early stage.
         </HeroSection.Description>
       </HeroSection.Root>
       <Research />

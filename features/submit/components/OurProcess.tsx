@@ -31,20 +31,29 @@ const OurProcess = () => {
             Step {step.number}
           </TimelineOppositeContent>
           <TimelineSeparator>
-            <TimelineDot color="primary" />
+            <TimelineDot
+              sx={{
+                backgroundColor: step.color,
+              }}
+            />
             <TimelineConnector
               sx={{
                 width: "3px",
-                background: "linear-gradient(90deg, #3385FF, #C4DCFF)",
+                background: `linear-gradient(90deg, ${step.color}, ${step.color}33)`, // 20% opacity of step.color
               }}
             />
           </TimelineSeparator>
           <TimelineContent>
-            <div className="relative -top-[10px] flex flex-col lg:flex-row justify-start items-start gap-4">
+            <div className="relative -top-[10px] flex flex-col lg:flex-row justify-start items-start gap-2">
               {/* Circle */}
               <div className="relative w-12 h-12 mr-[10px]">
                 {/* Gradient ring with shadow */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-300 to-blue-600 shadow-lg flex items-center justify-center">
+                <div
+                  className="absolute inset-0 rounded-full shadow-lg flex items-center justify-center"
+                  style={{
+                    background: `linear-gradient(135deg, ${step.color}66, ${step.color})`,
+                  }}
+                >
                   {/* White inner circle */}
                   <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center relative z-10">
                     <span className="text-sm font-semibold text-gray-800">
@@ -53,7 +62,12 @@ const OurProcess = () => {
                   </div>
                 </div>
                 {/* Left notch diamond shape */}
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-3 h-3 bg-blue-400 rotate-45 shadow-md rounded-sm"></div>
+                <div
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-3 h-3 rotate-45 shadow-md rounded-sm"
+                  style={{
+                    background: `linear-gradient(135deg, ${step.color}66, ${step.color})`,
+                  }}
+                ></div>
               </div>
               {/* <div className="h-fit w-fit rounded-full bg-[#061C3D] p-4"></div> */}
               <div>
@@ -88,6 +102,7 @@ const steps = [
   {
     number: "01",
     title: "Preparation (Before You Submit)",
+    color: "#EF4444",
     sections: [
       {
         subtitle: "Read the Author Guidelines",
@@ -106,6 +121,7 @@ const steps = [
   {
     number: "02",
     title: "Submission",
+    color: "#F97316",
     sections: [
       {
         subtitle: "Online Submission Form",
@@ -124,6 +140,7 @@ const steps = [
   {
     number: "03",
     title: "Initial Editorial Screening (1–2 Weeks)",
+    color: "#EAB308",
     sections: [
       {
         subtitle: "Scope Check",
@@ -142,6 +159,7 @@ const steps = [
   {
     number: "04",
     title: "Peer Review (4–6 Weeks)",
+    color: "#22C55E",
     sections: [
       {
         subtitle: "Reviewer Assignment",
@@ -160,6 +178,7 @@ const steps = [
   {
     number: "05",
     title: "Revision (2–4 Weeks)",
+    color: "#14B8A6",
     sections: [
       {
         subtitle: "Editor Check",
@@ -178,6 +197,7 @@ const steps = [
   {
     number: "06",
     title: "Final Editorial Review & Copyediting (1–2 Weeks)",
+    color: "#6366F1",
     sections: [
       {
         subtitle: "Editor Check",
@@ -196,6 +216,7 @@ const steps = [
   {
     number: "07",
     title: "Publication",
+    color: "#A855F7",
     sections: [
       {
         subtitle: "Revise Thoroughly",

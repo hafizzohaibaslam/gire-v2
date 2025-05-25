@@ -34,7 +34,7 @@ const IssueDetails = () => {
         <h3 className="font-figtree text-[#232536] text-[24px] lg:text-[36px] leading-[100%] lg:leading-[48px] font-semibold">
           Abstract
         </h3>
-        <p className="font-figtree font-medium text-[#23253699] text-[16px] lg:text-[24px] leading-[100%]">
+        <p className="font-figtree font-medium text-[#23253699] text-[16px] lg:text-[24px] leading-[100%] text-center">
           This study explores the targeting efficiency of sialic acid-modified
           lipid nanoparticles...
         </p>
