@@ -29,7 +29,7 @@ const GlobalNetwork = () => {
                 <div className="flex items-center justify-center bg-[#3385FF] rounded-[100px] p-[10px]">
                   <Globe className="w-[20px] h-[20px] text-white" />
                 </div>
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-center gap-[7px]">
                   <h1 className="font-playfair-display text-[#183B56] text-[24px] lg:text-[36px] leading-[30px] lg:leading-[48px] tracking-[0.2px] font-bold">
                     {network.stats}
                   </h1>

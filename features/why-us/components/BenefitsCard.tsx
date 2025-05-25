@@ -17,7 +17,7 @@ const BenefitsCard = ({ title, description, className }: BenefitsCardProps) => {
         className
       )}
     >
-      <div className="self-center rounded-full p-[12px] bg-[#EFF5FF]">
+      <div className="self-start rounded-full p-[12px] bg-[#EFF5FF]">
         <Image
           src={verified}
           alt="Verified"

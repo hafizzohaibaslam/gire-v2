@@ -1,7 +1,6 @@
 import { ChevronsRight } from "lucide-react";
-import Image from "next/image";
 import React from "react";
-import ChartImg from "@/public/submit-page/chart.svg";
+import OurProcess from "./OurProcess";
 
 const ReviewProcess = () => {
   return (
@@ -61,13 +60,12 @@ const ReviewProcess = () => {
           </div>
         ))}
       </div>
-      {/* Chart */}
-      <div>
-        <Image
-          src={ChartImg}
-          alt="chart"
-          className="w-full h-full object-cover"
-        />
+      {/* Our Process */}
+      <div className="space-y-[50px]">
+        <h1 className="font-playfair-display font-semibold text-[24px] lg:text-[48px] leading-[24px] lg:leading-[46px] text-black">
+          Our Process
+        </h1>
+        <OurProcess />
       </div>
     </div>
   );
