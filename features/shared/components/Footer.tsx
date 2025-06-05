@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import logo from "@/public/home-page/logo.svg";
+import logo3 from "@/public/logo3.svg";
 import { Mail, Phone } from "lucide-react";
 import Facebook from "@/public/home-page/fb.svg";
 import Twitter from "@/public/home-page/twitter.svg";
@@ -20,7 +20,7 @@ const Footer = () => {
           <div className="text-white">
             <Link href="/">
               <Image
-                src={logo}
+                src={logo3}
                 alt="logo"
                 width={100}
                 height={100}
