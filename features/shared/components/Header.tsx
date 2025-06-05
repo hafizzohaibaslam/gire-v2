@@ -1,7 +1,9 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import logo from "@/public/home-page/logo.svg";
+// import logo from "@/public/logo.svg";
+// import logo2 from "@/public/logo2.png";
+import logo3 from "@/public/logo3.svg";
 import { navlinks } from "../utils/navlinks";
 import Link from "next/link";
 import clsx from "clsx";
@@ -14,7 +16,7 @@ const Header = () => {
     <div className="px-[40px] pt-[20px] lg:pl-[153px] lg:pr-[96px] lg:pt-[55px] w-full max-w-[1440px] mx-auto">
       <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between text-white">
         <Link href="/">
-          <Image src={logo} alt="logo" width={100} height={100} />
+          <Image src={logo3} alt="logo" width={100} height={100} />
         </Link>
         <ul className="hidden lg:flex items-center gap-10">
           {navlinks.map((link) => (
