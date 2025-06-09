@@ -11,7 +11,7 @@ export const navlinks = [
   },
 
   {
-    label: "Our Mission",
+    label: "Why [Journal Name]?",
     href: routes.ourMission,
   },
   {
