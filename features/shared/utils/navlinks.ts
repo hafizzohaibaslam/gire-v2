@@ -11,7 +11,7 @@ export const navlinks = [
   },
 
   {
-    label: "Why [Journal Name]?",
+    label: "Why JSSE",
     href: routes.ourMission,
   },
   {

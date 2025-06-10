@@ -47,7 +47,7 @@ const Footer = () => {
           {/* Home Section */}
           <div className="text-white capitalize space-y-2">
             <h1 className="text-[24px] font-semibold">home</h1>
-            <p className="text-[16px] font-normal">why [Journal Name]?</p>
+            <p className="text-[16px] font-normal">why JSSE</p>
             <p className="text-[16px] font-normal">issues</p>
             <p className="text-[16px] font-normal">submit</p>
             <p className="text-[16px] font-normal">call of paper</p>
