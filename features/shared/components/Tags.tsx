@@ -11,7 +11,7 @@ const Tags = ({ tag, className }: TagsProps) => {
     <button
       key={tag}
       className={clsx(
-        "font-figtree px-[12px] py-[9px] bg-[#3385FF] rounded-[8px] text-white text-[14px] leading-[20px] tracking-[3px] font-semibold",
+        "font-figtree px-[12px] py-[8px] bg-[#3385FF] rounded-[8px] text-white text-[16px] leading-[20px] font-semibold",
         className
       )}
     >

@@ -3,9 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { tabHeaders } from "../utils/tabHeaders";
-import AuthorGuidelines from "./AuthorGuidelines";
-import Templates from "./Templates";
-import ReviewProcess from "./ReviewProcess";
+import RenderComponent from "./RenderComponent";
 
 const SubmitFeatures = () => {
   const [activeTab, setActiveTab] = useState<string>("author-guidelines");
@@ -14,7 +12,7 @@ const SubmitFeatures = () => {
     <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] pt-[80px] max-w-[1440px] mx-auto">
       {/* Tabs */}
       <div>
-        <Tabs defaultValue={activeTab}>
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)}>
           <TabsList className="flex flex-col lg:flex-row gap-[15px] lg:items-center lg:justify-center">
             {tabHeaders.map((tab) => (
               <TabsTrigger
@@ -25,23 +23,14 @@ const SubmitFeatures = () => {
                   activeTab === tab.value &&
                     "bg-[#3385FF] border-[#3385FF] text-white"
                 )}
-                onClick={() => setActiveTab(tab.value)}
               >
                 {tab.label}
               </TabsTrigger>
             ))}
           </TabsList>
-          {/* Author Guidelines Content */}
-          <TabsContent value="author-guidelines" className="mt-[50px]">
-            <AuthorGuidelines />
-          </TabsContent>
-          {/* Templates Content */}
-          <TabsContent value="templates" className="mt-[50px]">
-            <Templates />
-          </TabsContent>
-          {/* Review Process Content */}
-          <TabsContent value="review-process" className="mt-[50px]">
-            <ReviewProcess />
+
+          <TabsContent value={activeTab} className="mt-[50px]">
+            <RenderComponent activeTab={activeTab} tabValues={tabHeaders} />
           </TabsContent>
         </Tabs>
       </div>

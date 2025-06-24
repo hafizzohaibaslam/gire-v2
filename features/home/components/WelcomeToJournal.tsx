@@ -4,8 +4,8 @@ const WelcomeToJournal = () => {
   return (
     <div className="bg-[#1E1E1E] w-full">
       <div className="bg-[#3385FF] h-[20px]"></div>
-      <div className="pt-[86px] pb-[100px] px-[40px] lg:px-[100px] w-full max-w-[1440px] mx-auto">
-        <div className=" text-[#D9D9D9] space-y-[21px]">
+      <div className="pt-[86px] pb-[100px]">
+        <div className=" text-[#D9D9D9] space-y-[21px] max-w-[1440px] mx-auto px-[20px] lg:px-[149px]">
           <h2 className="font-playfair-display text-[25px] lg:text-[36px] leading-[100%] font-bold">
             Welcome to [Journal Name]
           </h2>

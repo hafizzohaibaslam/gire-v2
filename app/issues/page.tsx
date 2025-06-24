@@ -15,6 +15,7 @@ const IssuesPage = () => {
           creativity and scholarly contributions of our young researchers.
         </HeroSection.Description>
         <button className="font-be-vietnam-pro flex items-center gap-2 text-[14px] leading-[100%] font-medium capitalize px-[20px] py-[14px] text-black rounded-[100px] cursor-pointer bg-white border-[1px] border-[#F1F1F340] hover:bg-black hover:text-white transition-all duration-300">
+          <Download className="w-[18px] h-[18px]" />
           download current issues <Download className="w-[18px] h-[18px]" />
         </button>
       </HeroSection.Root>

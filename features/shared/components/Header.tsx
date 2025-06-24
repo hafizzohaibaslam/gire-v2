@@ -14,7 +14,7 @@ const Header = () => {
   const { isOpen, setIsOpen } = useGlobalContext();
   return (
     <div className="px-[40px] pt-[20px] lg:pl-[153px] lg:pr-[96px] lg:pt-[55px] w-full max-w-[1440px] mx-auto">
-      <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between text-white">
+      <div className="flex flex-row gap-4 items-center justify-between text-white">
         <Link href="/">
           <Image src={logo3} alt="logo" width={100} height={100} />
         </Link>

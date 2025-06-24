@@ -10,9 +10,7 @@ const OpenIssuesPage = () => {
         backgroundImage="issues-open-page/background-img.png"
         className="pb-[300px]"
       >
-        <HeroSection.Title>
-          Enhancing Student Engagement through Gamified Learning Platforms.
-        </HeroSection.Title>
+        <HeroSection.Title>2025, Vol. 1, No. 1</HeroSection.Title>
       </HeroSection.Root>
       <IssueDetails />
       <Footer />
