@@ -424,7 +424,7 @@ const Header = () => {
                 "relative text-[16px] font-medium transition-all cursor-pointer duration-300 hover:scale-105 group"
               )}
             >
-              <Link href={link.href} className="hover:text-red-500">
+              <Link href={link.href} className="hover:text-[#3385FF]">
                 {link.label}
               </Link>
               <div
@@ -433,7 +433,7 @@ const Header = () => {
                   pathname === link.href && "bg-white"
                 )}
               >
-                <div className="h-full w-0 group-hover:bg-red-500 group-hover:w-full transition-all duration-1000 ease-in-out"></div>
+                <div className="h-full w-0 group-hover:bg-[#3385FF] group-hover:w-full transition-all duration-1000 ease-in-out"></div>
               </div>
             </li>
           ))}
@@ -441,7 +441,7 @@ const Header = () => {
         <div className="flex gap-4 items-center">
           <button
             className={clsx(
-              "capitalize inline-block w-fit border-[1px] border-[#aaa] px-[13px] py-[7px] rounded-[50px] cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-teal-800 hover:text-white"
+              "capitalize inline-block w-fit border-[1px] border-[#aaa] px-[13px] py-[7px] rounded-[50px] cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-[#3385FF] hover:text-white"
             )}
           >
             <Link
@@ -449,22 +449,10 @@ const Header = () => {
               className="flex items-center gap-[5px] text-[13px] font-normal leading-[16px]"
             >
               <LogIn className="w-[13px] h-[13px]" />
-              Login
+              Contact us
             </Link>
           </button>
-          <button
-            className={clsx(
-              "capitalize inline-block w-fit border-[1px] border-[#aaa] px-[13px] leading-[16px] py-[7px] rounded-[50px] font-normal cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-teal-800 hover:text-white"
-            )}
-          >
-            <Link
-              href="/contact-us"
-              className="flex items-center gap-[5px] text-[13px] font-normal leading-[16px]"
-            >
-              <UserRoundPlus className="w-[13px] h-[13px]" />
-              Join
-            </Link>
-          </button>
+
           <Menu
             className={clsx(
               "block lg:hidden w-[24px] h-[24px] cursor-pointer hover:scale-115 transition-all duration-300 ease-in-out group-hover/2:text-black",
