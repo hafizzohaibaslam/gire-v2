@@ -18,7 +18,7 @@ const HeroSection = () => {
       {/* Main Content */}
       <div
         className={clsx(
-          "flex flex-col items-start justify-start mt-[50px] pb-[50px] lg:mt-[94px] px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
+          "flex flex-col items-start justify-start pt-[150px] pb-[50px] px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
         )}
       >
         <h1 className="font-fairplay-display font-bold text-[30px] lg:text-[60px] capitalize leading-[100%] max-w-lg">

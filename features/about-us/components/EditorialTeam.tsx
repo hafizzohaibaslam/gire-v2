@@ -3,7 +3,7 @@ import EditorialTeamCard from "./EditorialTeamCard";
 
 const EditorialTeam = () => {
   return (
-    <div className="w-full px-[40px] lg:px-[100px] mt-[100px] ">
+    <div className="w-full max-w-[1440px] mx-auto px-[40px] lg:px-[100px] mt-[100px] ">
       {/* Introduction */}
       <div className="space-y-[16px] capitalize">
         <h1 className="font-playfair-display text-black text-[30px] text-center lg:text-[48px] leading-[38px] lg:leading-[46px] font-semibold -tracking-[1px]">

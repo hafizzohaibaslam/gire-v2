@@ -12,7 +12,7 @@ const MobileNavbar = () => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+    <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
       <X
         className="absolute top-4 right-4 h-[24px] w-[24px] text-black cursor-pointer hover:scale-115 transition-all duration-300 ease-in-out"
         onClick={() => setIsOpen(false)}
