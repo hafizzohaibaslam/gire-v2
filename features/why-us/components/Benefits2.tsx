@@ -1,7 +1,6 @@
 import { features } from "@/features/home/utils/features";
-import clsx from "clsx";
-import Image from "next/image";
 import React from "react";
+import FeaturesCard from "@/features/home/components/FeaturesCard";
 
 const Benefits2 = () => {
   return (
@@ -21,28 +20,7 @@ const Benefits2 = () => {
       {/* Benefits 2 */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-[50px] items-center justify-between">
         {features.map((feature) => (
-          <div key={feature.id} className="flex flex-col gap-[20px]">
-            <div
-              className={clsx(
-                "flex items-center justify-center rounded-full p-[12px] w-fit"
-              )}
-              style={{ backgroundColor: `#${feature.bgColor}` }}
-            >
-              <Image
-                src={feature.image}
-                alt={feature.title}
-                width={100}
-                height={100}
-                className="w-[24px] h-[24px]"
-              />
-            </div>
-            <h1 className="font-playfair-display capitalize text-black text-[24px] lg:text-[28px] leading-[20px] lg:leading-[28px] font-semibold">
-              {feature.title}
-            </h1>
-            <p className="text-[#52525B] text-[20px] leading-[20px] lg:leading-[28px] font-normal">
-              {feature.description}
-            </p>
-          </div>
+          <FeaturesCard key={feature.id} feature={feature} />
         ))}
       </div>
     </div>

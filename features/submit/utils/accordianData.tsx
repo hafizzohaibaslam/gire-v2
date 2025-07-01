@@ -1,16 +1,16 @@
-import GeneralFormattingRequirements from "../components/GeneralFormatting Requirements";
+import GeneralFormattingRequirements from "../components/GeneralFormattingRequirements";
 import ManuscriptStructureFormat from "../components/ManuscriptStructureFormat";
 import TablesFigures from "../components/TablesFigures";
 import References from "../components/References";
 import SubmissionChecklist from "../components/SubmissionChecklist";
 
-type AccordianData = {
+export type AccordianData = {
   id: string;
   question: string;
   content: React.ReactNode;
 };
 
-export const accordianData: AccordianData[] = [
+export const authorGuidelinesAccordianData: AccordianData[] = [
   {
     id: "general-formatting-requirements",
     question: "General Formatting Requirements",

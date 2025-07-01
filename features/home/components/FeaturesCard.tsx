@@ -2,7 +2,6 @@
 import clsx from "clsx";
 import Image from "next/image";
 import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { Feature } from "../utils/features";
 import FeaturesPopUp from "./FeaturesPopUp";
 
@@ -14,7 +13,10 @@ const FeaturesCard = ({ feature }: FeaturesCardProps) => {
   const [openPopUp, setOpenPopUp] = useState<boolean>(false);
   return (
     <>
-      <div className="flex flex-col gap-[20px]">
+      <div
+        className="flex flex-col gap-[20px] cursor-pointer hover:shadow-[0px_0px_10px_4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out rounded-[30px] p-[20px]"
+        onClick={() => setOpenPopUp(true)}
+      >
         <div
           className={clsx(
             "flex items-center justify-center rounded-full p-[12px] w-fit"
@@ -35,12 +37,6 @@ const FeaturesCard = ({ feature }: FeaturesCardProps) => {
         <p className="text-[#52525B] text-[20px] leading-[20px] lg:leading-[28px] font-normal">
           {feature.description}
         </p>
-        <button
-          onClick={() => setOpenPopUp(true)}
-          className="w-fit flex items-center gap-2 text-[16px] leading-[100%] font-medium text-[#3385FF] lg:px-[26px] lg:py-[21px] px-[16px] py-[12px] border-[1px] border-[#3385FF] rounded-[48px] hover:bg-[#3385FF] hover:text-white transition-all duration-300 cursor-pointer"
-        >
-          view <ArrowRight className="w-[17px] h-[17px]" />
-        </button>
       </div>
       {/* Pop uo */}
       <FeaturesPopUp
