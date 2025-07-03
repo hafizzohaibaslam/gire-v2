@@ -14,16 +14,22 @@ import {
 } from "@/components/ui/select";
 
 const TrendingTopics = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("2024");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredTopics = trendingTopics.filter((topic) => {
     if (selectedCategory === "All") {
-      return topic.date.includes(selectedYear);
+      return (
+        topic.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        topic.date.includes(selectedYear)
+      );
     }
 
     return (
-      topic.date.includes(selectedYear) && topic.tags.includes(selectedCategory)
+      topic.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      topic.date.includes(selectedYear) &&
+      topic.tags.includes(selectedCategory)
     );
   });
 
@@ -36,7 +42,9 @@ const TrendingTopics = () => {
           <input
             type="search"
             placeholder="Search"
-            className="ml-[20px] text-[#858C95] text-[15px] font-normal leading-[22px] outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="ml-[20px] text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full"
           />
         </div>
         <div className="flex items-center gap-2 mt-[20px]">
@@ -83,9 +91,15 @@ const TrendingTopics = () => {
 
       {/* Profile Section */}
       <div className="flex flex-col gap-[30px] lg:gap-[60px]">
-        {filteredTopics.map((topic) => (
-          <TrendingTopicCard {...topic} key={topic.id} />
-        ))}
+        {filteredTopics.length > 0 ? (
+          filteredTopics.map((topic) => (
+            <TrendingTopicCard {...topic} key={topic.id} />
+          ))
+        ) : (
+          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+            No topics found
+          </div>
+        )}
       </div>
     </div>
   );
