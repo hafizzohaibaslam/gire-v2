@@ -1,6 +1,4 @@
-import AdvisoryBoard from "@/features/about-us/components/AdvisoryBoard";
 import ChiefEditor from "@/features/about-us/components/ChiefEditor";
-import EditorialTeam from "@/features/about-us/components/EditorialTeam";
 import React from "react";
 import Footer from "@/features/shared/components/Footer";
 import HeroSection from "@/features/shared/components/HeroSection";
@@ -18,8 +16,6 @@ const AboutUsPage = () => {
         </HeroSection.Description>
       </HeroSection.Root>
       <ChiefEditor />
-      <AdvisoryBoard />
-      <EditorialTeam />
       <Footer />
     </>
   );

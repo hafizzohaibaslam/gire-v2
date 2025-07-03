@@ -1,15 +1,24 @@
 import { ChevronsRight } from "lucide-react";
 import React from "react";
 import OurProcess from "./OurProcess";
+import Image from "next/image";
+import Arrow from "@/public/submit-page/arrow.png";
 
 const ReviewProcess = () => {
   return (
-    <div className="space-y-[50px]">
+    <div>
       {/* Submission Process */}
-      <div className="flex items-center justify-center py-10">
-        <div className="flex rounded-full border border-gray-200 overflow-hidden shadow-sm">
+      <div className="flex items-center justify-center w-full">
+        <div className="flex rounded-full border border-gray-200 overflow-hidden shadow-sm w-full overflow-x-scroll">
           {/* Step 1 */}
-          <div className="flex items-center px-6 py-4 space-x-3">
+          <div className="flex items-center px-6 py-4 space-x-3 w-full relative">
+            <Image
+              src={Arrow}
+              alt="step-1"
+              width={20}
+              height={20}
+              className="absolute right-0"
+            />
             <div className="w-10 h-10 flex items-center justify-center border-2 border-blue-500 rounded-full text-blue-500 font-medium">
               01
             </div>
@@ -18,22 +27,23 @@ const ReviewProcess = () => {
             </span>
           </div>
 
-          {/* Chevron Separator */}
-          <div className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-l-[16px] border-l-white shadow-md -ml-[1px]"></div>
-
           {/* Step 2 */}
-          <div className="flex items-center px-6 py-4 space-x-3">
+          <div className="flex items-center px-6 py-4 space-x-3 w-full relative">
+            <Image
+              src={Arrow}
+              alt="step-1"
+              width={20}
+              height={20}
+              className="absolute right-0"
+            />
             <div className="w-10 h-10 flex items-center justify-center border-2 border-blue-500 rounded-full text-blue-500 font-medium">
               02
             </div>
             <span className="text-base font-medium text-gray-900">Review</span>
           </div>
 
-          {/* Chevron Separator */}
-          <div className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-l-[16px] border-l-white shadow-md -ml-[1px]"></div>
-
           {/* Step 3 */}
-          <div className="flex items-center px-6 py-4 space-x-3">
+          <div className="flex items-center px-6 py-4 space-x-3 w-full">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-blue-500 rounded-full text-blue-500 font-medium">
               03
             </div>
@@ -44,11 +54,11 @@ const ReviewProcess = () => {
         </div>
       </div>
       {/* Progress Steps */}
-      <div className="px-[20px] py-[16px] flex flex-row flex-wrap items-center border-[1px] border-[#00000012] rounded-full">
+      <div className="px-[16px] py-[12px] flex flex-row items-center border-[1px] border-[#00000012] rounded-full my-[50px] overflow-x-scroll">
         {ProgressStepsData.map((step, index) => (
           <div key={step.id} className="flex items-center">
-            <div className="px-[17px] py-[16px] text-center">
-              <h4 className="font-figtree font-semibold text-[14px] leading-[20px] text-[#0D0B26]">
+            <div className="px-[13px] py-[12px] text-center">
+              <h4 className="font-figtree font-semibold text-[12px] leading-[18px] text-[#0D0B26]">
                 {step.title}
               </h4>
             </div>

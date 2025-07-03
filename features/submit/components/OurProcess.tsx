@@ -18,80 +18,120 @@ const OurProcess = () => {
         },
       }}
     >
-      {steps.map((step, index) => (
-        <TimelineItem key={index}>
-          <TimelineOppositeContent
-            className="text-[#393939] font-bold text-[16px] uppercase"
-            // sx={{
-            //   fontSize: "16px",
-            //   fontWeight: "bold",
-            //   textAlign: "start",
-            // }}
-          >
-            Step {step.number}
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot
-              sx={{
-                backgroundColor: step.color,
-              }}
-            />
-            <TimelineConnector
-              sx={{
-                width: "3px",
-                background: `linear-gradient(90deg, ${step.color}, ${step.color}33)`, // 20% opacity of step.color
-              }}
-            />
-          </TimelineSeparator>
-          <TimelineContent>
-            <div className="relative -top-[10px] flex flex-col lg:flex-row justify-start items-start gap-2">
-              {/* Circle */}
-              <div className="relative w-12 h-12 mr-[10px]">
-                {/* Gradient ring with shadow */}
+      {steps.map((step, index) => {
+        // Find if this step is the first in a section group
+        const section = sectionGroups.find((s) => s.start === index);
+        // Calculate how many steps this section spans
+        const sectionSpan = section ? section.end - section.start + 1 : 0;
+        return (
+          <TimelineItem key={index} className="relative">
+            {/* Section label (only for first step in group) */}
+            {section && (
+              <div
+                className="hidden lg:flex flex-col items-center justify-start absolute -left-24"
+                style={{
+                  top: 0,
+                  height: `calc(${sectionSpan} * 140px)` /* adjust for your timeline item height */,
+                  minHeight: `${sectionSpan * 140}px`,
+                }}
+              >
                 <div
-                  className="absolute inset-0 rounded-full shadow-lg flex items-center justify-center"
+                  className="flex items-center justify-center rounded-full"
                   style={{
-                    background: `linear-gradient(135deg, ${step.color}66, ${step.color})`,
+                    background: section.color,
+                    color: section.textColor,
+                    height: `100%`,
+                    width: "40px",
+                    borderRadius: "20px",
                   }}
                 >
-                  {/* White inner circle */}
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center relative z-10">
-                    <span className="text-sm font-semibold text-gray-800">
-                      {step.number}
-                    </span>
-                  </div>
-                </div>
-                {/* Left notch diamond shape */}
-                <div
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-3 h-3 rotate-45 shadow-md rounded-sm"
-                  style={{
-                    background: `linear-gradient(135deg, ${step.color}66, ${step.color})`,
-                  }}
-                ></div>
-              </div>
-              {/* <div className="h-fit w-fit rounded-full bg-[#061C3D] p-4"></div> */}
-              <div>
-                <h1 className="font-playfair-display font-semibold text-[24px] mb-[25px]">
-                  {step.title}
-                </h1>
-                {step.sections.map((section, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 md:grid-cols-[1fr_2fr]"
+                  <span
+                    className="font-bold text-[16px] tracking-wider"
+                    style={{
+                      writingMode: "vertical-rl",
+                      textOrientation: "mixed",
+                      letterSpacing: "2px",
+                      color: section.textColor,
+                      userSelect: "none",
+                    }}
                   >
-                    <h3 className="font-figtree font-bold text-[16px] leading-[24px] text-[#061C3D]">
-                      {section.subtitle}
-                    </h3>
-                    <p className="font-figree font-normal text-[16px] leading-[24px] text-[#061C3D]">
-                      {section.text}
-                    </p>
-                  </div>
-                ))}
+                    {section.label}
+                  </span>
+                </div>
               </div>
-            </div>
-          </TimelineContent>
-        </TimelineItem>
-      ))}
+            )}
+            <TimelineOppositeContent className="text-[#393939] font-bold text-[16px] uppercase min-w-[90px]">
+              <span className="text-[#393939] font-bold text-[16px] uppercase min-w-[90px]">
+                Step 0{index + 1}
+              </span>
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineDot
+                sx={{
+                  backgroundColor: step.color,
+                  width: 16,
+                  height: 16,
+                  minWidth: 16,
+                  minHeight: 16,
+                  marginTop: "16px",
+                }}
+              />
+              <TimelineConnector
+                sx={{
+                  width: "3px",
+                  background: `linear-gradient(90deg, ${step.color}, ${step.color}33)`,
+                }}
+              />
+            </TimelineSeparator>
+            <TimelineContent>
+              <div className="relative flex flex-col lg:flex-row justify-start items-start gap-2">
+                {/* Step number circle (custom) */}
+                <div className="relative -top-[5px] w-12 h-12 mr-[10px]">
+                  {/* Gradient ring with shadow */}
+                  <div
+                    className="absolute inset-0 rounded-full shadow-lg flex items-center justify-center"
+                    style={{
+                      background: `linear-gradient(135deg, ${step.color}66, ${step.color})`,
+                    }}
+                  >
+                    {/* White inner circle */}
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center relative">
+                      <span className="text-sm font-semibold text-gray-800">
+                        {step.number}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Left notch diamond shape */}
+                  <div
+                    className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-3 h-3 rotate-45 shadow-md rounded-sm"
+                    style={{
+                      background: `linear-gradient(135deg, ${step.color}66, ${step.color})`,
+                    }}
+                  ></div>
+                </div>
+                <div>
+                  <h1 className="font-playfair-display font-semibold text-[24px] mb-[25px]">
+                    {step.title}
+                  </h1>
+                  {step.sections.map((section, index) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-1 md:grid-cols-[1fr_2fr]"
+                    >
+                      <h3 className="font-figtree font-bold text-[16px] leading-[24px] text-[#061C3D]">
+                        {section.subtitle}
+                      </h3>
+                      <p className="font-figree font-normal text-[16px] leading-[24px] text-[#061C3D]">
+                        {section.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TimelineContent>
+          </TimelineItem>
+        );
+      })}
     </Timeline>
   );
 };
@@ -102,7 +142,7 @@ const steps = [
   {
     number: "01",
     title: "Preparation (Before You Submit)",
-    color: "#EF4444",
+    color: "#FCD1D2",
     sections: [
       {
         subtitle: "Read the Author Guidelines",
@@ -121,7 +161,7 @@ const steps = [
   {
     number: "02",
     title: "Submission",
-    color: "#F97316",
+    color: "#FCD1D2",
     sections: [
       {
         subtitle: "Online Submission Form",
@@ -140,7 +180,7 @@ const steps = [
   {
     number: "03",
     title: "Initial Editorial Screening (1–2 Weeks)",
-    color: "#EAB308",
+    color: "#D8C79A",
     sections: [
       {
         subtitle: "Scope Check",
@@ -159,7 +199,7 @@ const steps = [
   {
     number: "04",
     title: "Peer Review (4–6 Weeks)",
-    color: "#22C55E",
+    color: "#D8C79A",
     sections: [
       {
         subtitle: "Reviewer Assignment",
@@ -178,7 +218,7 @@ const steps = [
   {
     number: "05",
     title: "Revision (2–4 Weeks)",
-    color: "#14B8A6",
+    color: "#D8C79A",
     sections: [
       {
         subtitle: "Editor Check",
@@ -197,7 +237,7 @@ const steps = [
   {
     number: "06",
     title: "Final Editorial Review & Copyediting (1–2 Weeks)",
-    color: "#6366F1",
+    color: "#D8C79A",
     sections: [
       {
         subtitle: "Editor Check",
@@ -216,7 +256,7 @@ const steps = [
   {
     number: "07",
     title: "Publication",
-    color: "#A855F7",
+    color: "#8DA8D1",
     sections: [
       {
         subtitle: "Revise Thoroughly",
@@ -231,5 +271,36 @@ const steps = [
         text: "Upload revised manuscript and response letter via the submission portal.",
       },
     ],
+  },
+];
+
+const sectionGroups = [
+  {
+    label: "Submission",
+    color: "#FCD1D2", // light red
+    textColor: "#945B5C",
+    start: 0,
+    end: 1,
+  },
+  {
+    label: "Review",
+    color: "#FFF3CC", // light yellow
+    textColor: "#94815B",
+    start: 2,
+    end: 3,
+  },
+  {
+    label: "Revision",
+    color: "#D9EAD3", // light teal
+    textColor: "#5B9476",
+    start: 4,
+    end: 5,
+  },
+  {
+    label: "Publication",
+    color: "#C9DBF8", // light purple
+    textColor: "#5B8294",
+    start: 6,
+    end: 6,
   },
 ];
