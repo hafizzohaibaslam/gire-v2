@@ -9,7 +9,7 @@ import {
 import Button from "@/features/issues/components/Button";
 import { Download, Minus, Plus } from "lucide-react";
 import React, { useState } from "react";
-import { accordianData } from "../utils/accordianData";
+import { authorGuidelinesAccordianData } from "../utils/accordianData";
 import clsx from "clsx";
 
 const AuthorGuidelines = () => {
@@ -24,7 +24,7 @@ const AuthorGuidelines = () => {
       <div className="space-y-[30px]">
         <div className="space-y-[25px]">
           <h1 className="font-playfair-display font-semibold text-[32px] lg:text-[48px] leading-[36px] lg:leading-[46px] -tracking-[1px]">
-            Guidelines
+            Author Guidelines
           </h1>
           <p className="text-normal text-[#52525B] text-[16px] leading-[24px] lg:text-[22px] lg:leading-[32px]">
             The submission process at [Journal Name] is designed to be clear and
@@ -38,12 +38,8 @@ const AuthorGuidelines = () => {
         </Button>
       </div>
       {/* Accordian */}
-      <Accordion
-        type="single"
-        collapsible
-        className="mt-[50px] w-full mx-auto max-w-2xl p-[38px]"
-      >
-        {accordianData.map((accordian) => {
+      <Accordion type="single" collapsible className="mt-[50px] w-full">
+        {authorGuidelinesAccordianData.map((accordian) => {
           return (
             <AccordionItem
               key={accordian.id}
@@ -75,7 +71,7 @@ const AuthorGuidelines = () => {
         })}
       </Accordion>
       {/* Ready to Submit */}
-      <div className="bg-[#3385FF] p-[40px] rounded-[16px] text-center space-y-[30px]">
+      <div className="bg-[#3385FF] p-[40px] rounded-[16px] text-center space-y-[30px] mt-[100px]">
         <div className="text-white space-y-[23px]">
           <h1 className="font-figtree font-semibold text-[24px] lg:text-[36px] leading-[32px] lg:leading-[48px] tracking-[0.2px]">
             Ready to Submit Your Work?

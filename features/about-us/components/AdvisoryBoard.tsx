@@ -3,7 +3,10 @@ import AdvisoryBoardCard from "./AdvisoryBoardCard";
 
 const AdvisoryBoard = () => {
   return (
-    <div className="max-w-[1440px] mx-auto px-[40px] lg:px-[100px]">
+    <div
+      id="advisory-board"
+      className="max-w-[1440px] mx-auto px-[40px] lg:px-[100px]"
+    >
       {/* Introduction */}
       <div className="space-y-[16px] capitalize">
         <h1 className="font-playfair-display text-black text-[30px] text-center lg:text-[48px] leading-[38px] lg:leading-[46px] font-semibold -tracking-[1px]">

@@ -5,6 +5,7 @@ import BenefitsImage from "@/public/why-us-page/benefits.png";
 import BenefitsCard from "./BenefitsCard";
 import { benefits } from "../utils/benefits";
 import clsx from "clsx";
+
 const Benefits = () => {
   return (
     <div className="bg-white">
