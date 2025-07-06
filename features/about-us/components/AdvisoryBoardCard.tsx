@@ -1,35 +1,57 @@
 import Image from "next/image";
 import React from "react";
-import UniversityLogo from "@/public/about-us-page/university.png";
+import EditBtn from "@/features/admin/components/EditBtn";
 
-const AdvisoryBoardCard = () => {
+export type AdvisoryBoardCardProps = {
+  id: number;
+  university: string;
+  professor: string;
+  position: string;
+  affiliation: string;
+  field: string;
+  image: string;
+  showEditButton?: boolean;
+  handleEdit?: () => void;
+};
+
+const AdvisoryBoardCard = ({
+  showEditButton = false,
+  university,
+  professor,
+  position,
+  affiliation,
+  field,
+  image,
+  handleEdit,
+}: AdvisoryBoardCardProps) => {
   return (
-    <div className="bg-[#E8EAEE] space-y-[40px] p-[16px] rounded-md">
+    <div className="relative bg-[#E8EAEE] space-y-[30px] p-[16px] rounded-md">
+      {showEditButton && handleEdit && <EditBtn handleEdit={handleEdit} />}
       <div className="flex justify-center">
         <Image
-          src={UniversityLogo}
+          src={image}
           alt="University Logo"
           width={100}
           height={100}
-          className="w-[200px] h-[200px]"
+          className="w-[180px] h-[175px]"
         />
       </div>
       <div className="bg-white space-y-[10px] p-[20px] capitalize rounded-[12px]">
         <h2 className="text-[#19191B] text-[18px] font-semibold leading-[28px]">
-          harvard university
+          {university}
         </h2>
         <h4 className="text-[#19191B] text-[14px] font-semibold leading-[100%]">
-          dr. alice anderson
+          {professor}
         </h4>
         <div className="flex flex-col gap-[10px] space-y-[5px]">
           <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
-            <b>position: </b> associate professor
+            <b>position: </b> {position}
           </p>
           <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
-            <b>affiliation: </b> harvard university
+            <b>affiliation: </b> {affiliation}
           </p>
           <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
-            <b>field: </b> artificial intelligence
+            <b>field: </b> {field}
           </p>
         </div>
       </div>

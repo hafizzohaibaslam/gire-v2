@@ -1,5 +1,6 @@
 import React from "react";
 import AdvisoryBoardCard from "./AdvisoryBoardCard";
+import { advisoryBoardData } from "@/features/shared/utils/advisoryBoardData";
 
 const AdvisoryBoard = () => {
   return (
@@ -20,8 +21,8 @@ const AdvisoryBoard = () => {
       </div>
       {/* Advisory Board Members */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] mt-[60px]">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <AdvisoryBoardCard key={index} />
+        {advisoryBoardData.map((board, index) => (
+          <AdvisoryBoardCard key={index} {...board} />
         ))}
       </div>
     </div>
