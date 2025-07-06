@@ -1,11 +1,14 @@
 "use client";
 import Button from "@/features/shared/components/Button";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import React from "react";
 
 const AdminSigninPage = () => {
+  const router = useRouter();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    router.push("/admin/chief-editor");
   };
 
   return (
