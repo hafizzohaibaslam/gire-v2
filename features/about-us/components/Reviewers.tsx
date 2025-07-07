@@ -1,5 +1,6 @@
 import React from "react";
 import EditorialTeamCard from "./ReviewersCard";
+import { editorialTeamData } from "@/features/shared/utils/editorialTeamData";
 
 const EditorialTeam = () => {
   return (
@@ -20,8 +21,14 @@ const EditorialTeam = () => {
       </div>
       {/* Editorial Team Members */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] mt-[60px]">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <EditorialTeamCard key={index} />
+        {editorialTeamData.map((team, index) => (
+          <EditorialTeamCard
+            key={index}
+            image={team.image}
+            name={team.name}
+            department={team.department}
+            position={team.position}
+          />
         ))}
       </div>
     </div>

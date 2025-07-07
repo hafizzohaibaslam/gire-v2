@@ -2,7 +2,11 @@
 import { Search } from "lucide-react";
 import React, { useState } from "react";
 import TrendingTopicCard from "./TrendingTopicCard";
-import { trendingTopics } from "../utils/trendingTopics";
+import {
+  categoriesList,
+  trendingTopics,
+  yearsList,
+} from "../utils/trendingTopics";
 import {
   Select,
   SelectContent,
@@ -12,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 
 const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -93,7 +98,9 @@ const TrendingTopics = () => {
       <div className="flex flex-col gap-[30px] lg:gap-[60px]">
         {filteredTopics.length > 0 ? (
           filteredTopics.map((topic) => (
-            <TrendingTopicCard {...topic} key={topic.id} />
+            <Link href={`/issues/${topic.id}`} key={topic.id}>
+              <TrendingTopicCard {...topic} />
+            </Link>
           ))
         ) : (
           <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
@@ -106,23 +113,3 @@ const TrendingTopics = () => {
 };
 
 export default TrendingTopics;
-
-const yearsList = [
-  "2025",
-  "2024",
-  "2023",
-  "2022",
-  "2021",
-  "2020",
-  "2019",
-  "2018",
-  "2017",
-];
-
-const categoriesList = [
-  "All",
-  "Biotechnology & Genetics",
-  "Mobile Learning",
-  "E-Learning UX",
-  "EdTech Usability",
-];
