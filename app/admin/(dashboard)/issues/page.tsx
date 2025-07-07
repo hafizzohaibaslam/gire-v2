@@ -3,23 +3,23 @@ import { Editor } from "@tinymce/tinymce-react";
 import Button from "@/features/shared/components/Button";
 import React, { useState, useRef } from "react";
 import { trendingTopics } from "@/features/issues/utils/trendingTopics";
-import TrendingTopicCard, {
-  TrendingTopicCardProps,
-} from "@/features/issues/components/TrendingTopicCard";
+import TrendingTopicCard from "@/features/issues/components/TrendingTopicCard";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
 import { MultiSelect } from "@/features/admin/components/MultiSelect";
 import { categoriesList } from "@/features/issues/utils/trendingTopics";
+import { TrendingTopic } from "@/features/admin/lib/types";
 
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
-  const [selectedIssue, setSelectedIssue] =
-    useState<TrendingTopicCardProps | null>(null);
+  const [selectedIssue, setSelectedIssue] = useState<TrendingTopic | null>(
+    null
+  );
   const [imageUpload, setImageUpload] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const handleEdit = (issue: TrendingTopicCardProps) => {
+  const handleEdit = (issue: TrendingTopic) => {
     setSelectedIssue(issue);
   };
 
@@ -28,7 +28,6 @@ const AdminIssuesPage = () => {
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData);
     data.image = imageUpload;
-    console.log(data);
     setSelectedIssue(null);
     setImageUpload("");
   };
@@ -41,10 +40,10 @@ const AdminIssuesPage = () => {
       >
         <div className="flex justify-between items-center gap-4">
           <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
-            Edit Issue
+            {selectedIssue.id ? "Edit Issue" : "Add New Issue"}
           </h1>
           <Button type="submit" className="max-w-[150px]">
-            Update
+            {selectedIssue.id ? "Update" : "Add"}
           </Button>
         </div>
         <div className="lg:max-w-[80%] space-y-[50px]">
@@ -153,14 +152,29 @@ const AdminIssuesPage = () => {
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Issues
         </h1>
-        <Button className="max-w-[150px]">Add new</Button>
+        <Button
+          className="max-w-[150px]"
+          onClick={() => {
+            setSelectedIssue({
+              id: "",
+              image: "/issues-page/card1.svg",
+              author: "",
+              date: "",
+              title: "",
+              tags: [],
+              doi: "",
+            });
+          }}
+        >
+          Add new
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-x-[30px] gap-y-[16px] max-h-[72vh] overflow-y-auto">
         {trendingTopics.map((topic, index) => (
           <TrendingTopicCard
             key={index}
-            {...topic}
+            topic={topic}
             showEditButton={true}
             handleEdit={() => handleEdit(topic)}
           />

@@ -1,32 +1,25 @@
 import Image from "next/image";
 import React from "react";
 import EditBtn from "@/features/admin/components/EditBtn";
+import { Reviewer } from "@/features/admin/lib/types";
 
 export type EditorialTeamCardProps = {
-  image: string;
-  name: string;
-  department: string;
-  position: string;
-  showEditButton?: boolean;
+  reviewer: Reviewer;
   handleEdit?: () => void;
 };
 
 const EditorialTeamCard = ({
-  image,
-  name,
-  department,
-  position,
-  showEditButton,
+  reviewer,
   handleEdit = () => {},
 }: EditorialTeamCardProps) => {
   return (
     <div className="relative flex flex-col sm:flex-row sm:items-center border-2 border-[#E8EAEE] rounded-[12px]">
-      {showEditButton && (
+      {handleEdit && (
         <EditBtn handleEdit={handleEdit} className="absolute top-2 right-2" />
       )}
       <div className="overflow-hidden">
         <Image
-          src={image}
+          src={reviewer.image}
           alt="Editorial Team"
           width={100}
           height={208}
@@ -35,13 +28,13 @@ const EditorialTeamCard = ({
       </div>
       <div className="px-[20px] sm:px-[32px] py-[12px] capitalize space-y-[16px]">
         <h2 className="text-[#19191B] text-[18px] leading-[28px] font-bold">
-          {name}
+          {reviewer.name}
         </h2>
         <p className="text-[#787A82] text-[14px] font-normal leading-[20px]">
-          {department}
+          {reviewer.department}
         </p>
         <p className="text-[#787A82] text-[14px] leading-[20px] font-semibold">
-          {position}
+          {reviewer.position}
         </p>
       </div>
     </div>

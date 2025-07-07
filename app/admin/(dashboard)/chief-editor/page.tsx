@@ -122,7 +122,7 @@ const AdminChiefEditorPage = () => {
                 </div>
 
                 <Button type="submit" className="self-end max-w-[200px]">
-                  Update
+                  {activeTab === "chief-editor" ? "Update" : "Add"}
                 </Button>
               </div>
             </Form>

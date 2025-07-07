@@ -1,6 +1,6 @@
 export const advisoryBoardData = [
   {
-    id: 1,
+    id: "1",
     university: "Harvard University",
     professor: "Dr. Alice Anderson",
     position: "Associate Professor",
@@ -9,7 +9,7 @@ export const advisoryBoardData = [
     image: "/about-us-page/university.png",
   },
   {
-    id: 2,
+    id: "2",
     university: "London University",
     professor: "Dr. John Doe",
     position: "Professor",
@@ -18,7 +18,7 @@ export const advisoryBoardData = [
     image: "/about-us-page/university.png",
   },
   {
-    id: 3,
+    id: "3",
     university: "Oxford University",
     professor: "Dr. Jane Doe",
     position: "Professor",
@@ -27,7 +27,7 @@ export const advisoryBoardData = [
     image: "/about-us-page/university.png",
   },
   {
-    id: 4,
+    id: "4",
     university: "Cambridge University",
     professor: "Dr. John Doe",
     position: "Professor",
@@ -36,7 +36,7 @@ export const advisoryBoardData = [
     image: "/about-us-page/university.png",
   },
   {
-    id: 5,
+    id: "5",
     university: "Stanford University",
     professor: "Dr. Jane Doe",
     position: "Professor",
@@ -45,7 +45,7 @@ export const advisoryBoardData = [
     image: "/about-us-page/university.png",
   },
   {
-    id: 6,
+    id: "6",
     university: "MIT",
     professor: "Dr. Jane Doe",
     position: "Professor",

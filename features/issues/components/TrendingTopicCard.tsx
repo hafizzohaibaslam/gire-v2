@@ -5,26 +5,16 @@ import { Download } from "lucide-react";
 import Tags from "@/features/shared/components/Tags";
 import EditBtn from "@/features/admin/components/EditBtn";
 import { cn } from "@/lib/utils";
+import { TrendingTopic } from "@/features/admin/lib/types";
 
 export type TrendingTopicCardProps = {
-  image: string;
-  author: string;
-  date: string;
-  title: string;
-  tags: string[];
-  doi: string;
-  id: string;
+  topic: TrendingTopic;
   showEditButton?: boolean;
   handleEdit?: () => void;
 };
 
 const TrendingTopicCard = ({
-  image,
-  author,
-  date,
-  title,
-  tags,
-  doi,
+  topic,
   showEditButton = false,
   handleEdit = () => {},
 }: TrendingTopicCardProps) => {
@@ -38,7 +28,7 @@ const TrendingTopicCard = ({
       >
         {/* LEFT SIDE */}
         <Image
-          src={image}
+          src={topic.image}
           alt="card1"
           width={100}
           height={100}
@@ -48,11 +38,11 @@ const TrendingTopicCard = ({
         <div>
           <div className="flex flex-col lg:flex-row gap-[10px] lg:justify-between lg:items-center">
             <p className="font-figtree text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[3px] font-semibold">
-              {author}
+              {topic.author}
             </p>
             <div className="flex items-center gap-[10px]">
               <p className="mr-4 font-figtree text-[#6D6E76] text-[16px] leading-[28px] font-normal">
-                {date}
+                {topic.date}
               </p>
               {showEditButton && (
                 <EditBtn handleEdit={handleEdit} className="static" />
@@ -60,16 +50,16 @@ const TrendingTopicCard = ({
             </div>
           </div>
           <h1 className="font-figtree my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
-            {title}
+            {topic.title}
           </h1>
           {/* Tags */}
           <div className="flex flex-wrap gap-[10px]">
-            {tags.map((tag) => (
+            {topic.tags.map((tag) => (
               <Tags key={tag} tag={tag} />
             ))}
           </div>
           <p className="font-figtree my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
-            {doi}
+            {topic.doi}
           </p>
           <Button
             className="!max-w-full w-full flex justify-center items-center"

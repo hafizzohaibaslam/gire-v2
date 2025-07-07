@@ -1,8 +1,6 @@
 "use client";
 
-import EditorialTeamCard, {
-  EditorialTeamCardProps,
-} from "@/features/about-us/components/ReviewersCard";
+import EditorialTeamCard from "@/features/about-us/components/ReviewersCard";
 import EditModal from "@/features/admin/components/EditModal";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import Form from "@/features/admin/components/Form";
@@ -11,36 +9,49 @@ import Label from "@/features/admin/components/Label";
 import Button from "@/features/shared/components/Button";
 import { editorialTeamData } from "@/features/shared/utils/editorialTeamData";
 import React, { useState } from "react";
+import { Reviewer } from "@/features/admin/lib/types";
 
 const AdminReviewersPage = () => {
-  const [reviewers, setReviewers] =
-    useState<EditorialTeamCardProps[]>(editorialTeamData);
-  const [selectedReviewer, setSelectedReviewer] =
-    useState<EditorialTeamCardProps | null>(null);
+  const [reviewers, setReviewers] = useState<Reviewer[]>(editorialTeamData);
+  const [selectedReviewer, setSelectedReviewer] = useState<Reviewer | null>(
+    null
+  );
   const [imageUpload, setImageUpload] = useState<string>("");
 
-  const handleEdit = (reviewer: EditorialTeamCardProps) => {
+  const handleEdit = (reviewer: Reviewer) => {
     setSelectedReviewer(reviewer);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const isEditing = selectedReviewer?.id !== "";
     const formData = new FormData(e.target as HTMLFormElement);
-    const rawData = Object.fromEntries(formData);
-    rawData.image = imageUpload || "";
+    formData.append("image", imageUpload || "");
+    const rawData = Object.fromEntries(formData) as Reviewer;
 
-    setReviewers((prev) => {
-      const updatedReviewers = prev.map((reviewer) =>
-        reviewer.name === selectedReviewer?.name
-          ? {
-              ...reviewer,
-              ...rawData,
-              image: imageUpload || "/about-us-page/university.png",
-            }
-          : reviewer
-      );
-      return updatedReviewers;
-    });
+    if (isEditing) {
+      setReviewers((prev) => {
+        const updatedReviewers = prev.map((reviewer) =>
+          reviewer.id === selectedReviewer?.id
+            ? {
+                ...reviewer,
+                ...rawData,
+                image: imageUpload || "/about-us-page/university.png",
+              }
+            : reviewer
+        );
+        return updatedReviewers;
+      });
+    } else {
+      setReviewers((prev) => [
+        ...prev,
+        {
+          ...rawData,
+          id: (prev.length + 1).toString(),
+          image: imageUpload || "/about-us-page/university.png",
+        },
+      ]);
+    }
     setSelectedReviewer(null);
   };
 
@@ -50,15 +61,27 @@ const AdminReviewersPage = () => {
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Reviewers
         </h1>
-        <Button className="max-w-[150px]">Add New</Button>
+        <Button
+          className="max-w-[150px]"
+          onClick={() =>
+            setSelectedReviewer({
+              id: "",
+              name: "",
+              image: "/about-us-page/person1.png",
+              department: "",
+              position: "",
+            })
+          }
+        >
+          Add New
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[30px] gap-y-[16px]">
         {reviewers.map((reviewer, index) => (
           <EditorialTeamCard
             key={index}
-            {...reviewer}
-            showEditButton={true}
+            reviewer={reviewer}
             handleEdit={() => handleEdit(reviewer)}
           />
         ))}
@@ -88,8 +111,8 @@ const AdminReviewersPage = () => {
                     <Label htmlFor="fullName">Full Name</Label>
                     <InputField
                       type="text"
-                      id="fullName"
-                      name="fullName"
+                      id="name"
+                      name="name"
                       placeholder="Enter Full Name"
                       defaultValue={selectedReviewer?.name}
                       className="text-black placeholder:text-black"
@@ -113,8 +136,8 @@ const AdminReviewersPage = () => {
                   <Label htmlFor="editorialRole">Editorial Role</Label>
                   <InputField
                     type="text"
-                    id="editorialRole"
-                    name="editorialRole"
+                    id="position"
+                    name="position"
                     placeholder="Enter Editorial Role"
                     defaultValue={selectedReviewer?.position}
                     className="text-black placeholder:text-black"
@@ -122,7 +145,7 @@ const AdminReviewersPage = () => {
                 </div>
               </div>
               <Button type="submit" className="self-end max-w-[200px]">
-                Update
+                {selectedReviewer?.id ? "Update" : "Add"}
               </Button>
             </div>
           </Form>

@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import AdvisoryBoardCard, {
-  AdvisoryBoardCardProps,
-} from "@/features/about-us/components/AdvisoryBoardCard";
+import AdvisoryBoardCard from "@/features/about-us/components/AdvisoryBoardCard";
 import { advisoryBoardData } from "@/features/shared/utils/advisoryBoardData";
 import Form from "@/features/admin/components/Form";
 import InputField from "@/features/admin/components/InputField";
@@ -10,51 +8,81 @@ import Label from "@/features/admin/components/Label";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import Button from "@/features/shared/components/Button";
 import EditModal from "@/features/admin/components/EditModal";
+import { AdvisoryBoard } from "@/features/admin/lib/types";
 
 const AdminAdvisoryBoard = () => {
   const [advisoryBoards, setAdvisoryBoards] =
-    useState<AdvisoryBoardCardProps[]>(advisoryBoardData);
+    useState<AdvisoryBoard[]>(advisoryBoardData);
   const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
-    useState<AdvisoryBoardCardProps | null>(null);
+    useState<AdvisoryBoard | null>(null);
   const [imageUpload, setImageUpload] = useState<string | null>(null);
 
-  const handleEdit = (board: AdvisoryBoardCardProps) => {
+  const handleEdit = (board: AdvisoryBoard) => {
     setSelectedAdvisoryBoard(board);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const isEditing = selectedAdvisoryBoard?.id !== "";
     const formData = new FormData(e.target as HTMLFormElement);
-    const rawData = Object.fromEntries(formData);
-    rawData.image = imageUpload || "";
+    formData.append("image", imageUpload || "");
+    const rawData = Object.fromEntries(formData) as unknown as AdvisoryBoard;
 
-    setAdvisoryBoards((prev) => {
-      const updatedBoards = prev.map((board) =>
-        board.id === selectedAdvisoryBoard?.id
-          ? {
-              ...board,
-              ...rawData,
-              image: imageUpload || "/about-us-page/university.png",
-            }
-          : board
-      );
-      return updatedBoards;
-    });
+    if (isEditing) {
+      setAdvisoryBoards((prev) => {
+        const updatedBoards = prev.map((board) =>
+          board.id === selectedAdvisoryBoard?.id
+            ? {
+                ...board,
+                ...rawData,
+                image: imageUpload || "/about-us-page/university.png",
+              }
+            : board
+        );
+        return updatedBoards;
+      });
+    } else {
+      setAdvisoryBoards((prev) => [
+        ...prev,
+        {
+          ...rawData,
+          id: (prev.length + 1).toString(),
+          image: imageUpload || "/about-us-page/university.png",
+        },
+      ]);
+    }
     setSelectedAdvisoryBoard(null);
   };
 
   return (
     <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[37px] rounded-[25px]">
-      <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
-        Advisory Board
-      </h1>
+      <div className="flex justify-between items-center gap-4">
+        <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
+          Advisory Board
+        </h1>
+        <Button
+          className="max-w-[150px]"
+          onClick={() =>
+            setSelectedAdvisoryBoard({
+              id: "",
+              university: "",
+              professor: "",
+              position: "",
+              affiliation: "",
+              field: "",
+              image: "/about-us-page/university.png",
+            })
+          }
+        >
+          Add New
+        </Button>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px]">
-        {advisoryBoards.map((board, index) => (
+        {advisoryBoards.map((board) => (
           <AdvisoryBoardCard
-            key={index}
-            showEditButton={true}
-            {...board}
+            key={board.id}
+            board={board}
             handleEdit={() => handleEdit(board)}
           />
         ))}
@@ -140,7 +168,7 @@ const AdminAdvisoryBoard = () => {
                 </div>
               </div>
               <Button type="submit" className="self-end max-w-[200px]">
-                Update
+                {selectedAdvisoryBoard?.id ? "Update" : "Add"}
               </Button>
             </div>
           </Form>
