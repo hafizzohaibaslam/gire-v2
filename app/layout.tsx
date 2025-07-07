@@ -53,7 +53,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* favicon */}
-        <link rel="icon" href="/logo3.svg" />
+        <link rel="icon" href="/logo.svg" />
       </head>
       <body
         className={`${inter.variable} ${beVietnamPro.variable} ${playfairDisplay.variable} ${figtree.variable} ${poppins.variable} antialiased`}

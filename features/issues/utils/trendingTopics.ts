@@ -32,3 +32,23 @@ export const trendingTopics = [
     doi: "10.5678/edu.tech.2024.0314",
   },
 ];
+
+export const yearsList = [
+  "2025",
+  "2024",
+  "2023",
+  "2022",
+  "2021",
+  "2020",
+  "2019",
+  "2018",
+  "2017",
+];
+
+export const categoriesList = [
+  "All",
+  "Biotechnology & Genetics",
+  "Mobile Learning",
+  "E-Learning UX",
+  "EdTech Usability",
+];
