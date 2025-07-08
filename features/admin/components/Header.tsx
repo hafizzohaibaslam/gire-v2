@@ -10,6 +10,7 @@ const AdminHeader = () => {
   const [isOffCanvasSidebarOpen, setIsOffCanvasSidebarOpen] = useState(false);
 
   const renderOffCanvasSidebar = () => {
+    if (typeof window === "undefined") return null;
     return createPortal(
       <div
         className={`fixed top-0 bottom-0 left-0 z-50 w-[300px] bg-white border-r-[1px] border-[#E0E0E0] transition-all duration-300 ease-in-out ${cn(
