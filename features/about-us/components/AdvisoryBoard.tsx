@@ -21,8 +21,8 @@ const AdvisoryBoard = () => {
       </div>
       {/* Advisory Board Members */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] mt-[60px]">
-        {advisoryBoardData.map((board, index) => (
-          <AdvisoryBoardCard key={index} {...board} />
+        {advisoryBoardData.map((board) => (
+          <AdvisoryBoardCard key={board.id} board={board} />
         ))}
       </div>
     </div>

@@ -21,14 +21,8 @@ const EditorialTeam = () => {
       </div>
       {/* Editorial Team Members */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] mt-[60px]">
-        {editorialTeamData.map((team, index) => (
-          <EditorialTeamCard
-            key={index}
-            image={team.image}
-            name={team.name}
-            department={team.department}
-            position={team.position}
-          />
+        {editorialTeamData.map((team) => (
+          <EditorialTeamCard key={team.id} reviewer={team} />
         ))}
       </div>
     </div>

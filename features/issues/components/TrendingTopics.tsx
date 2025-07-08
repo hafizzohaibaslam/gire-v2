@@ -99,7 +99,7 @@ const TrendingTopics = () => {
         {filteredTopics.length > 0 ? (
           filteredTopics.map((topic) => (
             <Link href={`/issues/${topic.id}`} key={topic.id}>
-              <TrendingTopicCard {...topic} />
+              <TrendingTopicCard topic={topic} />
             </Link>
           ))
         ) : (
