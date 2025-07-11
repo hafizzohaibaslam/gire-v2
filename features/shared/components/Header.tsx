@@ -8,7 +8,7 @@ import { useGlobalContext } from "../providers/GlobalProvider";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import Logo from "@/public/logo.svg";
+import Logo2 from "@/public/logo2.svg";
 
 const Header = () => {
   const pathname = usePathname();
@@ -32,11 +32,14 @@ const Header = () => {
     >
       <div className="flex justify-between items-center gap-4">
         <Image
-          src={Logo}
+          src={Logo2}
           alt="Logo"
           width={100}
           height={100}
-          className="w-[80px] h-[80px] "
+          className={cn(
+            "w-[200px] h-[100px] [filter:brightness(100)] group-hover/2:filter-none",
+            scrolled ? "filter-none" : "filter-brightness-0"
+          )}
         />
         <ul className="hidden lg:flex lg:gap-20 lg:justify-between lg:items-center">
           {navlinks.map((link) => (

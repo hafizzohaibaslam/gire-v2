@@ -24,7 +24,7 @@ export const researchCards = [
     id: 4,
     title: "Contributing to the Academic Community",
     description:
-      "The [Journal Name] offers students a platform to share their research, gain recognition, and contribute to their fields, helping bridge the gap between high school and higher education.",
+      "The JSSE offers students a platform to share their research, gain recognition, and contribute to their fields, helping bridge the gap between high school and higher education.",
     imageUrl: "/why-us-page/chemical.png",
   },
   {

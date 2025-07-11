@@ -9,6 +9,9 @@ import Label from "@/features/admin/components/Label";
 import Textarea from "@/features/admin/components/Textarea";
 
 const initialProfile = {
+  name: "John Doe",
+  title: "Chief Editor",
+  affiliation: "University of California, Los Angeles",
   email: "charlenereed@gmail.com",
   phone: "02994 29494",
   linkedin: "",
@@ -61,40 +64,41 @@ const AdminChiefEditorPage = () => {
               <div className="w-full flex flex-col gap-[30px]">
                 <div className="w-full space-y-[25px]">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
-                    {/* Email */}
+                    {/* Name */}
                     <div className="flex flex-col gap-[11px] w-full">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="name">Name</Label>
                       <InputField
                         type="text"
-                        id="email"
-                        name="email"
-                        placeholder="Enter Email"
-                        defaultValue={chiefEditor?.email}
+                        id="name"
+                        name="name"
+                        placeholder="Enter Name"
+                        defaultValue={chiefEditor?.name}
                       />
                     </div>
-                    {/* Phone */}
+                    {/* Title */}
                     <div className="flex flex-col gap-[11px] w-full">
-                      <Label htmlFor="phone">Phone</Label>
+                      <Label htmlFor="title">Title</Label>
                       <InputField
                         type="text"
-                        id="phone"
-                        name="phone"
-                        placeholder="Enter Phone"
-                        defaultValue={chiefEditor?.phone}
+                        id="title"
+                        name="title"
+                        placeholder="Enter Title"
+                        defaultValue={chiefEditor?.title}
+                      />
+                    </div>
+                    {/* Affiliation */}
+                    <div className="flex flex-col gap-[11px] w-full">
+                      <Label htmlFor="affiliation">Affiliation</Label>
+                      <InputField
+                        type="text"
+                        id="affiliation"
+                        name="affiliation"
+                        placeholder="Enter Affiliation"
+                        defaultValue={chiefEditor?.affiliation}
                       />
                     </div>
                   </div>
-                  {/* Linkedin */}
-                  <div className="flex flex-col gap-[11px] w-full">
-                    <Label htmlFor="linkedin">Linkedin</Label>
-                    <InputField
-                      type="text"
-                      id="linkedin"
-                      name="linkedin"
-                      placeholder="Enter Linkedin"
-                      defaultValue={chiefEditor?.linkedin}
-                    />
-                  </div>
+
                   {/* Bio */}
                   <div className="flex flex-col gap-[11px] w-full">
                     <Label htmlFor="bio">Bio</Label>

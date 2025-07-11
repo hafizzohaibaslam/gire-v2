@@ -25,11 +25,11 @@ const AdminHeader = () => {
   return (
     <div className="bg-white px-[40px] py-[12px] flex gap-6 items-center justify-between lg:justify-end border-b-[1px] border-[#E0E0E0]">
       <Image
-        src={"/logo.svg"}
+        src={"/logo2.svg"}
         alt="logo"
         width={100}
         height={100}
-        className="w-[60px] h-[60px] block lg:hidden"
+        className="w-[150px] h-[60px] block lg:hidden"
       />
       <div className="flex items-center gap-4">
         <Image

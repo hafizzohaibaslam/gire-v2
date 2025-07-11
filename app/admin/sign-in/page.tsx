@@ -15,11 +15,11 @@ const AdminSigninPage = () => {
     <div className="relative h-screen flex items-center justify-center bg-[url('/admin/admin-login-bg.png')] bg-cover bg-center">
       <div className="absolute top-8 left-16">
         <Image
-          src={"/logo.svg"}
+          src={"/logo2.svg"}
           alt="logo"
           width={100}
           height={100}
-          className="w-[80px] h-[80px]"
+          className="w-[200px] h-[100px]"
         />
       </div>
       <div className="bg-white p-[47px] rounded-lg max-w-[520px] w-full [box-shadow:0px_0px_10px_3px_rgba(0,0,0,0.1)] space-y-[44px]">

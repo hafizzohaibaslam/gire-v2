@@ -37,11 +37,11 @@ const TrendingTopicCard = ({
         {/* RIGHT SIDE */}
         <div>
           <div className="flex flex-col lg:flex-row gap-[10px] lg:justify-between lg:items-center">
-            <p className="font-figtree text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[3px] font-semibold">
+            <p className="font-playfair-display text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[3px] font-semibold">
               {topic.author}
             </p>
             <div className="flex items-center gap-[10px]">
-              <p className="mr-4 font-figtree text-[#6D6E76] text-[16px] leading-[28px] font-normal">
+              <p className="mr-4 font-playfair-display text-[#6D6E76] text-[16px] leading-[28px] font-normal">
                 {topic.date}
               </p>
               {showEditButton && (
@@ -49,7 +49,7 @@ const TrendingTopicCard = ({
               )}
             </div>
           </div>
-          <h1 className="font-figtree my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
+          <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
             {topic.title}
           </h1>
           {/* Tags */}
@@ -58,7 +58,7 @@ const TrendingTopicCard = ({
               <Tags key={tag} tag={tag} />
             ))}
           </div>
-          <p className="font-figtree my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
+          <p className="font-playfair-display my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
             {topic.doi}
           </p>
           <Button
