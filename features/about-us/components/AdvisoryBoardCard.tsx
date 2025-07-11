@@ -6,12 +6,17 @@ import { AdvisoryBoard } from "@/features/admin/lib/types";
 export type AdvisoryBoardCardProps = {
   board: AdvisoryBoard;
   handleEdit?: () => void;
+  showEditBtn?: boolean;
 };
 
-const AdvisoryBoardCard = ({ board, handleEdit }: AdvisoryBoardCardProps) => {
+const AdvisoryBoardCard = ({
+  board,
+  handleEdit = () => {},
+  showEditBtn = false,
+}: AdvisoryBoardCardProps) => {
   return (
     <div className="relative bg-[#E8EAEE] space-y-[30px] p-[16px] rounded-md">
-      {handleEdit && <EditBtn handleEdit={handleEdit} />}
+      {showEditBtn && <EditBtn handleEdit={handleEdit} />}
       <div className="flex justify-center">
         <Image
           src={board.image}
@@ -23,14 +28,14 @@ const AdvisoryBoardCard = ({ board, handleEdit }: AdvisoryBoardCardProps) => {
       </div>
       <div className="bg-white space-y-[10px] p-[20px] capitalize rounded-[12px]">
         <h2 className="text-[#19191B] text-[18px] font-semibold leading-[28px]">
-          {board.university}
+          {board.name}
         </h2>
         <h4 className="text-[#19191B] text-[14px] font-semibold leading-[100%]">
-          {board.professor}
+          {board.title}
         </h4>
         <div className="flex flex-col gap-[10px] space-y-[5px]">
           <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
-            <b>position: </b> {board.position}
+            <b>Department: </b> {board.department}
           </p>
           <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
             <b>affiliation: </b> {board.affiliation}

@@ -22,6 +22,8 @@ const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("2024");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedVolume, setSelectedVolume] = useState(1);
+  const [selectedNumber, setSelectedNumber] = useState(1);
 
   const filteredTopics = trendingTopics.filter((topic) => {
     if (selectedCategory === "All") {
@@ -52,13 +54,13 @@ const TrendingTopics = () => {
             className="ml-[20px] text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full"
           />
         </div>
-        <div className="flex items-center gap-2 mt-[20px]">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-[20px]">
           {/* Years */}
           <Select
             value={selectedYear}
             onValueChange={(value) => setSelectedYear(value)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full lg:w-[180px]">
               <SelectValue placeholder="Select a year" />
             </SelectTrigger>
             <SelectContent>
@@ -77,7 +79,7 @@ const TrendingTopics = () => {
             value={selectedCategory}
             onValueChange={(value) => setSelectedCategory(value)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full lg:w-[180px]">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
@@ -91,6 +93,18 @@ const TrendingTopics = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
+          <input
+            type="number"
+            value={selectedVolume}
+            onChange={(e) => setSelectedVolume(Number(e.target.value))}
+            className="w-full lg:w-[180px] px-3 py-2 rounded-md border-[1px] border-[#E8EAEE] outline-none"
+          />
+          <input
+            type="number"
+            value={selectedNumber}
+            onChange={(e) => setSelectedNumber(Number(e.target.value))}
+            className="w-full lg:w-[180px] px-3 py-2 rounded-md border-[1px] border-[#E8EAEE] outline-none"
+          />
         </div>
       </div>
 

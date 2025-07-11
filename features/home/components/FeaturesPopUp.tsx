@@ -1,18 +1,15 @@
-import { Feature } from "../utils/features";
 import React from "react";
-import clsx from "clsx";
-import Image from "next/image";
 import { X } from "lucide-react";
 import { popupData } from "../utils/popupData";
 
 type FeaturesPopUpProps = {
-  feature: Feature;
+  title: string;
   handleClose: () => void;
   openPopUp: boolean;
 };
 
 const FeaturesPopUp = ({
-  feature,
+  title,
   handleClose,
   openPopUp,
 }: FeaturesPopUpProps) => {
@@ -30,25 +27,9 @@ const FeaturesPopUp = ({
         </button>
 
         <div>
-          {/* Icon */}
-          <div
-            className={clsx(
-              "flex items-center justify-center rounded-full p-[12px] w-fit mb-[25px]"
-            )}
-            style={{ backgroundColor: `#${feature.bgColor}` }}
-          >
-            <Image
-              src={feature.image}
-              alt={feature.title}
-              width={100}
-              height={100}
-              className="w-[24px] h-[24px]"
-            />
-          </div>
-
           {/* Content */}
           <h1 className="capitalize font-playfair-display text-black text-[24px] lg:text-[36px] leading-[22px] lg:leading-[28px] tracking-[0px] font-semibold mb-[30px]">
-            {feature.title}
+            {title}
           </h1>
           <div className="space-y-[10px] overflow-y-scroll max-h-[50vh]">
             {popupData.map((item, index) => (

@@ -10,9 +10,12 @@ import Label from "@/features/admin/components/Label";
 import { MultiSelect } from "@/features/admin/components/MultiSelect";
 import { categoriesList } from "@/features/issues/utils/trendingTopics";
 import { TrendingTopic } from "@/features/admin/lib/types";
+import { File } from "lucide-react";
 
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
+  const [pdfUpload, setPdfUpload] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedIssue, setSelectedIssue] = useState<TrendingTopic | null>(
     null
   );
@@ -56,6 +59,33 @@ const AdminIssuesPage = () => {
             />
           </div>
           <div className="w-full space-y-[25px]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
+              {/* Full Name */}
+              <div className="flex flex-col gap-[11px] w-full">
+                <Label htmlFor="volume">Volume</Label>
+                <InputField
+                  type="number"
+                  id="volume"
+                  name="volume"
+                  placeholder="Enter Volume"
+                  defaultValue={"1"}
+                  className="text-black placeholder:text-black"
+                />
+              </div>
+
+              {/* Date */}
+              <div className="flex flex-col gap-[11px] w-full">
+                <Label htmlFor="number">Number</Label>
+                <InputField
+                  type="number"
+                  id="number"
+                  name="number"
+                  placeholder="Enter Number"
+                  defaultValue={"1"}
+                  className="text-black placeholder:text-black"
+                />
+              </div>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
               {/* Full Name */}
               <div className="flex flex-col gap-[11px] w-full">
@@ -139,6 +169,30 @@ const AdminIssuesPage = () => {
                   height: 500,
                 }}
               />
+            </div>
+            <div className="flex flex-col gap-4">
+              <input
+                type="file"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={(e) => setPdfUpload(e.target.files?.[0]?.name || "")}
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Upload PDF
+              </Button>
+              {pdfUpload && (
+                <div className="flex items-center gap-2">
+                  <File className="w-4 h-4" />
+                  <p className="text-[#718EBF] font-inter font-normal text-[15px]">
+                    {pdfUpload}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

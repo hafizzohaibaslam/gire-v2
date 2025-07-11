@@ -78,7 +78,7 @@ const Footer = () => {
         <div className="space-y-[40px]">
           <div className="border-b-[2px] border-[#F7F7F880] mt-[30px]"></div>
           <p className="text-[14px] text-center font-normal text-white">
-            Copyright © 2025 [Journal Name]. All rights reserved.
+            Copyright © 2025 JSSE. All rights reserved.
           </p>
         </div>
       </div>

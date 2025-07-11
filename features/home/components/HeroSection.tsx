@@ -10,7 +10,7 @@ const HeroSection = () => {
   return (
     <div
       className={clsx(
-        "min-h-screen bg-[url('/home-page/hero-section.png')] bg-cover bg-black/50 bg-center bg-no-repeat [background-blend-mode:darken]"
+        "bg-[url('/home-page/hero-section.png')] bg-cover bg-black/50 bg-center bg-no-repeat [background-blend-mode:darken]"
       )}
     >
       {/* Header */}
@@ -18,14 +18,15 @@ const HeroSection = () => {
       {/* Main Content */}
       <div
         className={clsx(
-          "flex flex-col items-start justify-start pt-[150px] pb-[50px] px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
+          "flex-1 flex flex-col items-start justify-center pt-[150px] pb-[50px] px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
         )}
       >
         <h1 className="font-fairplay-display font-bold text-[30px] lg:text-[60px] capitalize leading-[100%] max-w-lg">
-          Discover Career Path With Real World Experience
+          A Student Voice in the World of Science
         </h1>
         <p className="text-[16px] lg:text-[18px] leading-[100%] font-medium">
-          Our internship programs offer growth, learning, and oppourtunity.
+          Our journal is dedicated to promoting curiosity, critical thinking,
+          and student-led research.
         </p>
         <p className="text-[16px] lg:text-[30px] leading-[100%] font-medium max-w-lg">
           Submit your research & be part of the future of science.

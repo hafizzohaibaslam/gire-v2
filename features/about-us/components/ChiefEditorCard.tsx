@@ -3,15 +3,15 @@ import React from "react";
 
 type ChiefEditorCardProps = {
   image: string;
-  socialMediaIcon: {
-    email: string;
-    phone: string;
-    linkedin: string;
+  personalInfoIcon: {
+    name: string;
+    title: string;
+    affiliation: string;
   };
-  socialMedia: {
-    email: string;
-    phone: string;
-    linkedin: string;
+  personalInfo: {
+    name: string;
+    title: string;
+    affiliation: string;
   };
 
   additionalInfo: string;
@@ -20,53 +20,53 @@ type ChiefEditorCardProps = {
 
 const ChiefEditorCard = ({
   image,
-  socialMediaIcon,
-  socialMedia,
+  personalInfo,
+  personalInfoIcon,
   additionalInfo,
   signature,
 }: ChiefEditorCardProps) => {
   return (
     <div className="w-full space-y-[40px]">
       {/* Profile Card */}
-      <div className="mt-[72px] flex flex-col items-start sm:flex-row sm:items-center gap-[40px]">
+      <div className="mt-[72px] flex flex-col items-start sm:flex-row sm:items-center gap-[30px]">
         <Image
           src={image}
           alt="Chief Editor"
           width={100}
           height={100}
-          className="rounded-full w-[200px] h-[200px] lg:ml-[44px]"
+          className="rounded-full w-[200px] h-[200px]"
         />
 
         <div className="w-full space-y-[8px]">
           <div className="text-[#5C6168] text-[18px] font-normal leading-[100%] flex items-center gap-2 w-full">
             <Image
-              src={socialMediaIcon.email}
+              src={personalInfoIcon.name}
               alt="Email"
               width={20}
               height={20}
               className="w-[20px] h-[20px] flex-shrink-0"
             />
-            <p className="break-all">{socialMedia.email}</p>
+            <p className="break-all">{personalInfo.name}</p>
           </div>
           <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%] w-full">
             <Image
-              src={socialMediaIcon.phone}
+              src={personalInfoIcon.title}
               alt="Mobile"
               width={20}
               height={20}
               className="flex-shrink-0"
             />
-            <p className="break-all">{socialMedia.phone}</p>
+            <p className="break-all">{personalInfo.title}</p>
           </div>
           <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%] w-full">
             <Image
-              src={socialMediaIcon.linkedin}
+              src={personalInfoIcon.affiliation}
               alt="Linkedin"
               width={20}
               height={20}
               className="flex-shrink-0"
             />
-            <p className="break-all">{socialMedia.linkedin}</p>
+            <p className="break-all">{personalInfo.affiliation}</p>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "./Header";
 import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 const HeroSectionComponent = ({
   children,
@@ -40,8 +41,8 @@ const Title = ({
 }) => {
   return (
     <h1
-      className={clsx(
-        "font-playfair-display font-bold text-[30px] lg:text-[60px] capitalize leading-[100%]",
+      className={cn(
+        "font-inter font-bold text-[30px] lg:text-[60px] capitalize leading-[100%]",
         className
       )}
     >

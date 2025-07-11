@@ -12,10 +12,10 @@ const SubmitPage = () => {
       >
         <HeroSection.Title>Submit</HeroSection.Title>
         <HeroSection.Description>
-          At [Journal Name], we are dedicated to making your manuscript
-          submission process smooth and straightforward. From the moment you
-          begin, we will guide you through each step, offering clear
-          instructions and detailed feedback to help you refine your work.
+          At JSSE, we are dedicated to making your manuscript submission process
+          smooth and straightforward. From the moment you begin, we will guide
+          you through each step, offering clear instructions and detailed
+          feedback to help you refine your work.
         </HeroSection.Description>
       </HeroSection.Root>
       <SubmitFeatures />

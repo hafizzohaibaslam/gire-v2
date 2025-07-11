@@ -28,7 +28,7 @@ const OurProcess = () => {
             {/* Section label (only for first step in group) */}
             {section && (
               <div
-                className="hidden lg:flex flex-col items-center justify-start absolute -left-24"
+                className="hidden lg:flex flex-col items-center justify-start absolute -left-0"
                 style={{
                   top: 0,
                   height: `calc(${sectionSpan} * 140px)` /* adjust for your timeline item height */,
@@ -61,9 +61,9 @@ const OurProcess = () => {
               </div>
             )}
             <TimelineOppositeContent className="text-[#393939] font-bold text-[16px] uppercase min-w-[90px]">
-              <span className="text-[#393939] font-bold text-[16px] uppercase min-w-[90px]">
+              {/* <span className="text-[#393939] font-bold text-[16px] uppercase min-w-[90px]">
                 Step 0{index + 1}
-              </span>
+              </span> */}
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot

@@ -21,10 +21,10 @@ const HeroSection = () => {
           Submit
         </h1>
         <p className="font-medium text-[16px] lg:text-[18px] leading-[20px] lg:leading-[28px] max-w-5xl">
-          At [Journal Name], we are dedicated to making your manuscript
-          submission process smooth and straightforward. From the moment you
-          begin, we will guide you through each step, offering clear
-          instructions and detailed feedback to help you refine your work.
+          At JSSE, we are dedicated to making your manuscript submission process
+          smooth and straightforward. From the moment you begin, we will guide
+          you through each step, offering clear instructions and detailed
+          feedback to help you refine your work.
         </p>
       </div>
     </div>

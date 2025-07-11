@@ -7,17 +7,17 @@ type Issue = {
 export const issuesData: Issue[] = [
   {
     title: 1,
-    description: "chose a place, activity and time",
+    description: "Discover What's New",
     buttonText: "current issue",
   },
   {
     title: 2,
-    description: "chose a place, activity and time",
+    description: "Meet the Team",
     buttonText: "about us",
   },
   {
     title: 3,
-    description: "chose a place, activity and time",
+    description: "How to Submit",
     buttonText: "submission guidelines",
   },
 ];

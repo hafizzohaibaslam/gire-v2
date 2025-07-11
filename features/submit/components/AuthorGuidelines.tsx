@@ -27,7 +27,7 @@ const AuthorGuidelines = () => {
             Author Guidelines
           </h1>
           <p className="text-normal text-[#52525B] text-[16px] leading-[24px] lg:text-[22px] lg:leading-[32px]">
-            The submission process at [Journal Name] is designed to be clear and
+            The submission process at JSSE is designed to be clear and
             accessible, ensuring that all authors can navigate it with ease.
             Below are the key components of the submission process:
           </p>
