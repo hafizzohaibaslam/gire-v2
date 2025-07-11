@@ -8,9 +8,9 @@ export type Reviewer = {
 
 export type AdvisoryBoard = {
   id: string;
-  university: string;
-  professor: string;
-  position: string;
+  name: string;
+  title: string;
+  department: string;
   affiliation: string;
   field: string;
   image: string;

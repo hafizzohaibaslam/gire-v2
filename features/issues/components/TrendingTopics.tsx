@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import TrendingTopicCard from "./TrendingTopicCard";
 import {
   categoriesList,
+  numbersList,
   trendingTopics,
+  volumesList,
   yearsList,
 } from "../utils/trendingTopics";
 import {
@@ -22,6 +24,8 @@ const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("2024");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedVolume, setSelectedVolume] = useState("All");
+  const [selectedNumber, setSelectedNumber] = useState("All");
 
   const filteredTopics = trendingTopics.filter((topic) => {
     if (selectedCategory === "All") {
@@ -52,13 +56,13 @@ const TrendingTopics = () => {
             className="ml-[20px] text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full"
           />
         </div>
-        <div className="flex items-center gap-2 mt-[20px]">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-[20px]">
           {/* Years */}
           <Select
             value={selectedYear}
             onValueChange={(value) => setSelectedYear(value)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full lg:w-[180px]">
               <SelectValue placeholder="Select a year" />
             </SelectTrigger>
             <SelectContent>
@@ -77,7 +81,7 @@ const TrendingTopics = () => {
             value={selectedCategory}
             onValueChange={(value) => setSelectedCategory(value)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full lg:w-[180px]">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
@@ -86,6 +90,45 @@ const TrendingTopics = () => {
                 {categoriesList.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          {/* Volume */}
+          <Select
+            value={selectedVolume}
+            onValueChange={(value) => setSelectedVolume(value)}
+          >
+            <SelectTrigger className="w-full lg:w-[180px]">
+              <SelectValue placeholder="Select a volume" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Volume</SelectLabel>
+                {volumesList.map((volume) => (
+                  <SelectItem key={volume} value={volume}>
+                    {volume}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {/* Number */}
+          <Select
+            value={selectedNumber}
+            onValueChange={(value) => setSelectedNumber(value)}
+          >
+            <SelectTrigger className="w-full lg:w-[180px]">
+              <SelectValue placeholder="Select a number" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Number</SelectLabel>
+                {numbersList.map((number) => (
+                  <SelectItem key={number} value={number}>
+                    {number}
                   </SelectItem>
                 ))}
               </SelectGroup>

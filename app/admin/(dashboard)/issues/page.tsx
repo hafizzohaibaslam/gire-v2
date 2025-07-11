@@ -2,17 +2,35 @@
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "@/features/shared/components/Button";
 import React, { useState, useRef } from "react";
-import { trendingTopics } from "@/features/issues/utils/trendingTopics";
+import {
+  trendingTopics,
+  volumesList,
+} from "@/features/issues/utils/trendingTopics";
 import TrendingTopicCard from "@/features/issues/components/TrendingTopicCard";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
 import { MultiSelect } from "@/features/admin/components/MultiSelect";
-import { categoriesList } from "@/features/issues/utils/trendingTopics";
+import {
+  categoriesList,
+  numbersList,
+} from "@/features/issues/utils/trendingTopics";
 import { TrendingTopic } from "@/features/admin/lib/types";
+import { File } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
+  const [pdfUpload, setPdfUpload] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedIssue, setSelectedIssue] = useState<TrendingTopic | null>(
     null
   );
@@ -56,6 +74,47 @@ const AdminIssuesPage = () => {
             />
           </div>
           <div className="w-full space-y-[25px]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
+              {/* Volume */}
+              <div className="flex flex-col gap-[11px] w-full">
+                <Label htmlFor="volume">Volume</Label>
+                <Select>
+                  <SelectTrigger className="w-full border-[1px] border-[#DFEAF2] rounded-[15px] px-4 py-6 focus:outline-none focus:ring-2 focus:ring-blue-200 hover:border-gray-400 text-[#718EBF] font-inter font-normal text-[15px] placeholder:text-[#718EBF] transition-all duration-200">
+                    <SelectValue placeholder="Select a volume" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Volume</SelectLabel>
+                      {volumesList.map((volume) => (
+                        <SelectItem key={volume} value={volume}>
+                          {volume}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Number */}
+              <div className="flex flex-col gap-[11px] w-full">
+                <Label htmlFor="number">Number</Label>
+                <Select>
+                  <SelectTrigger className="w-full border-[1px] border-[#DFEAF2] rounded-[15px] px-4 py-6 focus:outline-none focus:ring-2 focus:ring-blue-200 hover:border-gray-400 text-[#718EBF] font-inter font-normal text-[15px] placeholder:text-[#718EBF] transition-all duration-200">
+                    <SelectValue placeholder="Select a number" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Number</SelectLabel>
+                      {numbersList.map((number) => (
+                        <SelectItem key={number} value={number}>
+                          {number}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
               {/* Full Name */}
               <div className="flex flex-col gap-[11px] w-full">
@@ -139,6 +198,30 @@ const AdminIssuesPage = () => {
                   height: 500,
                 }}
               />
+            </div>
+            <div className="flex flex-col gap-4">
+              <input
+                type="file"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={(e) => setPdfUpload(e.target.files?.[0]?.name || "")}
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Upload PDF
+              </Button>
+              {pdfUpload && (
+                <div className="flex items-center gap-2">
+                  <File className="w-4 h-4" />
+                  <p className="text-[#718EBF] font-inter font-normal text-[15px]">
+                    {pdfUpload}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

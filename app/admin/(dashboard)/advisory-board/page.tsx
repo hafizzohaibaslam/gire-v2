@@ -65,9 +65,9 @@ const AdminAdvisoryBoard = () => {
           onClick={() =>
             setSelectedAdvisoryBoard({
               id: "",
-              university: "",
-              professor: "",
-              position: "",
+              name: "",
+              title: "",
+              department: "",
               affiliation: "",
               field: "",
               image: "/about-us-page/university.png",
@@ -106,39 +106,39 @@ const AdminAdvisoryBoard = () => {
             </div>
             <div className="w-full flex flex-col gap-[30px]">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
-                {/* Institution */}
+                {/* Name */}
                 <div className="flex flex-col gap-[11px] w-full">
-                  <Label htmlFor="university">University</Label>
+                  <Label htmlFor="name">Name</Label>
                   <InputField
                     type="text"
-                    id="university"
-                    name="university"
-                    placeholder="Enter University"
-                    defaultValue={selectedAdvisoryBoard?.university}
+                    id="name"
+                    name="name"
+                    placeholder="Enter Name"
+                    defaultValue={selectedAdvisoryBoard?.name}
                     className="text-black placeholder:text-black"
                   />
                 </div>
-                {/* Professor */}
+                {/* Title */}
                 <div className="flex flex-col gap-[11px] w-full">
-                  <Label htmlFor="professor">Professor</Label>
+                  <Label htmlFor="title">Title</Label>
                   <InputField
                     type="text"
-                    id="professor"
-                    name="professor"
-                    placeholder="Enter Professor"
-                    defaultValue={selectedAdvisoryBoard?.professor}
+                    id="title"
+                    name="title"
+                    placeholder="Enter Title"
+                    defaultValue={selectedAdvisoryBoard?.title}
                     className="text-black placeholder:text-black"
                   />
                 </div>
-                {/* Position */}
+                {/* Department */}
                 <div className="flex flex-col gap-[11px] w-full">
-                  <Label htmlFor="position">Position</Label>
+                  <Label htmlFor="department">Department</Label>
                   <InputField
                     type="text"
-                    id="position"
-                    name="position"
-                    placeholder="Enter Position"
-                    defaultValue={selectedAdvisoryBoard?.position}
+                    id="department"
+                    name="department"
+                    placeholder="Enter Department"
+                    defaultValue={selectedAdvisoryBoard?.department}
                     className="text-black placeholder:text-black"
                   />
                 </div>

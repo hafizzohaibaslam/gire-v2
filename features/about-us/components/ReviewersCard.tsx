@@ -6,15 +6,17 @@ import { Reviewer } from "@/features/admin/lib/types";
 export type EditorialTeamCardProps = {
   reviewer: Reviewer;
   handleEdit?: () => void;
+  showEditBtn?: boolean;
 };
 
 const EditorialTeamCard = ({
   reviewer,
   handleEdit = () => {},
+  showEditBtn = false,
 }: EditorialTeamCardProps) => {
   return (
     <div className="relative flex flex-col sm:flex-row sm:items-center border-2 border-[#E8EAEE] rounded-[12px]">
-      {handleEdit && (
+      {showEditBtn && (
         <EditBtn handleEdit={handleEdit} className="absolute top-2 right-2" />
       )}
       <div className="overflow-hidden">

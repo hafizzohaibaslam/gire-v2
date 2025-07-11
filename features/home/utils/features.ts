@@ -9,34 +9,50 @@ export type Feature = {
 export const features = [
   {
     id: 1,
+    title: "fast turnaround",
+    description:
+      "We understand the importance of timely communication in the academic process.",
+    image: "/home-page/clock.svg",
+    bgColor: "#FF761033",
+  },
+  {
+    id: 2,
+    title: "professional community",
+    description:
+      "Our journal benefits from the support and guidance of an esteemed professional community.",
+    image: "/home-page/users.svg",
+    bgColor: "#6E76E533",
+  },
+  {
+    id: 3,
     title: "peer review process",
     description:
       "All submissions undergo a rigorous peer review to ensure quality and academic integrity.",
     image: "/home-page/brain.svg",
-    bgColor: "F2393633",
+    bgColor: "#F2393633",
   },
   {
-    id: 2,
+    id: 4,
     title: "open access",
     description:
       "Our journal is committed to open access, allowing free access to all published articles.",
     image: "/home-page/earth.svg",
-    bgColor: "008EFF33",
+    bgColor: "#008EFF33",
   },
   {
-    id: 3,
+    id: 5,
     title: "student-centric",
     description:
       "We prioritize the voices of high school students, providing a platform tailored to their unique perspectives and insights.",
     image: "/home-page/student.svg",
-    bgColor: "45C64633",
+    bgColor: "#45C64633",
   },
   {
-    id: 4,
+    id: 6,
     title: "DOI  assignment",
     description:
       "Each article is assigned a Digital Object Identifier (DOI), ensuring a permanent link and easy access for citation and reference.",
     image: "/home-page/link.svg",
-    bgColor: "FABB1833",
+    bgColor: "#FABB1833",
   },
 ];

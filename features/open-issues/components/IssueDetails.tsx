@@ -10,22 +10,32 @@ const IssueDetails = () => {
     <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] pt-[100px] max-w-[1440px] mx-auto">
       {/* Introduction */}
       <div>
-        <div className="flex flex-col capitalize gap-4 mb-[30px] space-y-[16px]">
-          <p className="font-figtree text-[#23253699] text-[20px] leading-[100%] font-normal">
-            May 12, 2025
+        <div className="flex flex-col  gap-[10px]">
+          <p className="font-playfair-display text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[3px] font-semibold">
+            Dr. Emily Richards
           </p>
-          <h1 className="font-figtree text-black text-[16px] lg:text-[36px] leading-[20px] lg:leading-[48px] -tracking-[1px] font-semibold">
-            Enhancing Student Engagement through Gamified Learning Platforms.
-          </h1>
-          <p className="lowercase font-figtree text-[#23253699] text-[24px] leading-[100%] font-medium">
-            https://doi.org/10.59720/24-029
-          </p>
-          <div className="flex flex-wrap gap-[10px]">
-            <Tags tag="Emily Richards (Newyork Highschool)" />
+          <div className="flex items-center gap-[10px]">
+            <p className="mr-4 font-playfair-display text-[#6D6E76] text-[16px] leading-[28px] font-normal">
+              May 1, 2025
+            </p>
           </div>
         </div>
-        {/* Download Button */}
-        <Button icon={<Download className="w-[18px] h-[18px]" />}>
+        <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
+          Enhancing Student Engagement through Gamified Learning Platforms.
+        </h1>
+        {/* Tags */}
+        <div className="flex flex-wrap gap-[10px]">
+          {tags.map((tag) => (
+            <Tags key={tag} tag={tag} />
+          ))}
+        </div>
+        <p className="font-playfair-display my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
+          https://doi.org/10.59720/24-029
+        </p>
+        <Button
+          className="!max-w-full w-full flex justify-center items-center"
+          icon={<Download className="w-[18px] h-[18px]" />}
+        >
           Download PDF
         </Button>
       </div>
@@ -50,3 +60,11 @@ const IssueDetails = () => {
 };
 
 export default IssueDetails;
+
+const tags = [
+  "Education",
+  "Technology",
+  "Learning",
+  "Gamification",
+  "Student Engagement",
+];

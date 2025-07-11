@@ -12,11 +12,11 @@ const Sidebar = () => {
     <div className="w-[300px]">
       <div className="mt-[5px] ml-[25px]">
         <Image
-          src={"/logo.svg"}
+          src={"/logo2.svg"}
           alt="logo"
           width={100}
           height={100}
-          className="w-[60px] h-[60px]"
+          className="w-[150px] h-[60px]"
         />
       </div>
       <div className="mt-[50px]">
