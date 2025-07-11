@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import TrendingTopicCard from "./TrendingTopicCard";
 import {
   categoriesList,
+  numbersList,
   trendingTopics,
+  volumesList,
   yearsList,
 } from "../utils/trendingTopics";
 import {
@@ -22,8 +24,8 @@ const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("2024");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedVolume, setSelectedVolume] = useState(1);
-  const [selectedNumber, setSelectedNumber] = useState(1);
+  const [selectedVolume, setSelectedVolume] = useState("All");
+  const [selectedNumber, setSelectedNumber] = useState("All");
 
   const filteredTopics = trendingTopics.filter((topic) => {
     if (selectedCategory === "All") {
@@ -93,18 +95,45 @@ const TrendingTopics = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <input
-            type="number"
+
+          {/* Volume */}
+          <Select
             value={selectedVolume}
-            onChange={(e) => setSelectedVolume(Number(e.target.value))}
-            className="w-full lg:w-[180px] px-3 py-2 rounded-md border-[1px] border-[#E8EAEE] outline-none"
-          />
-          <input
-            type="number"
+            onValueChange={(value) => setSelectedVolume(value)}
+          >
+            <SelectTrigger className="w-full lg:w-[180px]">
+              <SelectValue placeholder="Select a volume" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Volume</SelectLabel>
+                {volumesList.map((volume) => (
+                  <SelectItem key={volume} value={volume}>
+                    {volume}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {/* Number */}
+          <Select
             value={selectedNumber}
-            onChange={(e) => setSelectedNumber(Number(e.target.value))}
-            className="w-full lg:w-[180px] px-3 py-2 rounded-md border-[1px] border-[#E8EAEE] outline-none"
-          />
+            onValueChange={(value) => setSelectedNumber(value)}
+          >
+            <SelectTrigger className="w-full lg:w-[180px]">
+              <SelectValue placeholder="Select a number" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Number</SelectLabel>
+                {numbersList.map((number) => (
+                  <SelectItem key={number} value={number}>
+                    {number}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
