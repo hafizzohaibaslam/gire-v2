@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/accordion";
 import clsx from "clsx";
 import React, { useState } from "react";
-import { Minus, Plus } from "lucide-react";
 import { faqsData } from "../utils/faqsData";
 
 const FAQs = () => {
@@ -50,11 +49,6 @@ const FAQs = () => {
                 >
                   <div className="flex items-center gap-[10px] justify-between">
                     {faq.question}
-                    {activeAccordion === faq.id ? (
-                      <Minus className="w-[20px] h-[20px]" />
-                    ) : (
-                      <Plus className="w-[20px] h-[20px]" />
-                    )}
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="mt-[13px] overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">

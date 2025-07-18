@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Button from "@/features/issues/components/Button";
-import { Download, Minus, Plus } from "lucide-react";
+import { Download } from "lucide-react";
 import React, { useState } from "react";
 import { publishingPolicyAccordianData } from "../utils/accordianData";
 
@@ -57,11 +57,6 @@ const PublishingPolicy = () => {
               >
                 <div className="flex items-center gap-[10px] justify-between">
                   {accordian.question}
-                  {activeAccordion === accordian.id ? (
-                    <Minus className="w-[20px] h-[20px]" />
-                  ) : (
-                    <Plus className="w-[20px] h-[20px]" />
-                  )}
                 </div>
               </AccordionTrigger>
               <AccordionContent className="mt-[13px] overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
