@@ -37,7 +37,7 @@ const Header = () => {
           width={100}
           height={100}
           className={cn(
-            "w-[200px] h-[100px] [filter:brightness(100)] group-hover/2:filter-none",
+            "w-[250px] h-[100px] [filter:brightness(100)] group-hover/2:filter-none",
             scrolled ? "filter-none" : "filter-brightness-0"
           )}
         />
@@ -64,6 +64,17 @@ const Header = () => {
           ))}
         </ul>
         <div className="flex gap-4 items-center">
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScYqn18pKTS3aFyYZx-eQjSlOVcigEV9E_-vyAkmDDe11OAuw/viewform"
+            target="_blank"
+            className={clsx(
+              "capitalize inline-block w-fit border-[1px] border-[#aaa] px-[13px] py-[7px] rounded-[50px] cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-[#3385FF] hover:text-white"
+            )}
+          >
+            <span className="flex items-center gap-[5px] text-[13px] font-normal leading-[16px]">
+              Submit Paper
+            </span>
+          </a>
           <button
             className={clsx(
               "capitalize inline-block w-fit border-[1px] border-[#aaa] px-[13px] py-[7px] rounded-[50px] cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-[#3385FF] hover:text-white"

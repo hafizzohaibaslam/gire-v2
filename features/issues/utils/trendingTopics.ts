@@ -5,7 +5,8 @@ export const trendingTopics = [
     author: "Dr. Emily Richards",
     date: "March 14, 2024",
     title: "Enhancing Student Engagement through Gamified Learning Platforms.",
-    tags: ["Biotechnology & Genetics", "Mobile Learning", "E-Learning UX"],
+    researchField: "Biotechnology & Genetics",
+    researchKeywords: ["Mobile Learning", "E-Learning UX"],
     doi: "10.5678/edu.tech.2024.0314",
   },
   {
@@ -14,12 +15,8 @@ export const trendingTopics = [
     author: "Dr. Emily Richards",
     date: "March 14, 2024",
     title: "Adaptive UX Strategies for Inclusive Education",
-    tags: [
-      "Biotechnology & Genetics",
-      "Mobile Learning",
-      "E-Learning UX",
-      "EdTech Usability",
-    ],
+    researchField: "Biotechnology & Genetics",
+    researchKeywords: ["Mobile Learning", "E-Learning UX", "EdTech Usability"],
     doi: "10.5678/edu.tech.2024.0314",
   },
   {
@@ -28,7 +25,8 @@ export const trendingTopics = [
     author: "Dr. Emily Richards",
     date: "March 14, 2024",
     title: "The Impact of Visual Design on E-Learning Outcomes",
-    tags: ["E-Learning UX", "EdTech Usability"],
+    researchField: "Biotechnology & Genetics",
+    researchKeywords: ["E-Learning UX", "EdTech Usability"],
     doi: "10.5678/edu.tech.2024.0314",
   },
 ];

@@ -2,30 +2,13 @@
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "@/features/shared/components/Button";
 import React, { useState, useRef } from "react";
-import {
-  trendingTopics,
-  volumesList,
-} from "@/features/issues/utils/trendingTopics";
+import { trendingTopics } from "@/features/issues/utils/trendingTopics";
 import TrendingTopicCard from "@/features/issues/components/TrendingTopicCard";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
-import { MultiSelect } from "@/features/admin/components/MultiSelect";
-import {
-  categoriesList,
-  numbersList,
-} from "@/features/issues/utils/trendingTopics";
 import { TrendingTopic } from "@/features/admin/lib/types";
 import { File } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
@@ -35,7 +18,8 @@ const AdminIssuesPage = () => {
     null
   );
   const [imageUpload, setImageUpload] = useState<string>("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedVolume, setSelectedVolume] = useState<number>(1);
+  const [selectedNumber, setSelectedNumber] = useState<number>(1);
 
   const handleEdit = (issue: TrendingTopic) => {
     setSelectedIssue(issue);
@@ -78,41 +62,29 @@ const AdminIssuesPage = () => {
               {/* Volume */}
               <div className="flex flex-col gap-[11px] w-full">
                 <Label htmlFor="volume">Volume</Label>
-                <Select>
-                  <SelectTrigger className="w-full border-[1px] border-[#DFEAF2] rounded-[15px] px-4 py-6 focus:outline-none focus:ring-2 focus:ring-blue-200 hover:border-gray-400 text-[#718EBF] font-inter font-normal text-[15px] placeholder:text-[#718EBF] transition-all duration-200">
-                    <SelectValue placeholder="Select a volume" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Volume</SelectLabel>
-                      {volumesList.map((volume) => (
-                        <SelectItem key={volume} value={volume}>
-                          {volume}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <InputField
+                  type="number"
+                  id="volume"
+                  name="volume"
+                  placeholder="Enter Volume"
+                  value={selectedVolume}
+                  onChange={(e) => setSelectedVolume(Number(e.target.value))}
+                  className="text-black placeholder:text-black"
+                />
               </div>
 
               {/* Number */}
               <div className="flex flex-col gap-[11px] w-full">
                 <Label htmlFor="number">Number</Label>
-                <Select>
-                  <SelectTrigger className="w-full border-[1px] border-[#DFEAF2] rounded-[15px] px-4 py-6 focus:outline-none focus:ring-2 focus:ring-blue-200 hover:border-gray-400 text-[#718EBF] font-inter font-normal text-[15px] placeholder:text-[#718EBF] transition-all duration-200">
-                    <SelectValue placeholder="Select a number" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Number</SelectLabel>
-                      {numbersList.map((number) => (
-                        <SelectItem key={number} value={number}>
-                          {number}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <InputField
+                  type="number"
+                  id="number"
+                  name="number"
+                  placeholder="Enter Number"
+                  value={selectedNumber}
+                  onChange={(e) => setSelectedNumber(Number(e.target.value))}
+                  className="text-black placeholder:text-black"
+                />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
@@ -156,24 +128,31 @@ const AdminIssuesPage = () => {
               />
             </div>
 
-            {/* Tags */}
-            <MultiSelect.Root
-              options={categoriesList}
-              selectedOptions={selectedTags}
-              onChange={setSelectedTags}
-            >
-              <MultiSelect.Label htmlFor="tags">Tags</MultiSelect.Label>
-              <MultiSelect.Trigger
-                placeholder="Select tags..."
-                className="border-[1px] border-[#DFEAF2] rounded-[15px] px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-200 text-[#718EBF] font-inter font-normal text-[15px] placeholder:text-[#718EBF]"
+            {/* Research Field */}
+            <div className="flex flex-col gap-[11px] w-full">
+              <Label htmlFor="researchField">Research Field</Label>
+              <InputField
+                type="text"
+                id="researchField"
+                name="researchField"
+                placeholder="Enter Research Field"
+                defaultValue={selectedIssue?.researchField}
+                className="text-black placeholder:text-black"
               />
-              <MultiSelect.Content>
-                <MultiSelect.Search placeholder="Search tags..." />
-                <MultiSelect.Actions />
-                <MultiSelect.Options />
-              </MultiSelect.Content>
-              <MultiSelect.Count />
-            </MultiSelect.Root>
+            </div>
+
+            {/* Research Keywords */}
+            <div className="flex flex-col gap-[11px] w-full">
+              <Label htmlFor="researchKeywords">Research Keywords</Label>
+              <InputField
+                type="text"
+                id="researchKeywords"
+                name="researchKeywords"
+                placeholder="Enter Research Keywords"
+                defaultValue={selectedIssue?.researchKeywords.join(", ")}
+                className="text-black placeholder:text-black"
+              />
+            </div>
 
             {/* Link */}
             <div className="flex flex-col gap-[11px] w-full">
@@ -244,7 +223,8 @@ const AdminIssuesPage = () => {
               author: "",
               date: "",
               title: "",
-              tags: [],
+              researchField: "",
+              researchKeywords: [],
               doi: "",
             });
           }}

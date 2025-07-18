@@ -6,6 +6,7 @@ import Facebook from "@/public/home-page/fb.svg";
 import Twitter from "@/public/home-page/twitter.svg";
 import { MapPin } from "lucide-react";
 import LinkedIn from "@/public/home-page/linkedin.svg";
+import Logo2 from "@/public/logo2.svg";
 
 const Footer = () => {
   return (
@@ -19,11 +20,11 @@ const Footer = () => {
           <div className="text-white">
             <Link href="/">
               <Image
-                src={"/logo.svg"}
+                src={Logo2}
                 alt="logo"
                 width={100}
                 height={100}
-                className="w-[80px] h-[80px]"
+                className="w-[200px] h-[100px] [filter:brightness(100)]"
               />
             </Link>
             <div className="space-y-2 mt-4">

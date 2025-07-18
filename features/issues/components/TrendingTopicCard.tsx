@@ -52,10 +52,12 @@ const TrendingTopicCard = ({
           <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
             {topic.title}
           </h1>
-          {/* Tags */}
+
+          {/* Research Keywords */}
           <div className="flex flex-wrap gap-[10px]">
-            {topic.tags.map((tag) => (
-              <Tags key={tag} tag={tag} />
+            <Tags tag={topic.researchField} className="bg-sky-500" />
+            {topic.researchKeywords.map((keyword) => (
+              <Tags key={keyword} tag={keyword} />
             ))}
           </div>
           <p className="font-playfair-display my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
