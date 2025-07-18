@@ -55,7 +55,10 @@ const TrendingTopicCard = ({
 
           {/* Research Keywords */}
           <div className="flex flex-wrap gap-[10px]">
-            <Tags tag={topic.researchField} className="bg-sky-500" />
+            <Tags
+              tag={topic.researchField}
+              className="bg-gray-400 hover:bg-gray-500"
+            />
             {topic.researchKeywords.map((keyword) => (
               <Tags key={keyword} tag={keyword} />
             ))}

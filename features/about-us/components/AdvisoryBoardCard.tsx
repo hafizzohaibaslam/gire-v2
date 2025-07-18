@@ -30,14 +30,12 @@ const AdvisoryBoardCard = ({
         <h2 className="text-[#19191B] text-[18px] font-semibold leading-[28px]">
           {board.title}
         </h2>
-        <div className="flex flex-col gap-[10px] space-y-[5px]">
-          <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
-            <b>Department: </b> {board.department}
+        <div className="flex flex-col gap-[10px]">
+          <p className="text-[#787A82] text-[16px] font-normal leading-[25px]">
+            {board.department}, {board.affiliation}
           </p>
-          <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
-            <b>affiliation: </b> {board.affiliation}
-          </p>
-          <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
+
+          <p className="text-[#787A82] text-[16px] font-normal leading-[25px]">
             <b>field: </b> {board.field}
           </p>
         </div>
