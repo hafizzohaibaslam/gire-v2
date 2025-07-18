@@ -12,35 +12,48 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import Label from "@/features/admin/components/Label";
+import { TrendingTopic } from "@/features/admin/lib/types";
 
 const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("2024");
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedVolume, setSelectedVolume] = useState("All");
   const [selectedNumber, setSelectedNumber] = useState("All");
+  const [selectedResearchField, setSelectedResearchField] = useState("All");
 
-  const filteredTopics = trendingTopics.filter((topic) => {
-    if (selectedCategory === "All") {
-      return (
-        topic.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+  const filterTopics = (topics: TrendingTopic[]) => {
+    let filteredData = [...topics];
+
+    if (searchTerm && searchTerm !== "") {
+      filteredData = filteredData.filter((topic) =>
+        topic.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (selectedYear && selectedYear !== "All") {
+      filteredData = filteredData.filter((topic) =>
         topic.date.includes(selectedYear)
       );
     }
+    if (selectedResearchField && selectedResearchField !== "All") {
+      filteredData = filteredData.filter(
+        (topic) =>
+          topic.researchField.includes(selectedResearchField) ||
+          topic.researchKeywords.some((keyword) =>
+            keyword.toLowerCase().includes(selectedResearchField.toLowerCase())
+          )
+      );
+    }
 
-    return (
-      topic.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      topic.date.includes(selectedYear) &&
-      topic.tags.includes(selectedCategory)
-    );
-  });
+    return filteredData;
+  };
+
+  const filteredTopics = filterTopics(trendingTopics);
 
   return (
     <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] lg:pt-[100px] max-w-[1440px] mx-auto">
@@ -58,82 +71,82 @@ const TrendingTopics = () => {
         </div>
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-[20px]">
           {/* Years */}
-          <Select
-            value={selectedYear}
-            onValueChange={(value) => setSelectedYear(value)}
-          >
-            <SelectTrigger className="w-full lg:w-[180px]">
-              <SelectValue placeholder="Select a year" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Years</SelectLabel>
+          <div className="flex flex-col gap-2">
+            <Label>Years</Label>
+            <Select
+              value={selectedYear}
+              onValueChange={(value) => setSelectedYear(value)}
+            >
+              <SelectTrigger className="w-full lg:w-[180px]">
+                <SelectValue placeholder="Select a year" />
+              </SelectTrigger>
+              <SelectContent>
                 {yearsList.map((year) => (
                   <SelectItem key={year} value={year}>
                     {year}
                   </SelectItem>
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+              </SelectContent>
+            </Select>
+          </div>
           {/* Categories */}
-          <Select
-            value={selectedCategory}
-            onValueChange={(value) => setSelectedCategory(value)}
-          >
-            <SelectTrigger className="w-full lg:w-[180px]">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Categories</SelectLabel>
-                {categoriesList.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
+          <div className="flex flex-col gap-2">
+            <Label>Fields</Label>
+            <Select
+              value={selectedResearchField}
+              onValueChange={(value) => setSelectedResearchField(value)}
+            >
+              <SelectTrigger className="w-full lg:w-[180px]">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categoriesList.map((field) => (
+                  <SelectItem key={field} value={field}>
+                    {field}
                   </SelectItem>
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+              </SelectContent>
+            </Select>
+          </div>
 
           {/* Volume */}
-          <Select
-            value={selectedVolume}
-            onValueChange={(value) => setSelectedVolume(value)}
-          >
-            <SelectTrigger className="w-full lg:w-[180px]">
-              <SelectValue placeholder="Select a volume" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Volume</SelectLabel>
+          <div className="flex flex-col gap-2">
+            <Label>Volume</Label>
+            <Select
+              value={selectedVolume}
+              onValueChange={(value) => setSelectedVolume(value)}
+            >
+              <SelectTrigger className="w-full lg:w-[180px]">
+                <SelectValue placeholder="Select a volume" />
+              </SelectTrigger>
+              <SelectContent>
                 {volumesList.map((volume) => (
                   <SelectItem key={volume} value={volume}>
                     {volume}
                   </SelectItem>
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+              </SelectContent>
+            </Select>
+          </div>
           {/* Number */}
-          <Select
-            value={selectedNumber}
-            onValueChange={(value) => setSelectedNumber(value)}
-          >
-            <SelectTrigger className="w-full lg:w-[180px]">
-              <SelectValue placeholder="Select a number" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Number</SelectLabel>
+          <div className="flex flex-col gap-2">
+            <Label>Number</Label>
+            <Select
+              value={selectedNumber}
+              onValueChange={(value) => setSelectedNumber(value)}
+            >
+              <SelectTrigger className="w-full lg:w-[180px]">
+                <SelectValue placeholder="Select a number" />
+              </SelectTrigger>
+              <SelectContent>
                 {numbersList.map((number) => (
                   <SelectItem key={number} value={number}>
                     {number}
                   </SelectItem>
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 

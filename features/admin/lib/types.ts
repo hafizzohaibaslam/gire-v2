@@ -22,6 +22,7 @@ export type TrendingTopic = {
   author: string;
   date: string;
   title: string;
-  tags: string[];
+  researchField: string;
+  researchKeywords: string[];
   doi: string;
 };

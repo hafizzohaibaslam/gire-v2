@@ -28,11 +28,8 @@ const AdvisoryBoardCard = ({
       </div>
       <div className="bg-white space-y-[10px] p-[20px] capitalize rounded-[12px]">
         <h2 className="text-[#19191B] text-[18px] font-semibold leading-[28px]">
-          {board.name}
-        </h2>
-        <h4 className="text-[#19191B] text-[14px] font-semibold leading-[100%]">
           {board.title}
-        </h4>
+        </h2>
         <div className="flex flex-col gap-[10px] space-y-[5px]">
           <p className="text-[#787A82] text-[14px] font-normal leading-[25px]">
             <b>Department: </b> {board.department}

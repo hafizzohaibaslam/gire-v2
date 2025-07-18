@@ -37,7 +37,7 @@ const FeaturesPopUp = ({
                 key={index}
                 className="flex flex-col gap-[4px] text-[#52525B] text-[20px] leading-[24px] lg:leading-[36px] font-normal font-inter"
               >
-                <h4>{item.title}</h4>
+                <h4 className="font-bold">{item.title}</h4>
                 <p>{item.description}</p>
               </div>
             ))}
