@@ -52,7 +52,6 @@ const TrendingTopics = () => {
 
     return filteredData;
   };
-
   const filteredTopics = filterTopics(trendingTopics);
 
   return (
