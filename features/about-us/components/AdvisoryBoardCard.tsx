@@ -2,24 +2,32 @@ import Image from "next/image";
 import React from "react";
 import EditBtn from "@/features/admin/components/EditBtn";
 import { AdvisoryBoard } from "@/features/admin/lib/types";
+import DeleteBtn from "@/features/admin/components/DeleteBtn";
 
 export type AdvisoryBoardCardProps = {
   board: AdvisoryBoard;
-  handleEdit?: () => void;
   showEditBtn?: boolean;
+  handleEdit?: () => void;
+  showDeleteBtn?: boolean;
+  handleDelete?: () => void;
 };
 
 const AdvisoryBoardCard = ({
   board,
   handleEdit = () => {},
   showEditBtn = false,
+  showDeleteBtn = false,
+  handleDelete = () => {},
 }: AdvisoryBoardCardProps) => {
   return (
     <div className="relative bg-[#E8EAEE] space-y-[30px] p-[16px] rounded-md">
-      {showEditBtn && <EditBtn handleEdit={handleEdit} />}
+      <div className="absolute top-4 right-4 flex gap-2">
+        {showEditBtn && <EditBtn handleEdit={handleEdit} />}
+        {showDeleteBtn && <DeleteBtn handleDelete={handleDelete} />}
+      </div>
       <div className="flex justify-center">
         <Image
-          src={board.image}
+          src={"/about-us-page/university.png"} // `${board.imgUrl}` ||
           alt="University Logo"
           width={100}
           height={100}

@@ -5,25 +5,29 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type FileImageUploadProps = {
-  image: string;
+  imgUrl: string;
   onChange: (url: string) => void;
   className?: string;
   imageClassName?: string;
 };
 
 function FileImageUpload({
-  image,
+  imgUrl,
   onChange,
   className,
   imageClassName,
 }: FileImageUploadProps) {
-  const [preview, setPreview] = useState<string>(image);
+  const [preview, setPreview] = useState<string>(imgUrl);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (file) {
-      setPreview("/about-us-page/university.png");
-      onChange("/about-us-page/university.png");
+      const blobUrl = URL.createObjectURL(file);
+      setPreview(blobUrl);
+      onChange(blobUrl);
+    } else {
+      setPreview(imgUrl);
+      onChange(imgUrl || "/about-us-page/university.png");
     }
   };
 
