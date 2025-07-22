@@ -7,13 +7,13 @@ export type Reviewer = {
 };
 
 export type AdvisoryBoard = {
-  id: string;
+  objId: string;
   name: string;
   title: string;
   department: string;
   affiliation: string;
   field: string;
-  image: string;
+  imgUrl: string;
 };
 
 export type TrendingTopic = {

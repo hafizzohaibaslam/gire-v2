@@ -12,7 +12,7 @@ function EditBtn({ handleEdit, className, iconClassName }: EditBtnProps) {
     <button
       onClick={handleEdit}
       className={cn(
-        "absolute top-4 right-4 bg-white rounded-full p-2 shadow-md cursor-pointer hover:bg-[#3385FF] transition-all duration-300 group",
+        "bg-white rounded-full p-2 shadow-md cursor-pointer hover:bg-[#3385FF] transition-all duration-300 group",
         className
       )}
     >

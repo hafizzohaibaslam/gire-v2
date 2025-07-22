@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import AdvisoryBoardCard from "@/features/about-us/components/AdvisoryBoardCard";
-import { advisoryBoardData } from "@/features/shared/utils/advisoryBoardData";
 import Form from "@/features/admin/components/Form";
 import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
@@ -9,50 +8,67 @@ import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import Button from "@/features/shared/components/Button";
 import EditModal from "@/features/admin/components/EditModal";
 import { AdvisoryBoard } from "@/features/admin/lib/types";
+import { useGetAdvisoryBoards } from "@/features/admin/advisory-board/hooks/useGetAdvisoryBoards";
+import Skeleton from "@/features/admin/advisory-board/components/Skeleton";
+import { useCreateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useCreateAdvisoryBoard";
+import { useDeleteAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useDeleteAdvisoryBoard";
+import { useUpdateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useUpdateAdvisoryBoard";
 
 const AdminAdvisoryBoard = () => {
-  const [advisoryBoards, setAdvisoryBoards] =
-    useState<AdvisoryBoard[]>(advisoryBoardData);
+  const {
+    data: advisoryBoards,
+    isLoading,
+    isError,
+    error,
+  } = useGetAdvisoryBoards();
   const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
     useState<AdvisoryBoard | null>(null);
-  const [imageUpload, setImageUpload] = useState<string | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
+
+  const { mutate: createAdvisoryBoard, isPending: isCreating } =
+    useCreateAdvisoryBoard();
+  const { mutate: deleteAdvisoryBoard, isPending: isDeleting } =
+    useDeleteAdvisoryBoard();
+  const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
+    useUpdateAdvisoryBoard();
 
   const handleEdit = (board: AdvisoryBoard) => {
     setSelectedAdvisoryBoard(board);
   };
 
+  const handleDelete = (objId: string) => {
+    console.log("ObjId", objId);
+    if (isDeleting) return; // Prevent multiple clicks
+    if (
+      window.confirm(`Are you sure you want to delete this advisory board?`)
+    ) {
+      deleteAdvisoryBoard(objId);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isEditing = selectedAdvisoryBoard?.id !== "";
-    const formData = new FormData(e.target as HTMLFormElement);
-    formData.append("image", imageUpload || "");
-    const rawData = Object.fromEntries(formData) as unknown as AdvisoryBoard;
+    const isEditing = selectedAdvisoryBoard?.objId !== "";
 
     if (isEditing) {
-      setAdvisoryBoards((prev) => {
-        const updatedBoards = prev.map((board) =>
-          board.id === selectedAdvisoryBoard?.id
-            ? {
-                ...board,
-                ...rawData,
-                image: imageUpload || "/about-us-page/university.png",
-              }
-            : board
-        );
-        return updatedBoards;
-      });
+      updateAdvisoryBoard(selectedAdvisoryBoard as unknown as AdvisoryBoard);
     } else {
-      setAdvisoryBoards((prev) => [
-        ...prev,
-        {
-          ...rawData,
-          id: (prev.length + 1).toString(),
-          image: imageUpload || "/about-us-page/university.png",
-        },
-      ]);
+      const formData = new FormData(e.target as HTMLFormElement);
+      const rawData = Object.fromEntries(formData) as unknown as AdvisoryBoard;
+      rawData.imgUrl = imgUrl || "/about-us-page/university.png";
+
+      createAdvisoryBoard(rawData);
     }
     setSelectedAdvisoryBoard(null);
   };
+
+  if (isLoading) return <Skeleton />;
+  if (isError)
+    return (
+      <div className="text-red-500 text-center text-[20px] font-bold">
+        Error: {error instanceof Error ? error.message : "An error occurred"}
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[37px] rounded-[25px]">
@@ -64,13 +80,13 @@ const AdminAdvisoryBoard = () => {
           className="max-w-[150px]"
           onClick={() =>
             setSelectedAdvisoryBoard({
-              id: "",
+              objId: "",
               name: "",
               title: "",
               department: "",
               affiliation: "",
               field: "",
-              image: "/about-us-page/university.png",
+              imgUrl: "/about-us-page/university.png",
             })
           }
         >
@@ -79,11 +95,14 @@ const AdminAdvisoryBoard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px]">
-        {advisoryBoards.map((board) => (
+        {advisoryBoards?.map((board) => (
           <AdvisoryBoardCard
-            key={board.id}
+            key={board.objId}
             board={board}
+            showEditBtn={true}
             handleEdit={() => handleEdit(board)}
+            showDeleteBtn={true}
+            handleDelete={() => handleDelete(board.objId)}
           />
         ))}
       </div>
@@ -100,8 +119,8 @@ const AdminAdvisoryBoard = () => {
             {/* File Upload */}
             <div className="relative">
               <FileImageUpload
-                image={selectedAdvisoryBoard?.image || ""}
-                onChange={(url) => setImageUpload(url)}
+                imgUrl={selectedAdvisoryBoard?.imgUrl || ""}
+                onChange={(url) => setImgUrl(url)}
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">
@@ -167,8 +186,12 @@ const AdminAdvisoryBoard = () => {
                   />
                 </div>
               </div>
-              <Button type="submit" className="self-end max-w-[200px]">
-                {selectedAdvisoryBoard?.id ? "Update" : "Add"}
+              <Button
+                type="submit"
+                className="self-end max-w-[200px]"
+                disabled={isCreating || isUpdating || isDeleting}
+              >
+                {selectedAdvisoryBoard?.objId ? "Update" : "Add"}
               </Button>
             </div>
           </Form>

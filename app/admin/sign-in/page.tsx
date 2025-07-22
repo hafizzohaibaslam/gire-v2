@@ -1,14 +1,17 @@
 "use client";
 import Button from "@/features/shared/components/Button";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import React from "react";
+import { useSigninAdmin } from "@/features/admin/sign-in/hooks/useSigninAdmin";
 
 const AdminSigninPage = () => {
-  const router = useRouter();
+  const { mutate: signinAdmin, isPending } = useSigninAdmin();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/admin/chief-editor");
+    const formData = new FormData(e.target as HTMLFormElement);
+    const password = formData.get("password") as string;
+    signinAdmin(password);
   };
 
   return (
@@ -59,7 +62,9 @@ const AdminSigninPage = () => {
               />
             </div>
           </div>
-          <Button type="submit">Continue</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Signing in..." : "Continue"}
+          </Button>
         </form>
       </div>
     </div>

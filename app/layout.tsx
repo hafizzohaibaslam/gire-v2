@@ -50,12 +50,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* favicon */}
         <link rel="icon" href="/logo.svg" />
       </head>
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${beVietnamPro.variable} ${playfairDisplay.variable} ${figtree.variable} ${poppins.variable} antialiased`}
       >
         <Providers>{children}</Providers>
