@@ -32,6 +32,7 @@ export const trendingTopics = [
 ];
 
 export const yearsList = [
+  "All",
   "2025",
   "2024",
   "2023",
