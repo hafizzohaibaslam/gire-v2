@@ -22,10 +22,13 @@ import { TrendingTopic } from "@/features/admin/lib/types";
 
 const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedYear, setSelectedYear] = useState("2024");
+  const [selectedYear, setSelectedYear] = useState("All");
   const [selectedVolume, setSelectedVolume] = useState("All");
   const [selectedNumber, setSelectedNumber] = useState("All");
   const [selectedResearchField, setSelectedResearchField] = useState("All");
+  const [filteredTopics, setFilteredTopics] = useState<TrendingTopic[]>([
+    ...trendingTopics,
+  ]);
 
   const filterTopics = (topics: TrendingTopic[]) => {
     let filteredData = [...topics];
@@ -52,7 +55,11 @@ const TrendingTopics = () => {
 
     return filteredData;
   };
-  const filteredTopics = filterTopics(trendingTopics);
+
+  const handleApplyFilters = () => {
+    const filteredTopics = filterTopics(trendingTopics);
+    setFilteredTopics(filteredTopics);
+  };
 
   return (
     <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] lg:pt-[100px] max-w-[1440px] mx-auto">
@@ -146,6 +153,14 @@ const TrendingTopics = () => {
               </SelectContent>
             </Select>
           </div>
+          <button
+            className="bg-[#3385FF] text-white px-[20px] py-[10px] rounded-[100px] cursor-pointer self-end"
+            onClick={() => {
+              handleApplyFilters();
+            }}
+          >
+            Apply Filters
+          </button>
         </div>
       </div>
 

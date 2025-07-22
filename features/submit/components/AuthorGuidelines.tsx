@@ -44,11 +44,14 @@ const AuthorGuidelines = () => {
             <AccordionItem
               key={accordian.id}
               value={accordian.id}
-              className="border-b-[1px] border-[#D9DBE9] py-[38px]"
+              className={clsx(
+                "border-b-[1px] border-[#D9DBE9] group py-[38px] relative"
+              )}
             >
+              <div className="absolute bottom-0 left-0 w-0 h-[2px] group-hover:w-full group-hover:bg-[#d4d6e8] transition-all ease-in-out duration-500"></div>
               <AccordionTrigger
                 className={clsx(
-                  "w-full text-[#170F49] text-[16px] lg:text-[24px] leading-[24px] lg:leading-[28px] font-medium font-figtree -tracking-[1px]",
+                  "cursor-pointer w-full text-[#170F49] text-[16px] lg:text-[24px] leading-[24px] lg:leading-[28px] font-medium font-figtree -tracking-[1px]",
                   activeAccordion === accordian.id &&
                     "text-[#3385FF] font-semibold"
                 )}

@@ -68,7 +68,7 @@ const Header = () => {
             href="https://docs.google.com/forms/d/e/1FAIpQLScYqn18pKTS3aFyYZx-eQjSlOVcigEV9E_-vyAkmDDe11OAuw/viewform"
             target="_blank"
             className={clsx(
-              "capitalize inline-block w-fit border-[1px] border-[#aaa] px-[13px] py-[7px] rounded-[50px] cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-[#3385FF] hover:text-white"
+              "capitalize inline-block w-fit border-[1px] border-[#aaa] px-[13px] py-[7px] rounded-[50px] cursor-pointer hover:transition-all hover:duration-300 hover:scale-105 hover:bg-[#3385FF] hover:text-white"
             )}
           >
             <span className="flex items-center gap-[5px] text-[13px] font-normal leading-[16px]">

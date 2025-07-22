@@ -24,7 +24,7 @@ const Footer = () => {
                 alt="logo"
                 width={100}
                 height={100}
-                className="w-[200px] h-[100px] [filter:brightness(100)]"
+                className="w-[350px] h-[120px] [filter:brightness(100)] -ml-4"
               />
             </Link>
             <div className="space-y-2 mt-4">

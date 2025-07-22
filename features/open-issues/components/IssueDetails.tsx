@@ -11,25 +11,28 @@ const IssueDetails = () => {
       {/* Introduction */}
       <div>
         <div className="flex flex-col  gap-[10px]">
-          <p className="font-playfair-display text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[3px] font-semibold">
+          <p className="font-playfair-display text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[2px] font-semibold">
             Dr. Emily Richards
           </p>
           <div className="flex items-center gap-[10px]">
-            <p className="mr-4 font-playfair-display text-[#6D6E76] text-[16px] leading-[28px] font-normal">
+            <p className="mr-4 font-playfair-display text-[#6D6E76] text-[16px] leading-[28px] font-normal tracking-[2px]">
               May 1, 2025
             </p>
           </div>
         </div>
-        <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
+        <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold tracking-[2px]">
           Enhancing Student Engagement through Gamified Learning Platforms.
         </h1>
         {/* Tags */}
         <div className="flex flex-wrap gap-[10px]">
-          {tags.map((tag) => (
-            <Tags key={tag} tag={tag} />
+          {researchField.map((field) => (
+            <Tags key={field} tag={field} className="bg-blue-800" />
+          ))}
+          {researchKeWords.map((word) => (
+            <Tags key={word} tag={word} />
           ))}
         </div>
-        <p className="font-playfair-display my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
+        <p className="font-playfair-display my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal tracking-[2px]">
           https://doi.org/10.59720/24-029
         </p>
         <Button
@@ -61,8 +64,9 @@ const IssueDetails = () => {
 
 export default IssueDetails;
 
-const tags = [
-  "Education",
+const researchField = ["Education"];
+
+const researchKeWords = [
   "Technology",
   "Learning",
   "Gamification",
