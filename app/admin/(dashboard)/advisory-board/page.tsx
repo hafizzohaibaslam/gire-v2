@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AdvisoryBoardCard from "@/features/about-us/components/AdvisoryBoardCard";
 import Form from "@/features/admin/components/Form";
 import InputField from "@/features/admin/components/InputField";
@@ -8,64 +8,47 @@ import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import Button from "@/features/shared/components/Button";
 import EditModal from "@/features/admin/components/EditModal";
 import { AdvisoryBoard } from "@/features/admin/lib/types";
-import { useGetAdvisoryBoards } from "@/features/admin/advisory-board/hooks/useGetAdvisoryBoards";
 import Skeleton from "@/features/shared/components/Skeleton";
 import { useCreateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useCreateAdvisoryBoard";
-import { useDeleteAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useDeleteAdvisoryBoard";
 import { useUpdateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useUpdateAdvisoryBoard";
 import { toast } from "sonner";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
 import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { handleEdit } from "@/features/shared/utils/handleEdit";
 import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
+import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
+import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
+import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
+
+const URL = "/api/advisories";
 
 const AdminAdvisoryBoard = () => {
   const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
     useState<AdvisoryBoard | null>(null);
   const [image, setImage] = useState<File | null>(null);
 
-  const [allAdvisoryBoards, setAllAdvisoryBoards] = useState<AdvisoryBoard[]>(
-    []
-  );
-  const [offsetObjId, setOffsetObjId] = useState<string>("");
-  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
-  const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
-  const SIZE = 6;
-
-  const {
-    data: advisoryBoards,
-    isLoading,
-    isError,
-    error,
-  } = useGetAdvisoryBoards({
-    size: SIZE,
-    offsetObjId,
-  });
-
   const { mutate: createAdvisoryBoard, isPending: isCreating } =
     useCreateAdvisoryBoard();
   const { mutate: deleteAdvisoryBoard, isPending: isDeleting } =
-    useDeleteAdvisoryBoard();
+    useGenericDelete({
+      url: URL,
+      msgKeyValue: "Advisory Board",
+    });
   const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
     useUpdateAdvisoryBoard();
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
   const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
 
-  useEffect(() => {
-    if (advisoryBoards && advisoryBoards?.length > 0) {
-      setAllAdvisoryBoards((prev) => [...prev, ...advisoryBoards]);
-
-      // If we received fewer items than requested, there's no more data
-      if (advisoryBoards.length < SIZE) {
-        setIsMoreDataAvailable(false);
-      }
-    } else if (advisoryBoards && advisoryBoards.length === 0) {
-      // If we received an empty array, there's no more data
-      setIsMoreDataAvailable(false);
-    }
-    setIsLoadingMore(false);
-  }, [advisoryBoards]);
+  const {
+    allData,
+    offsetObjId,
+    isLoading,
+    isError,
+    isLoadingMore,
+    isMoreDataAvailable,
+    handleLoadMoreBtnClick,
+  } = useGenericPagination<AdvisoryBoard>({ url: URL });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -100,14 +83,6 @@ const AdminAdvisoryBoard = () => {
     setImage(null);
   };
 
-  if (isLoading) return <Skeleton />;
-  if (isError)
-    return (
-      <div className="text-red-500 text-center text-[20px] font-bold">
-        Error: {error instanceof Error ? error.message : "An error occurred"}
-      </div>
-    );
-
   return (
     <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[37px] rounded-[25px] h-full">
       <div className="flex justify-between items-center gap-4">
@@ -132,14 +107,20 @@ const AdminAdvisoryBoard = () => {
         </Button>
       </div>
 
-      {isError && (
+      {!offsetObjId && isLoading && (
+        <div className="mt-[60px]">
+          <Skeleton />
+        </div>
+      )}
+
+      {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
           Error loading advisory boards
         </div>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] overflow-y-auto">
-        {allAdvisoryBoards.length > 0 ? (
-          allAdvisoryBoards.map((board) => (
+        {allData.length > 0 ? (
+          allData.map((board) => (
             <AdvisoryBoardCard
               key={board.objId}
               board={board}
@@ -158,7 +139,7 @@ const AdminAdvisoryBoard = () => {
         )}
       </div>
 
-      {allAdvisoryBoards && allAdvisoryBoards.length > 0 && (
+      {allData && allData.length > 0 && (
         <div className="mt-[40px] text-center">
           {isLoading && (
             <div className="mt-[60px]">
@@ -166,17 +147,12 @@ const AdminAdvisoryBoard = () => {
             </div>
           )}
           {isMoreDataAvailable ? (
-            <Button
-              disabled={isLoadingMore}
-              onClick={() => {
-                setOffsetObjId(
-                  allAdvisoryBoards[allAdvisoryBoards.length - 1].objId
-                );
-                setIsLoadingMore(true);
-              }}
-            >
-              {isLoadingMore ? "Loading..." : "Load More"}
-            </Button>
+            <LoadMoreBtn
+              isLoadingMore={isLoadingMore}
+              handleClick={() =>
+                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
+              }
+            />
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
               All advisory board members have been loaded.

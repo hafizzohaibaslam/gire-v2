@@ -1,6 +1,6 @@
 "use client";
 import { Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TrendingTopicCard from "./IssueCard";
 import {
   categoriesList,
@@ -19,9 +19,9 @@ import {
 import Link from "next/link";
 import Label from "@/features/admin/components/Label";
 import { Issue } from "@/features/admin/lib/types";
-import { useGetIssues } from "@/features/admin/issues/hooks/useGetIssues";
 import Skeleton from "@/features/shared/components/Skeleton";
-import Button from "@/features/shared/components/Button";
+import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
+import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 
 const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,35 +31,17 @@ const TrendingTopics = () => {
   // const [selectedNumber, setSelectedNumber] = useState("All");
   const [selectedResearchField, setSelectedResearchField] = useState("All");
 
-  const [allIssues, setAllIssues] = useState<Issue[]>([]);
-  const [offsetObjId, setOffsetObjId] = useState<string>("");
-  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
-  const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
-  const SIZE = 1;
-
   const {
-    data: issues,
+    allData,
+    offsetObjId,
     isLoading,
     isError,
-  } = useGetIssues({
-    size: SIZE,
-    offsetObjId,
+    isLoadingMore,
+    isMoreDataAvailable,
+    handleLoadMoreBtnClick,
+  } = useGenericPagination<Issue>({
+    url: "/api/issues",
   });
-
-  useEffect(() => {
-    if (issues && issues?.length > 0) {
-      setAllIssues((prev) => [...prev, ...issues]);
-
-      // If we received fewer items than requested, there's no more data
-      if (issues.length < SIZE) {
-        setIsMoreDataAvailable(false);
-      }
-    } else if (issues && issues.length === 0) {
-      // If we received an empty array, there's no more data
-      setIsMoreDataAvailable(false);
-    }
-    setIsLoadingMore(false);
-  }, [issues]);
 
   const filterTopics = (topics: Issue[]) => {
     let filteredData = [...topics];
@@ -205,15 +187,22 @@ const TrendingTopics = () => {
         </div>
       </div>
 
-      {isError && (
+      {!offsetObjId && isLoading && (
+        <div className="mt-[60px]">
+          <Skeleton />
+        </div>
+      )}
+
+      {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
           Error loading advisory boards
         </div>
       )}
+
       {/* Profile Section */}
       <div className="flex flex-col gap-[30px] lg:gap-[60px]">
-        {allIssues.length > 0 ? (
-          allIssues.map((topic) => (
+        {allData.length > 0 ? (
+          allData.map((topic) => (
             <Link href={`/issues/${topic.objId}`} key={topic.objId}>
               <TrendingTopicCard topic={topic} />
             </Link>
@@ -224,7 +213,7 @@ const TrendingTopics = () => {
           </div>
         )}
       </div>
-      {allIssues && allIssues.length > 0 && (
+      {allData && allData.length > 0 && (
         <div className="mt-[40px] text-center">
           {isLoading && (
             <div className="mt-[60px]">
@@ -232,15 +221,12 @@ const TrendingTopics = () => {
             </div>
           )}
           {isMoreDataAvailable ? (
-            <Button
-              disabled={isLoadingMore}
-              onClick={() => {
-                setOffsetObjId(allIssues[allIssues.length - 1].objId);
-                setIsLoadingMore(true);
-              }}
-            >
-              {isLoadingMore ? "Loading..." : "Load More"}
-            </Button>
+            <LoadMoreBtn
+              isLoadingMore={isLoadingMore}
+              handleClick={() =>
+                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
+              }
+            />
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
               All advisory board members have been loaded.

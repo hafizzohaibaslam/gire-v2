@@ -1,7 +1,7 @@
 "use client";
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "@/features/shared/components/Button";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import IssueCard from "@/features/issues/components/IssueCard";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import InputField from "@/features/admin/components/InputField";
@@ -10,7 +10,6 @@ import { Issue } from "@/features/admin/lib/types";
 import { File } from "lucide-react";
 // import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { handleEdit } from "@/features/shared/utils/handleEdit";
-import { useGetIssues } from "@/features/admin/issues/hooks/useGetIssues";
 import Skeleton from "@/features/shared/components/Skeleton";
 import { useDeleteIssue } from "@/features/admin/issues/hooks/useDeleteIssue";
 import { handleDelete } from "@/features/shared/utils/handleDelete";
@@ -18,6 +17,8 @@ import { useCreateIssue } from "@/features/admin/issues/hooks/useCreateIssue";
 import { toast } from "sonner";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
 import { useUpdateIssue } from "@/features/admin/issues/hooks/useUpdateIssue";
+import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
+import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
@@ -31,42 +32,21 @@ const AdminIssuesPage = () => {
   const [selectedNumber, setSelectedNumber] = useState<number>(1);
   const [content, setContent] = useState<string>("");
 
-  const [allIssues, setAllIssues] = useState<Issue[]>([]);
-  const [offsetObjId, setOffsetObjId] = useState<string>("");
-  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
-  const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
-  const SIZE = 1;
-
   const {
-    data: issues,
+    allData,
+    offsetObjId,
     isLoading,
     isError,
-    error,
-  } = useGetIssues({
-    size: SIZE,
-    offsetObjId,
-  });
+    isLoadingMore,
+    isMoreDataAvailable,
+    handleLoadMoreBtnClick,
+  } = useGenericPagination<Issue>({ url: "/api/issues" });
 
   const { mutate: createIssue, isPending: isCreating } = useCreateIssue();
   const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
   const { mutate: deleteIssue, isPending: isDeleting } = useDeleteIssue();
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
-
-  useEffect(() => {
-    if (issues && issues?.length > 0) {
-      setAllIssues((prev) => [...prev, ...issues]);
-
-      // If we received fewer items than requested, there's no more data
-      if (issues.length < SIZE) {
-        setIsMoreDataAvailable(false);
-      }
-    } else if (issues && issues.length === 0) {
-      // If we received an empty array, there's no more data
-      setIsMoreDataAvailable(false);
-    }
-    setIsLoadingMore(false);
-  }, [issues]);
 
   const handleReset = () => {
     setSelectedIssue(null);
@@ -107,13 +87,6 @@ const AdminIssuesPage = () => {
     }
     handleReset();
   };
-
-  if (isError)
-    return (
-      <div className="text-red-500 text-center text-[20px] font-bold">
-        Error: {error instanceof Error ? error.message : "An error occurred"}
-      </div>
-    );
 
   if (selectedIssue) {
     return (
@@ -324,14 +297,20 @@ const AdminIssuesPage = () => {
         </Button>
       </div>
 
-      {isError && (
+      {!offsetObjId && isLoading && (
+        <div className="mt-[60px]">
+          <Skeleton />
+        </div>
+      )}
+
+      {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-          Error loading advisory boards
+          Error loading issues
         </div>
       )}
       <div className="grid grid-cols-1 gap-x-[30px] gap-y-[16px] overflow-y-auto">
-        {allIssues.length > 0 ? (
-          allIssues.map((topic, index) => (
+        {allData.length > 0 ? (
+          allData.map((topic, index) => (
             <IssueCard
               key={index}
               topic={topic}
@@ -354,7 +333,7 @@ const AdminIssuesPage = () => {
           </div>
         )}
       </div>
-      {allIssues && allIssues.length > 0 && (
+      {allData && allData.length > 0 && (
         <div className="mt-[40px] text-center">
           {isLoading && (
             <div className="mt-[60px]">
@@ -362,18 +341,15 @@ const AdminIssuesPage = () => {
             </div>
           )}
           {isMoreDataAvailable ? (
-            <Button
-              disabled={isLoadingMore}
-              onClick={() => {
-                setOffsetObjId(allIssues[allIssues.length - 1].objId);
-                setIsLoadingMore(true);
-              }}
-            >
-              {isLoadingMore ? "Loading..." : "Load More"}
-            </Button>
+            <LoadMoreBtn
+              isLoadingMore={isLoadingMore}
+              handleClick={() =>
+                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
+              }
+            />
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All advisory board members have been loaded.
+              All issues have been loaded.
             </p>
           )}
         </div>
