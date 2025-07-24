@@ -10,6 +10,11 @@ const api = axios.create({
 export default api;
 
 api.interceptors.request.use((config) => {
+  //
+  // if (config.url?.includes("media")) {
+  //   return config;
+  // }
+
   const accessToken = localStorage.getItem("accessToken");
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

@@ -8,14 +8,20 @@ export const useDeleteAdvisoryBoard = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    onMutate: (objId: string) => {
+    onMutate: async (objId: string) => {
       const toastId = toast.loading("Deleting advisory board...");
+      await queryClient.cancelQueries({ queryKey: ["advisories"] });
+
+      // Save previous data for rollback
+      const previousData = queryClient.getQueryData<AdvisoryBoard[]>([
+        "advisories",
+      ]);
 
       queryClient.setQueryData<AdvisoryBoard[]>(["advisories"], (old) => {
         return old?.filter((board) => board.objId !== objId);
       });
 
-      return { toastId };
+      return { toastId, previousData };
     },
     mutationFn: async (objId: string) => {
       try {
@@ -26,7 +32,7 @@ export const useDeleteAdvisoryBoard = () => {
       } catch (error) {
         throw new Error(
           error instanceof AxiosError
-            ? error.response?.data.detail
+            ? error?.response?.data?.detail
             : "Failed to delete advisory board"
         );
       }
@@ -37,18 +43,13 @@ export const useDeleteAdvisoryBoard = () => {
       });
     },
     onError: (error, __, context) => {
-      if (error instanceof AxiosError) {
-        toast.error(
-          error.response?.data.detail || "Failed to delete advisory board",
-          {
-            id: context?.toastId,
-          }
-        );
-      } else {
-        toast.error("Failed to delete advisory board", {
-          id: context?.toastId,
-        });
-      }
+      toast.error(error.message || "Failed to delete advisory board", {
+        id: context?.toastId,
+      });
+
+      queryClient.setQueryData<AdvisoryBoard[]>(["advisories"], () => {
+        return context?.previousData;
+      });
     },
   });
 };

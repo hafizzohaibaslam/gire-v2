@@ -7,56 +7,102 @@ import Form from "@/features/admin/components/Form";
 import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
 import Button from "@/features/shared/components/Button";
-import { editorialTeamData } from "@/features/shared/utils/editorialTeamData";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Reviewer } from "@/features/admin/lib/types";
+import { useGetReviewers } from "@/features/admin/reviewers/hooks/useGetReviewers";
+import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
+import { useDeleteReviewer } from "@/features/admin/reviewers/hooks/useDeleteReviewer";
+import { useUpdateReviewer } from "@/features/admin/reviewers/hooks/useUpdateReviewer";
+import { useCreateReviewer } from "@/features/admin/reviewers/hooks/useCreateReviewer";
+import { toast } from "sonner";
+import { handleDelete } from "@/features/shared/utils/handleDelete";
+import { handleEdit } from "@/features/shared/utils/handleEdit";
+import Skeleton from "@/features/shared/components/Skeleton";
 
 const AdminReviewersPage = () => {
-  const [reviewers, setReviewers] = useState<Reviewer[]>(editorialTeamData);
   const [selectedReviewer, setSelectedReviewer] = useState<Reviewer | null>(
     null
   );
-  const [imageUpload, setImageUpload] = useState<string>("");
+  const [image, setImage] = useState<File | null>(null);
 
-  const handleEdit = (reviewer: Reviewer) => {
-    setSelectedReviewer(reviewer);
-  };
+  const [allReviewers, setAllReviewers] = useState<Reviewer[]>([]);
+  const [offsetObjId, setOffsetObjId] = useState<string>("");
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
+  const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
+  const SIZE = 6;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const {
+    data: reviewers,
+    isLoading,
+    isError,
+    error,
+  } = useGetReviewers({
+    size: SIZE,
+    offsetObjId,
+  });
+
+  const { mutate: createReviewer, isPending: isCreating } = useCreateReviewer();
+  const { mutate: deleteReviewer, isPending: isDeleting } = useDeleteReviewer();
+  const { mutate: updateReviewer, isPending: isUpdating } = useUpdateReviewer();
+  const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
+    useGeneratePresignedUrl();
+
+  useEffect(() => {
+    if (reviewers && reviewers?.length > 0) {
+      setAllReviewers((prev) => [...prev, ...reviewers]);
+
+      // If we received fewer items than requested, there's no more data
+      if (reviewers.length < SIZE) {
+        setIsMoreDataAvailable(false);
+      }
+    } else if (reviewers && reviewers.length === 0) {
+      // If we received an empty array, there's no more data
+      setIsMoreDataAvailable(false);
+    }
+    setIsLoadingMore(false);
+  }, [reviewers]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isEditing = selectedReviewer?.id !== "";
+    if (isCreating || isUpdating || isGenerating) return;
+    if (!image) {
+      toast.error("Please upload an image");
+      return;
+    }
+
+    const response = await generatePresignedUrl({
+      contentType: image.type,
+      key: `reviewers/${image.name}-${Date.now()}`,
+    });
+
     const formData = new FormData(e.target as HTMLFormElement);
-    formData.append("image", imageUpload || "");
-    const rawData = Object.fromEntries(formData) as Reviewer;
+    const rawData = Object.fromEntries(formData) as unknown as Reviewer;
+    rawData.imgUrl = response.getUrl;
+
+    const isEditing = selectedReviewer?.objId !== "";
 
     if (isEditing) {
-      setReviewers((prev) => {
-        const updatedReviewers = prev.map((reviewer) =>
-          reviewer.id === selectedReviewer?.id
-            ? {
-                ...reviewer,
-                ...rawData,
-                image: imageUpload || "/about-us-page/university.png",
-              }
-            : reviewer
-        );
-        return updatedReviewers;
+      updateReviewer({
+        ...rawData,
+        objId: selectedReviewer?.objId || "",
       });
     } else {
-      setReviewers((prev) => [
-        ...prev,
-        {
-          ...rawData,
-          id: (prev.length + 1).toString(),
-          image: imageUpload || "/about-us-page/university.png",
-        },
-      ]);
+      createReviewer(rawData);
     }
     setSelectedReviewer(null);
+    setImage(null);
   };
 
+  if (isLoading) return <Skeleton />;
+  if (isError)
+    return (
+      <div className="text-red-500 text-center text-[20px] font-bold">
+        Error: {error instanceof Error ? error.message : "An error occurred"}
+      </div>
+    );
+
   return (
-    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px]">
+    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px] overflow-y-auto h-full">
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Reviewers
@@ -65,11 +111,11 @@ const AdminReviewersPage = () => {
           className="max-w-[150px]"
           onClick={() =>
             setSelectedReviewer({
-              id: "",
+              objId: "",
+              imgUrl: "/about-us-page/person1.png",
               name: "",
-              image: "/about-us-page/person1.png",
               department: "",
-              position: "",
+              role: "",
             })
           }
         >
@@ -77,15 +123,56 @@ const AdminReviewersPage = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[30px] gap-y-[16px]">
-        {reviewers.map((reviewer, index) => (
-          <EditorialTeamCard
-            key={index}
-            reviewer={reviewer}
-            handleEdit={() => handleEdit(reviewer)}
-          />
-        ))}
+      {isError && (
+        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+          Error loading advisory boards
+        </div>
+      )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[30px] gap-y-[16px] overflow-y-auto">
+        {allReviewers.length > 0 ? (
+          allReviewers.map((reviewer, index) => (
+            <EditorialTeamCard
+              key={index}
+              reviewer={reviewer}
+              showEditBtn={true}
+              handleEdit={() => handleEdit(reviewer, setSelectedReviewer)}
+              showDeleteBtn={true}
+              handleDelete={() =>
+                handleDelete(reviewer.objId, isDeleting, deleteReviewer)
+              }
+            />
+          ))
+        ) : (
+          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+            No reviewers found
+          </div>
+        )}
       </div>
+
+      {allReviewers && allReviewers.length > 0 && (
+        <div className="mt-[40px] text-center">
+          {isLoading && (
+            <div className="mt-[60px]">
+              <Skeleton />
+            </div>
+          )}
+          {isMoreDataAvailable ? (
+            <Button
+              disabled={isLoadingMore}
+              onClick={() => {
+                setOffsetObjId(allReviewers[allReviewers.length - 1].objId);
+                setIsLoadingMore(true);
+              }}
+            >
+              {isLoadingMore ? "Loading..." : "Load More"}
+            </Button>
+          ) : (
+            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
+              All reviewers have been loaded.
+            </p>
+          )}
+        </div>
+      )}
 
       {selectedReviewer && (
         <EditModal
@@ -99,8 +186,9 @@ const AdminReviewersPage = () => {
             {/* File Upload */}
             <div className="relative">
               <FileImageUpload
-                image={selectedReviewer?.image || ""}
-                onChange={(url) => setImageUpload(url)}
+                image={image}
+                onChange={(file) => setImage(file)}
+                defaultImage={"/about-us-page/person1.png"}
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">
@@ -111,7 +199,7 @@ const AdminReviewersPage = () => {
                     <Label htmlFor="fullName">Full Name</Label>
                     <InputField
                       type="text"
-                      id="name"
+                      id="fullName"
                       name="name"
                       placeholder="Enter Full Name"
                       defaultValue={selectedReviewer?.name}
@@ -136,16 +224,20 @@ const AdminReviewersPage = () => {
                   <Label htmlFor="editorialRole">Editorial Role</Label>
                   <InputField
                     type="text"
-                    id="position"
-                    name="position"
+                    id="role"
+                    name="role"
                     placeholder="Enter Editorial Role"
-                    defaultValue={selectedReviewer?.position}
+                    defaultValue={selectedReviewer?.role}
                     className="text-black placeholder:text-black"
                   />
                 </div>
               </div>
-              <Button type="submit" className="self-end max-w-[200px]">
-                {selectedReviewer?.id ? "Update" : "Add"}
+              <Button
+                type="submit"
+                className="self-end max-w-[200px]"
+                disabled={isCreating || isUpdating || isDeleting}
+              >
+                {selectedReviewer?.objId ? "Update" : "Add"}
               </Button>
             </div>
           </Form>

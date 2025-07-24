@@ -1,7 +1,7 @@
 "use client";
 import { Search } from "lucide-react";
-import React, { useState } from "react";
-import TrendingTopicCard from "./TrendingTopicCard";
+import React, { useEffect, useState } from "react";
+import TrendingTopicCard from "./IssueCard";
 import {
   categoriesList,
   numbersList,
@@ -18,19 +18,50 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import Label from "@/features/admin/components/Label";
-import { TrendingTopic } from "@/features/admin/lib/types";
+import { Issue } from "@/features/admin/lib/types";
+import { useGetIssues } from "@/features/admin/issues/hooks/useGetIssues";
+import Skeleton from "@/features/shared/components/Skeleton";
+import Button from "@/features/shared/components/Button";
 
 const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("All");
-  const [selectedVolume, setSelectedVolume] = useState("All");
-  const [selectedNumber, setSelectedNumber] = useState("All");
+  const [selectedArea, setSelectedArea] = useState("");
+  // const [selectedVolume, setSelectedVolume] = useState("All");
+  // const [selectedNumber, setSelectedNumber] = useState("All");
   const [selectedResearchField, setSelectedResearchField] = useState("All");
-  const [filteredTopics, setFilteredTopics] = useState<TrendingTopic[]>([
-    ...trendingTopics,
-  ]);
 
-  const filterTopics = (topics: TrendingTopic[]) => {
+  const [allIssues, setAllIssues] = useState<Issue[]>([]);
+  const [offsetObjId, setOffsetObjId] = useState<string>("");
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
+  const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
+  const SIZE = 1;
+
+  const {
+    data: issues,
+    isLoading,
+    isError,
+  } = useGetIssues({
+    size: SIZE,
+    offsetObjId,
+  });
+
+  useEffect(() => {
+    if (issues && issues?.length > 0) {
+      setAllIssues((prev) => [...prev, ...issues]);
+
+      // If we received fewer items than requested, there's no more data
+      if (issues.length < SIZE) {
+        setIsMoreDataAvailable(false);
+      }
+    } else if (issues && issues.length === 0) {
+      // If we received an empty array, there's no more data
+      setIsMoreDataAvailable(false);
+    }
+    setIsLoadingMore(false);
+  }, [issues]);
+
+  const filterTopics = (topics: Issue[]) => {
     let filteredData = [...topics];
 
     if (searchTerm && searchTerm !== "") {
@@ -47,7 +78,7 @@ const TrendingTopics = () => {
       filteredData = filteredData.filter(
         (topic) =>
           topic.researchField.includes(selectedResearchField) ||
-          topic.researchKeywords.some((keyword) =>
+          topic.researchKeywords.some((keyword: string) =>
             keyword.toLowerCase().includes(selectedResearchField.toLowerCase())
           )
       );
@@ -56,10 +87,7 @@ const TrendingTopics = () => {
     return filteredData;
   };
 
-  const handleApplyFilters = () => {
-    const filteredTopics = filterTopics(trendingTopics);
-    setFilteredTopics(filteredTopics);
-  };
+  const handleApplyFilters = () => {};
 
   return (
     <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] lg:pt-[100px] max-w-[1440px] mx-auto">
@@ -115,8 +143,21 @@ const TrendingTopics = () => {
             </Select>
           </div>
 
-          {/* Volume */}
+          {/* Area */}
           <div className="flex flex-col gap-2">
+            <Label htmlFor="area">Fields</Label>
+            <input
+              id="area"
+              type="text"
+              placeholder="Enter area"
+              value={selectedArea}
+              onChange={(e) => setSelectedArea(e.target.value)}
+              className="w-full lg:w-[180px] border-[1px] border-[#E8EAEE] rounded-[10px] px-[10px] py-[10px] outline-none"
+            />
+          </div>
+
+          {/* Volume */}
+          {/* <div className="flex flex-col gap-2">
             <Label>Volume</Label>
             <Select
               value={selectedVolume}
@@ -133,9 +174,9 @@ const TrendingTopics = () => {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           {/* Number */}
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <Label>Number</Label>
             <Select
               value={selectedNumber}
@@ -152,7 +193,7 @@ const TrendingTopics = () => {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           <button
             className="bg-[#3385FF] text-white px-[20px] py-[10px] rounded-[100px] cursor-pointer self-end"
             onClick={() => {
@@ -164,11 +205,16 @@ const TrendingTopics = () => {
         </div>
       </div>
 
+      {isError && (
+        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+          Error loading advisory boards
+        </div>
+      )}
       {/* Profile Section */}
       <div className="flex flex-col gap-[30px] lg:gap-[60px]">
-        {filteredTopics.length > 0 ? (
-          filteredTopics.map((topic) => (
-            <Link href={`/issues/${topic.id}`} key={topic.id}>
+        {allIssues.length > 0 ? (
+          allIssues.map((topic) => (
+            <Link href={`/issues/${topic.objId}`} key={topic.objId}>
               <TrendingTopicCard topic={topic} />
             </Link>
           ))
@@ -178,6 +224,30 @@ const TrendingTopics = () => {
           </div>
         )}
       </div>
+      {allIssues && allIssues.length > 0 && (
+        <div className="mt-[40px] text-center">
+          {isLoading && (
+            <div className="mt-[60px]">
+              <Skeleton />
+            </div>
+          )}
+          {isMoreDataAvailable ? (
+            <Button
+              disabled={isLoadingMore}
+              onClick={() => {
+                setOffsetObjId(allIssues[allIssues.length - 1].objId);
+                setIsLoadingMore(true);
+              }}
+            >
+              {isLoadingMore ? "Loading..." : "Load More"}
+            </Button>
+          ) : (
+            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
+              All advisory board members have been loaded.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

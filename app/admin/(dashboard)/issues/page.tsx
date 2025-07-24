@@ -1,58 +1,144 @@
 "use client";
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "@/features/shared/components/Button";
-import React, { useState, useRef } from "react";
-import { trendingTopics } from "@/features/issues/utils/trendingTopics";
-import TrendingTopicCard from "@/features/issues/components/TrendingTopicCard";
+import React, { useState, useRef, useEffect } from "react";
+import IssueCard from "@/features/issues/components/IssueCard";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
-import { TrendingTopic } from "@/features/admin/lib/types";
+import { Issue } from "@/features/admin/lib/types";
 import { File } from "lucide-react";
+// import { handleDelete } from "@/features/shared/utils/handleDelete";
+import { handleEdit } from "@/features/shared/utils/handleEdit";
+import { useGetIssues } from "@/features/admin/issues/hooks/useGetIssues";
+import Skeleton from "@/features/shared/components/Skeleton";
+import { useDeleteIssue } from "@/features/admin/issues/hooks/useDeleteIssue";
+import { handleDelete } from "@/features/shared/utils/handleDelete";
+import { useCreateIssue } from "@/features/admin/issues/hooks/useCreateIssue";
+import { toast } from "sonner";
+import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
+import { useUpdateIssue } from "@/features/admin/issues/hooks/useUpdateIssue";
 
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
   const [pdfUpload, setPdfUpload] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedIssue, setSelectedIssue] = useState<TrendingTopic | null>(
-    null
-  );
-  const [imageUpload, setImageUpload] = useState<string>("");
+  const [selectedIssue, setSelectedIssue] = useState<
+    (Issue & { content: string }) | null
+  >(null);
+  const [image, setImage] = useState<File | null>(null);
   const [selectedVolume, setSelectedVolume] = useState<number>(1);
   const [selectedNumber, setSelectedNumber] = useState<number>(1);
+  const [content, setContent] = useState<string>("");
 
-  const handleEdit = (issue: TrendingTopic) => {
-    setSelectedIssue(issue);
-  };
+  const [allIssues, setAllIssues] = useState<Issue[]>([]);
+  const [offsetObjId, setOffsetObjId] = useState<string>("");
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
+  const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
+  const SIZE = 1;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const data = Object.fromEntries(formData);
-    data.image = imageUpload;
+  const {
+    data: issues,
+    isLoading,
+    isError,
+    error,
+  } = useGetIssues({
+    size: SIZE,
+    offsetObjId,
+  });
+
+  const { mutate: createIssue, isPending: isCreating } = useCreateIssue();
+  const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
+  const { mutate: deleteIssue, isPending: isDeleting } = useDeleteIssue();
+  const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
+    useGeneratePresignedUrl();
+
+  useEffect(() => {
+    if (issues && issues?.length > 0) {
+      setAllIssues((prev) => [...prev, ...issues]);
+
+      // If we received fewer items than requested, there's no more data
+      if (issues.length < SIZE) {
+        setIsMoreDataAvailable(false);
+      }
+    } else if (issues && issues.length === 0) {
+      // If we received an empty array, there's no more data
+      setIsMoreDataAvailable(false);
+    }
+    setIsLoadingMore(false);
+  }, [issues]);
+
+  const handleReset = () => {
     setSelectedIssue(null);
-    setImageUpload("");
+    setImage(null);
+    setPdfUpload("");
+    setContent("");
+    setSelectedVolume(1);
+    setSelectedNumber(1);
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isCreating || isGenerating) return;
+    if (!image) {
+      toast.error("Please upload an image");
+      return;
+    }
+
+    const response = await generatePresignedUrl({
+      contentType: image.type,
+      key: `issues/${image.name}-${Date.now()}`,
+    });
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const rawData = Object.fromEntries(formData) as unknown as Issue;
+    rawData.paperUrl = response.getUrl;
+    rawData.content = content;
+
+    const isEditing = selectedIssue?.objId !== "";
+
+    if (isEditing) {
+      updateIssue({
+        ...rawData,
+        objId: selectedIssue?.objId || "",
+      });
+    } else {
+      createIssue(rawData);
+    }
+    handleReset();
+  };
+
+  if (isError)
+    return (
+      <div className="text-red-500 text-center text-[20px] font-bold">
+        Error: {error instanceof Error ? error.message : "An error occurred"}
+      </div>
+    );
 
   if (selectedIssue) {
     return (
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px]"
+        className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px] h-full overflow-y-auto"
       >
         <div className="flex justify-between items-center gap-4">
           <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
-            {selectedIssue.id ? "Edit Issue" : "Add New Issue"}
+            {selectedIssue.objId ? "Edit Issue" : "Add New Issue"}
           </h1>
-          <Button type="submit" className="max-w-[150px]">
-            {selectedIssue.id ? "Update" : "Add"}
+          <Button
+            type="submit"
+            disabled={isCreating || isGenerating || isUpdating}
+            className="max-w-[150px]"
+          >
+            {selectedIssue.objId ? "Update" : "Add"}
           </Button>
         </div>
         <div className="lg:max-w-[80%] space-y-[50px]">
           <div className="w-full">
             <FileImageUpload
-              image={selectedIssue.image}
-              onChange={(url) => setImageUpload(url)}
+              image={image}
+              onChange={(file) => setImage(file)}
+              defaultImage={"/issues-page/card1.svg"}
               className="w-full max-w-[400px]"
               imageClassName="w-full h-full rounded-xs"
             />
@@ -61,11 +147,11 @@ const AdminIssuesPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
               {/* Volume */}
               <div className="flex flex-col gap-[11px] w-full">
-                <Label htmlFor="volume">Volume</Label>
+                <Label htmlFor="paperVolume">Paper Volume</Label>
                 <InputField
                   type="number"
-                  id="volume"
-                  name="volume"
+                  id="paperVolume"
+                  name="paperVolume"
                   placeholder="Enter Volume"
                   value={selectedVolume}
                   onChange={(e) => setSelectedVolume(Number(e.target.value))}
@@ -75,11 +161,11 @@ const AdminIssuesPage = () => {
 
               {/* Number */}
               <div className="flex flex-col gap-[11px] w-full">
-                <Label htmlFor="number">Number</Label>
+                <Label htmlFor="paperNumber">Paper Number</Label>
                 <InputField
                   type="number"
-                  id="number"
-                  name="number"
+                  id="paperNumber"
+                  name="paperNumber"
                   placeholder="Enter Number"
                   value={selectedNumber}
                   onChange={(e) => setSelectedNumber(Number(e.target.value))}
@@ -94,9 +180,9 @@ const AdminIssuesPage = () => {
                 <InputField
                   type="text"
                   id="fullName"
-                  name="fullName"
+                  name="name"
                   placeholder="Enter Full Name"
-                  defaultValue={selectedIssue?.author}
+                  defaultValue={selectedIssue?.name}
                   className="text-black placeholder:text-black"
                 />
               </div>
@@ -130,13 +216,13 @@ const AdminIssuesPage = () => {
 
             {/* Research Field */}
             <div className="flex flex-col gap-[11px] w-full">
-              <Label htmlFor="researchField">Research Field</Label>
+              <Label htmlFor="area">Area</Label>
               <InputField
                 type="text"
-                id="researchField"
-                name="researchField"
-                placeholder="Enter Research Field"
-                defaultValue={selectedIssue?.researchField}
+                id="area"
+                name="area"
+                placeholder="Enter Area"
+                defaultValue={selectedIssue?.area}
                 className="text-black placeholder:text-black"
               />
             </div>
@@ -147,9 +233,9 @@ const AdminIssuesPage = () => {
               <InputField
                 type="text"
                 id="researchKeywords"
-                name="researchKeywords"
+                name="keyword"
                 placeholder="Enter Research Keywords"
-                defaultValue={selectedIssue?.researchKeywords.join(", ")}
+                defaultValue={selectedIssue?.keyword}
                 className="text-black placeholder:text-black"
               />
             </div>
@@ -162,7 +248,7 @@ const AdminIssuesPage = () => {
                 id="link"
                 name="link"
                 placeholder="Enter Link"
-                defaultValue={selectedIssue?.doi}
+                defaultValue={selectedIssue?.link}
                 className="text-black placeholder:text-black"
               />
             </div>
@@ -171,6 +257,8 @@ const AdminIssuesPage = () => {
             <div className="flex flex-col gap-[11px] w-full">
               <Label htmlFor="content">Content</Label>
               <Editor
+                value={content}
+                onEditorChange={(content) => setContent(content)}
                 onInit={(evt, editor) => (editorRef.current = editor)}
                 apiKey="q072heva0y88u5qnrvbu37zyp1mreir3z868dt8iuxdy99if"
                 init={{
@@ -209,7 +297,7 @@ const AdminIssuesPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px]">
+    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px] h-full">
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Issues
@@ -218,14 +306,17 @@ const AdminIssuesPage = () => {
           className="max-w-[150px]"
           onClick={() => {
             setSelectedIssue({
-              id: "",
-              image: "/issues-page/card1.svg",
-              author: "",
+              objId: "",
+              name: "",
               date: "",
+              area: "",
+              link: "",
               title: "",
-              researchField: "",
-              researchKeywords: [],
-              doi: "",
+              keyword: "",
+              paperUrl: "",
+              paperVolume: 1,
+              paperNumber: 1,
+              content: "",
             });
           }}
         >
@@ -233,16 +324,60 @@ const AdminIssuesPage = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-x-[30px] gap-y-[16px] max-h-[72vh] overflow-y-auto">
-        {trendingTopics.map((topic, index) => (
-          <TrendingTopicCard
-            key={index}
-            topic={topic}
-            showEditButton={true}
-            handleEdit={() => handleEdit(topic)}
-          />
-        ))}
+      {isError && (
+        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+          Error loading advisory boards
+        </div>
+      )}
+      <div className="grid grid-cols-1 gap-x-[30px] gap-y-[16px] overflow-y-auto">
+        {allIssues.length > 0 ? (
+          allIssues.map((topic, index) => (
+            <IssueCard
+              key={index}
+              topic={topic}
+              showEditBtn={true}
+              showDeleteBtn={true}
+              handleEdit={() =>
+                handleEdit(
+                  topic as Issue & { content: string },
+                  setSelectedIssue
+                )
+              }
+              handleDelete={() =>
+                handleDelete(topic.objId, isDeleting, deleteIssue)
+              }
+            />
+          ))
+        ) : (
+          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+            No issues found
+          </div>
+        )}
       </div>
+      {allIssues && allIssues.length > 0 && (
+        <div className="mt-[40px] text-center">
+          {isLoading && (
+            <div className="mt-[60px]">
+              <Skeleton />
+            </div>
+          )}
+          {isMoreDataAvailable ? (
+            <Button
+              disabled={isLoadingMore}
+              onClick={() => {
+                setOffsetObjId(allIssues[allIssues.length - 1].objId);
+                setIsLoadingMore(true);
+              }}
+            >
+              {isLoadingMore ? "Loading..." : "Load More"}
+            </Button>
+          ) : (
+            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
+              All advisory board members have been loaded.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
