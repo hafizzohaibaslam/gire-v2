@@ -1,9 +1,9 @@
 export type Reviewer = {
-  id: string;
-  image: string;
+  objId: string;
+  imgUrl: string;
   name: string;
   department: string;
-  position: string;
+  role: string;
 };
 
 export type AdvisoryBoard = {
@@ -16,13 +16,27 @@ export type AdvisoryBoard = {
   imgUrl: string;
 };
 
-export type TrendingTopic = {
-  id: string;
-  image: string;
-  author: string;
-  date: string;
+export type Issue = {
+  objId: string;
+  name: string;
+  area: string;
+  link: string;
   title: string;
-  researchField: string;
-  researchKeywords: string[];
-  doi: string;
+  keyword: string;
+  paperUrl: string;
+  paperVolume: number;
+  paperNumber: number;
+  content?: string;
+  date?: string;
+};
+
+export type Editor = {
+  objId: string;
+  name: string;
+  title: string;
+  affiliation: string;
+  bio: string;
+  letter: string;
+  imgUrl: string;
+  level: "co-chief" | "chief";
 };

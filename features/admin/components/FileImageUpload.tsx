@@ -5,36 +5,40 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type FileImageUploadProps = {
-  imgUrl: string;
-  onChange: (url: string) => void;
+  image: File | null;
+  onChange: (file: File | null) => void;
   className?: string;
   imageClassName?: string;
+  defaultImage: string;
 };
 
 function FileImageUpload({
-  imgUrl,
+  image,
   onChange,
   className,
   imageClassName,
+  defaultImage,
 }: FileImageUploadProps) {
-  const [preview, setPreview] = useState<string>(imgUrl);
+  const [preview, setPreview] = useState<File | null>(image || null);
+  const blobUrl = preview ? URL.createObjectURL(preview) : defaultImage;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("On Changed called");
     const file = e.target.files?.[0] || null;
     if (file) {
-      const blobUrl = URL.createObjectURL(file);
-      setPreview(blobUrl);
-      onChange(blobUrl);
+      setPreview(file);
+      onChange(file || null);
     } else {
-      setPreview(imgUrl);
-      onChange(imgUrl || "/about-us-page/university.png");
+      setPreview(image);
+      onChange(image || null);
     }
+    e.target.value = "";
   };
 
   return (
     <div className={cn("self-start relative w-fit", className)}>
       <Image
-        src={preview}
+        src={blobUrl || defaultImage}
         alt="Profile"
         width={100}
         height={100}
@@ -46,7 +50,7 @@ function FileImageUpload({
       <label className="absolute bottom-2 -right-2 bg-blue-600 rounded-full p-2 cursor-pointer shadow-md">
         <input
           type="file"
-          accept="image/*"
+          accept="application/pdf, image/jpg, image/png, video/mp4"
           className="hidden"
           onChange={handleFileChange}
         />

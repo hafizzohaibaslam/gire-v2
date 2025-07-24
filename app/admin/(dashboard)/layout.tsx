@@ -8,15 +8,17 @@ const AdminDashboardLayoutPage = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="bg-[#F5F7FA] min-h-screen flex relative">
+    <div className="bg-[#F5F7FA] h-screen flex relative overflow-hidden">
       {/* Sidebar */}
       <div className="lg:block hidden bg-white border-r-[1px] border-[#E0E0E0]">
         <Sidebar />
       </div>
       {/* Header and Main Content */}
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col overflow-hidden">
         <AdminHeader />
-        <main className="px-[40px] py-[30px] flex-1">{children}</main>
+        <main className="px-[40px] py-[30px] flex-1 overflow-hidden">
+          {children}
+        </main>
       </div>
     </div>
   );

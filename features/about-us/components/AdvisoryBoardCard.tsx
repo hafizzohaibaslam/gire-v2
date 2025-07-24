@@ -27,8 +27,8 @@ const AdvisoryBoardCard = ({
       </div>
       <div className="flex justify-center">
         <Image
-          src={"/about-us-page/university.png"} // `${board.imgUrl}` ||
-          alt="University Logo"
+          src={board.imgUrl}
+          alt="Advisory Board Image"
           width={100}
           height={100}
           className="w-[180px] h-[175px]"

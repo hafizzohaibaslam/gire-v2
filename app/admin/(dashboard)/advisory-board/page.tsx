@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdvisoryBoardCard from "@/features/about-us/components/AdvisoryBoardCard";
 import Form from "@/features/admin/components/Form";
 import InputField from "@/features/admin/components/InputField";
@@ -9,21 +9,38 @@ import Button from "@/features/shared/components/Button";
 import EditModal from "@/features/admin/components/EditModal";
 import { AdvisoryBoard } from "@/features/admin/lib/types";
 import { useGetAdvisoryBoards } from "@/features/admin/advisory-board/hooks/useGetAdvisoryBoards";
-import Skeleton from "@/features/admin/advisory-board/components/Skeleton";
+import Skeleton from "@/features/shared/components/Skeleton";
 import { useCreateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useCreateAdvisoryBoard";
 import { useDeleteAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useDeleteAdvisoryBoard";
 import { useUpdateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useUpdateAdvisoryBoard";
+import { toast } from "sonner";
+import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
+import { handleDelete } from "@/features/shared/utils/handleDelete";
+import { handleEdit } from "@/features/shared/utils/handleEdit";
+import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
 
 const AdminAdvisoryBoard = () => {
+  const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
+    useState<AdvisoryBoard | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+
+  const [allAdvisoryBoards, setAllAdvisoryBoards] = useState<AdvisoryBoard[]>(
+    []
+  );
+  const [offsetObjId, setOffsetObjId] = useState<string>("");
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
+  const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
+  const SIZE = 6;
+
   const {
     data: advisoryBoards,
     isLoading,
     isError,
     error,
-  } = useGetAdvisoryBoards();
-  const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
-    useState<AdvisoryBoard | null>(null);
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  } = useGetAdvisoryBoards({
+    size: SIZE,
+    offsetObjId,
+  });
 
   const { mutate: createAdvisoryBoard, isPending: isCreating } =
     useCreateAdvisoryBoard();
@@ -31,35 +48,56 @@ const AdminAdvisoryBoard = () => {
     useDeleteAdvisoryBoard();
   const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
     useUpdateAdvisoryBoard();
+  const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
+    useGeneratePresignedUrl();
+  const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
 
-  const handleEdit = (board: AdvisoryBoard) => {
-    setSelectedAdvisoryBoard(board);
-  };
+  useEffect(() => {
+    if (advisoryBoards && advisoryBoards?.length > 0) {
+      setAllAdvisoryBoards((prev) => [...prev, ...advisoryBoards]);
 
-  const handleDelete = (objId: string) => {
-    console.log("ObjId", objId);
-    if (isDeleting) return; // Prevent multiple clicks
-    if (
-      window.confirm(`Are you sure you want to delete this advisory board?`)
-    ) {
-      deleteAdvisoryBoard(objId);
+      // If we received fewer items than requested, there's no more data
+      if (advisoryBoards.length < SIZE) {
+        setIsMoreDataAvailable(false);
+      }
+    } else if (advisoryBoards && advisoryBoards.length === 0) {
+      // If we received an empty array, there's no more data
+      setIsMoreDataAvailable(false);
     }
-  };
+    setIsLoadingMore(false);
+  }, [advisoryBoards]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isCreating || isUpdating || isGenerating || isUploading) return;
+    if (!image) {
+      toast.error("Please upload an image");
+      return;
+    }
+
+    const response = await generatePresignedUrl({
+      contentType: image.type,
+      key: `advisory-board/${image.name}`,
+    });
+
+    await uploadToS3({ file: image, putUrl: response.putUrl });
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const rawData = Object.fromEntries(formData) as unknown as AdvisoryBoard;
+    rawData.imgUrl = response.getUrl;
+
     const isEditing = selectedAdvisoryBoard?.objId !== "";
 
     if (isEditing) {
-      updateAdvisoryBoard(selectedAdvisoryBoard as unknown as AdvisoryBoard);
+      updateAdvisoryBoard({
+        ...rawData,
+        objId: selectedAdvisoryBoard?.objId || "",
+      });
     } else {
-      const formData = new FormData(e.target as HTMLFormElement);
-      const rawData = Object.fromEntries(formData) as unknown as AdvisoryBoard;
-      rawData.imgUrl = imgUrl || "/about-us-page/university.png";
-
       createAdvisoryBoard(rawData);
     }
     setSelectedAdvisoryBoard(null);
+    setImage(null);
   };
 
   if (isLoading) return <Skeleton />;
@@ -71,7 +109,7 @@ const AdminAdvisoryBoard = () => {
     );
 
   return (
-    <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[37px] rounded-[25px]">
+    <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[37px] rounded-[25px] h-full">
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Advisory Board
@@ -94,18 +132,58 @@ const AdminAdvisoryBoard = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px]">
-        {advisoryBoards?.map((board) => (
-          <AdvisoryBoardCard
-            key={board.objId}
-            board={board}
-            showEditBtn={true}
-            handleEdit={() => handleEdit(board)}
-            showDeleteBtn={true}
-            handleDelete={() => handleDelete(board.objId)}
-          />
-        ))}
+      {isError && (
+        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+          Error loading advisory boards
+        </div>
+      )}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] overflow-y-auto">
+        {allAdvisoryBoards.length > 0 ? (
+          allAdvisoryBoards.map((board) => (
+            <AdvisoryBoardCard
+              key={board.objId}
+              board={board}
+              showEditBtn={true}
+              handleEdit={() => handleEdit(board, setSelectedAdvisoryBoard)}
+              showDeleteBtn={true}
+              handleDelete={() =>
+                handleDelete(board.objId, isDeleting, deleteAdvisoryBoard)
+              }
+            />
+          ))
+        ) : (
+          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+            No advisory boards found
+          </div>
+        )}
       </div>
+
+      {allAdvisoryBoards && allAdvisoryBoards.length > 0 && (
+        <div className="mt-[40px] text-center">
+          {isLoading && (
+            <div className="mt-[60px]">
+              <Skeleton />
+            </div>
+          )}
+          {isMoreDataAvailable ? (
+            <Button
+              disabled={isLoadingMore}
+              onClick={() => {
+                setOffsetObjId(
+                  allAdvisoryBoards[allAdvisoryBoards.length - 1].objId
+                );
+                setIsLoadingMore(true);
+              }}
+            >
+              {isLoadingMore ? "Loading..." : "Load More"}
+            </Button>
+          ) : (
+            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
+              All advisory board members have been loaded.
+            </p>
+          )}
+        </div>
+      )}
 
       {selectedAdvisoryBoard && (
         <EditModal
@@ -119,8 +197,9 @@ const AdminAdvisoryBoard = () => {
             {/* File Upload */}
             <div className="relative">
               <FileImageUpload
-                imgUrl={selectedAdvisoryBoard?.imgUrl || ""}
-                onChange={(url) => setImgUrl(url)}
+                image={image}
+                onChange={(file) => setImage(file)}
+                defaultImage={"/about-us-page/university.png"}
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">

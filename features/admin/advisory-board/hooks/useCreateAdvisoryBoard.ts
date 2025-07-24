@@ -34,7 +34,7 @@ export const useCreateAdvisoryBoard = () => {
       } catch (error) {
         throw new Error(
           error instanceof AxiosError
-            ? error.response?.data.detail
+            ? error?.response?.data?.detail
             : "Failed to create advisory board"
         );
       }
@@ -52,14 +52,9 @@ export const useCreateAdvisoryBoard = () => {
 
     onError: (error, _, context) => {
       // Rollback cache if there was an error
-      toast.error(
-        error instanceof AxiosError
-          ? error.response?.data.detail
-          : "Failed to create advisory board",
-        {
-          id: context?.toastId,
-        }
-      );
+      toast.error(error.message || "Failed to create advisory board", {
+        id: context?.toastId,
+      });
 
       queryClient.setQueryData<AdvisoryBoard[]>(["advisories"], () => {
         return context?.previousData;
