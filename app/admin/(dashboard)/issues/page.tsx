@@ -8,18 +8,18 @@ import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
 import { Issue } from "@/features/admin/lib/types";
 import { File } from "lucide-react";
-// import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { handleEdit } from "@/features/shared/utils/handleEdit";
 import Skeleton from "@/features/shared/components/Skeleton";
-import { useDeleteIssue } from "@/features/admin/issues/hooks/useDeleteIssue";
 import { handleDelete } from "@/features/shared/utils/handleDelete";
-import { useCreateIssue } from "@/features/admin/issues/hooks/useCreateIssue";
 import { toast } from "sonner";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
-import { useUpdateIssue } from "@/features/admin/issues/hooks/useUpdateIssue";
 import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
 import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
+import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
+import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
+import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
 
+const URL = "/api/issues";
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
   const [pdfUpload, setPdfUpload] = useState<string>("");
@@ -34,17 +34,34 @@ const AdminIssuesPage = () => {
 
   const {
     allData,
+    handleAddToAllData,
+    handleUpdateInAllData,
+    handleDeleteFromAllData,
     offsetObjId,
     isLoading,
     isError,
     isLoadingMore,
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
-  } = useGenericPagination<Issue>({ url: "/api/issues" });
+  } = useGenericPagination<Issue>({ url: URL });
 
-  const { mutate: createIssue, isPending: isCreating } = useCreateIssue();
-  const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
-  const { mutate: deleteIssue, isPending: isDeleting } = useDeleteIssue();
+  const { mutate: createIssue, isPending: isCreating } =
+    useGenericCreate<Issue>({
+      url: URL,
+      msgKeyValue: "Issue",
+      handleAddToAllData,
+    });
+  const { mutate: updateIssue, isPending: isUpdating } =
+    useGenericUpdate<Issue>({
+      url: URL,
+      msgKeyValue: "Issue",
+      handleUpdateInAllData,
+    });
+  const { mutate: deleteIssue, isPending: isDeleting } = useGenericDelete({
+    url: URL,
+    msgKeyValue: "Issue",
+    handleDeleteFromAllData,
+  });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
 

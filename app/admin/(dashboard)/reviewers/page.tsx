@@ -10,16 +10,17 @@ import Label from "@/features/admin/components/Label";
 import Button from "@/features/shared/components/Button";
 import { Reviewer } from "@/features/admin/lib/types";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
-import { useDeleteReviewer } from "@/features/admin/reviewers/hooks/useDeleteReviewer";
-import { useUpdateReviewer } from "@/features/admin/reviewers/hooks/useUpdateReviewer";
-import { useCreateReviewer } from "@/features/admin/reviewers/hooks/useCreateReviewer";
 import { toast } from "sonner";
 import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { handleEdit } from "@/features/shared/utils/handleEdit";
 import Skeleton from "@/features/shared/components/Skeleton";
 import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
 import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
+import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
+import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
+import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
 
+const URL = "/api/reviewers";
 const AdminReviewersPage = () => {
   const [selectedReviewer, setSelectedReviewer] = useState<Reviewer | null>(
     null
@@ -27,23 +28,40 @@ const AdminReviewersPage = () => {
   const [image, setImage] = useState<File | null>(null);
   const {
     allData,
+    handleAddToAllData,
+    handleUpdateInAllData,
+    handleDeleteFromAllData,
     offsetObjId,
     isLoading,
     isError,
     isLoadingMore,
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
-  } = useGenericPagination<Reviewer>({ url: "/api/reviewers" });
+  } = useGenericPagination<Reviewer>({ url: URL });
 
-  const { mutate: createReviewer, isPending: isCreating } = useCreateReviewer();
-  const { mutate: deleteReviewer, isPending: isDeleting } = useDeleteReviewer();
-  const { mutate: updateReviewer, isPending: isUpdating } = useUpdateReviewer();
+  const { mutate: createReviewer, isPending: isCreating } =
+    useGenericCreate<Reviewer>({
+      url: URL,
+      msgKeyValue: "Reviewer",
+      handleAddToAllData,
+    });
+  const { mutate: deleteReviewer, isPending: isDeleting } = useGenericDelete({
+    url: URL,
+    msgKeyValue: "Reviewer",
+    handleDeleteFromAllData,
+  });
+  const { mutate: updateReviewer, isPending: isUpdating } =
+    useGenericUpdate<Reviewer>({
+      url: URL,
+      msgKeyValue: "Reviewer",
+      handleUpdateInAllData,
+    });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isCreating || isUpdating || isGenerating) return;
+    if (isCreating || isUpdating || isGenerating || isDeleting) return;
     if (!image) {
       toast.error("Please upload an image");
       return;

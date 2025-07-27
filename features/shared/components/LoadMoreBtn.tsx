@@ -7,7 +7,11 @@ type LoadMoreBtnProps = {
 
 const LoadMoreBtn = ({ isLoadingMore, handleClick }: LoadMoreBtnProps) => {
   return (
-    <Button disabled={isLoadingMore} onClick={handleClick}>
+    <Button
+      disabled={isLoadingMore}
+      onClick={handleClick}
+      className="max-w-[300px] mx-auto"
+    >
       {isLoadingMore ? "Loading..." : "Load More"}
     </Button>
   );
