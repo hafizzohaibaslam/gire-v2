@@ -10,7 +10,7 @@ export const useGenericUpdate = <T extends { objId: string }>({
 }: {
   url: string;
   msgKeyValue: string;
-  handleUpdateInAllData: (data: T) => void;
+  handleUpdateInAllData?: (data: T) => void;
 }) => {
   return useMutation({
     onMutate: () => {
@@ -36,7 +36,7 @@ export const useGenericUpdate = <T extends { objId: string }>({
       toast.success(`${msgKeyValue} updated successfully`, {
         id: context?.toastId,
       });
-      handleUpdateInAllData(variables);
+      handleUpdateInAllData?.(variables);
     },
 
     onError: (error, _, context) => {

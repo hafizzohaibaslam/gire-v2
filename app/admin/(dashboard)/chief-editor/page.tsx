@@ -11,8 +11,8 @@ import Skeleton from "@/features/shared/components/Skeleton";
 import { toast } from "sonner";
 import { Editor } from "@/features/admin/lib/types";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
-import { useUpdateEditor } from "@/features/admin/chief-editor/hooks/useUpdateEditor";
 import { useGenericGet } from "@/features/shared/hooks/useGenericGet";
+import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
 
 const initialProfile: Editor = {
   objId: "temp-id",
@@ -42,7 +42,10 @@ const AdminChiefEditorPage = () => {
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
   const { mutateAsync: updateEditor, isPending: isUpdating } =
-    useUpdateEditor();
+    useGenericUpdate<Editor>({
+      url: URL,
+      msgKeyValue: "Editor",
+    });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
