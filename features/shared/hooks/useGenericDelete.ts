@@ -1,23 +1,20 @@
 import api from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-
 import { AxiosError } from "axios";
 
 export const useGenericDelete = ({
   url,
   msgKeyValue,
+  handleDeleteFromAllData,
 }: {
   url: string;
   msgKeyValue: string;
+  handleDeleteFromAllData: (objId: string) => void;
 }) => {
-  const queryClient = useQueryClient();
-  const queryKey = url.split("/").pop();
-
   return useMutation({
-    onMutate: async () => {
+    onMutate: () => {
       const toastId = toast.loading(`Deleting ${msgKeyValue}...`);
-      await queryClient.cancelQueries({ queryKey: [queryKey] });
       return { toastId };
     },
     mutationFn: async (objId: string) => {
@@ -34,11 +31,11 @@ export const useGenericDelete = ({
         );
       }
     },
-    onSuccess: (_, __, context) => {
+    onSuccess: (_, objId, context) => {
       toast.success(`${msgKeyValue} deleted successfully`, {
         id: context?.toastId,
       });
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      handleDeleteFromAllData(objId);
     },
     onError: (error, __, context) => {
       toast.error(error.message || `Failed to delete ${msgKeyValue}`, {

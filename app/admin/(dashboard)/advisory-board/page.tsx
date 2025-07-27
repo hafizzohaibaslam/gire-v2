@@ -9,8 +9,6 @@ import Button from "@/features/shared/components/Button";
 import EditModal from "@/features/admin/components/EditModal";
 import { AdvisoryBoard } from "@/features/admin/lib/types";
 import Skeleton from "@/features/shared/components/Skeleton";
-import { useCreateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useCreateAdvisoryBoard";
-import { useUpdateAdvisoryBoard } from "@/features/admin/advisory-board/hooks/useUpdateAdvisoryBoard";
 import { toast } from "sonner";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
 import { handleDelete } from "@/features/shared/utils/handleDelete";
@@ -19,29 +17,20 @@ import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
 import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
 import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
+import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
+import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
 
 const URL = "/api/advisories";
-
 const AdminAdvisoryBoard = () => {
   const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
     useState<AdvisoryBoard | null>(null);
   const [image, setImage] = useState<File | null>(null);
 
-  const { mutate: createAdvisoryBoard, isPending: isCreating } =
-    useCreateAdvisoryBoard();
-  const { mutate: deleteAdvisoryBoard, isPending: isDeleting } =
-    useGenericDelete({
-      url: URL,
-      msgKeyValue: "Advisory Board",
-    });
-  const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
-    useUpdateAdvisoryBoard();
-  const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
-    useGeneratePresignedUrl();
-  const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
-
   const {
     allData,
+    handleAddToAllData,
+    handleUpdateInAllData,
+    handleDeleteFromAllData,
     offsetObjId,
     isLoading,
     isError,
@@ -49,6 +38,28 @@ const AdminAdvisoryBoard = () => {
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
   } = useGenericPagination<AdvisoryBoard>({ url: URL });
+
+  const { mutate: createAdvisoryBoard, isPending: isCreating } =
+    useGenericCreate<AdvisoryBoard>({
+      url: URL,
+      msgKeyValue: "Advisory Board",
+      handleAddToAllData,
+    });
+  const { mutate: deleteAdvisoryBoard, isPending: isDeleting } =
+    useGenericDelete({
+      url: URL,
+      msgKeyValue: "Advisory Board",
+      handleDeleteFromAllData,
+    });
+  const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
+    useGenericUpdate<AdvisoryBoard>({
+      url: URL,
+      msgKeyValue: "Advisory Board",
+      handleUpdateInAllData,
+    });
+  const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
+    useGeneratePresignedUrl();
+  const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

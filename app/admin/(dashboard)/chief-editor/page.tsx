@@ -7,12 +7,12 @@ import InputField from "@/features/admin/components/InputField";
 import Button from "@/features/shared/components/Button";
 import Label from "@/features/admin/components/Label";
 import Textarea from "@/features/admin/components/Textarea";
-import { useGetEditors } from "@/features/admin/chief-editor/hooks/useGetEditors";
 import Skeleton from "@/features/shared/components/Skeleton";
 import { toast } from "sonner";
 import { Editor } from "@/features/admin/lib/types";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
 import { useUpdateEditor } from "@/features/admin/chief-editor/hooks/useUpdateEditor";
+import { useGenericGet } from "@/features/shared/hooks/useGenericGet";
 
 const initialProfile: Editor = {
   objId: "temp-id",
@@ -25,12 +25,20 @@ const initialProfile: Editor = {
   level: "chief",
 };
 
+const URL = "/api/editors";
 const AdminChiefEditorPage = () => {
   const [activeTab, setActiveTab] = useState<"chief" | "co-chief">("chief");
   const [selectedEditor, setSelectedEditor] = useState<Editor>(initialProfile);
   const [image, setImage] = useState<File | null>();
 
-  const { data: editors, isLoading, isError, error } = useGetEditors();
+  const {
+    data: editors,
+    isLoading,
+    isError,
+    error,
+  } = useGenericGet<Editor>({
+    url: URL,
+  });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
   const { mutateAsync: updateEditor, isPending: isUpdating } =

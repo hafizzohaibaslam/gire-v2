@@ -2,7 +2,11 @@
 import { useEffect, useState } from "react";
 import { useGenericGet } from "./useGenericGet";
 
-export const useGenericPagination = <T>({ url }: { url: string }) => {
+export const useGenericPagination = <T extends { objId: string }>({
+  url,
+}: {
+  url: string;
+}) => {
   const [allData, setAllData] = useState<T[]>([]);
   const [offsetObjId, setOffsetObjId] = useState<string>("");
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(true);
@@ -12,6 +16,20 @@ export const useGenericPagination = <T>({ url }: { url: string }) => {
   const handleLoadMoreBtnClick = (lastItemObjId: string) => {
     setOffsetObjId(lastItemObjId);
     setIsLoadingMore(true);
+  };
+
+  const handleAddToAllData = (data: T) => {
+    setAllData((prev) => [...prev, data]);
+  };
+
+  const handleUpdateInAllData = (data: T) => {
+    setAllData((prev) =>
+      prev.map((item) => (item.objId === data.objId ? data : item))
+    );
+  };
+
+  const handleDeleteFromAllData = (objId: string) => {
+    setAllData((prev) => prev.filter((item) => item.objId !== objId));
   };
 
   const { data, isLoading, isError } = useGenericGet<T>({
@@ -37,6 +55,9 @@ export const useGenericPagination = <T>({ url }: { url: string }) => {
 
   return {
     allData,
+    handleAddToAllData,
+    handleUpdateInAllData,
+    handleDeleteFromAllData,
     offsetObjId,
     isMoreDataAvailable,
     isLoading,
