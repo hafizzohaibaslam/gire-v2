@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import TrendingTopicCard from "./IssueCard";
 import {
   categoriesList,
-  numbersList,
-  trendingTopics,
-  volumesList,
+  // numbersList,
+  // trendingTopics,
+  // volumesList,
   yearsList,
 } from "../utils/trendingTopics";
 import {
@@ -43,31 +43,31 @@ const TrendingTopics = () => {
     url: "/api/issues",
   });
 
-  const filterTopics = (topics: Issue[]) => {
-    let filteredData = [...topics];
+  // const filterTopics = (topics: Issue[]) => {
+  //   let filteredData = [...topics];
 
-    if (searchTerm && searchTerm !== "") {
-      filteredData = filteredData.filter((topic) =>
-        topic.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    if (selectedYear && selectedYear !== "All") {
-      filteredData = filteredData.filter((topic) =>
-        topic.date.includes(selectedYear)
-      );
-    }
-    if (selectedResearchField && selectedResearchField !== "All") {
-      filteredData = filteredData.filter(
-        (topic) =>
-          topic.researchField.includes(selectedResearchField) ||
-          topic.researchKeywords.some((keyword: string) =>
-            keyword.toLowerCase().includes(selectedResearchField.toLowerCase())
-          )
-      );
-    }
+  //   if (searchTerm && searchTerm !== "") {
+  //     filteredData = filteredData.filter((topic) =>
+  //       topic.title.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //   }
+  //   if (selectedYear && selectedYear !== "All") {
+  //     filteredData = filteredData.filter((topic) =>
+  //       topic.date.includes(selectedYear)
+  //     );
+  //   }
+  //   if (selectedResearchField && selectedResearchField !== "All") {
+  //     filteredData = filteredData.filter(
+  //       (topic) =>
+  //         topic.researchField.includes(selectedResearchField) ||
+  //         topic.researchKeywords.some((keyword: string) =>
+  //           keyword.toLowerCase().includes(selectedResearchField.toLowerCase())
+  //         )
+  //     );
+  //   }
 
-    return filteredData;
-  };
+  //   return filteredData;
+  // };
 
   const handleApplyFilters = () => {};
 

@@ -1,6 +1,6 @@
-import { TrendingTopic } from "@/features/admin/lib/types";
+import { Issue } from "@/features/admin/lib/types";
 
-export const trendingTopics: TrendingTopic[] = [
+export const trendingTopics: Issue[] = [
   {
     objId: "1",
     name: "Dr. Emily Richards",
@@ -12,7 +12,6 @@ export const trendingTopics: TrendingTopic[] = [
     paperUrl: "https://www.google.com",
     paperVolume: 1,
     paperNumber: 1,
-    doi: "10.5678/edu.tech.2024.0314",
   },
   {
     objId: "2",
@@ -25,7 +24,6 @@ export const trendingTopics: TrendingTopic[] = [
     paperUrl: "https://www.google.com",
     paperVolume: 1,
     paperNumber: 1,
-    doi: "10.5678/edu.tech.2024.0314",
   },
   {
     objId: "3",
@@ -38,7 +36,6 @@ export const trendingTopics: TrendingTopic[] = [
     paperUrl: "https://www.google.com",
     paperVolume: 1,
     paperNumber: 1,
-    doi: "10.5678/edu.tech.2024.0314",
   },
 ];
 

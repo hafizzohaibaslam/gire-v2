@@ -1,20 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import AdminHeader from "@/features/admin/components/Header";
 import Sidebar from "@/features/admin/components/Sidebar";
 import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/lib/AuthProvider";
 
 const AdminDashboardLayoutPage = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const isAdmin = localStorage.getItem("isAdmin");
   const router = useRouter();
+  const { isAdmin } = useAuthContext();
 
-  if (!isAdmin) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (!isAdmin) {
+      router.push("/");
+    }
+  }, [isAdmin, router]);
 
   return (
     <div className="bg-[#F5F7FA] h-screen flex relative overflow-hidden">
