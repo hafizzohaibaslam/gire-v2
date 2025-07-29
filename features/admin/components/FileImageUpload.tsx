@@ -23,7 +23,6 @@ function FileImageUpload({
   const blobUrl = preview ? URL.createObjectURL(preview) : defaultImage;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("On Changed called");
     const file = e.target.files?.[0] || null;
     if (file) {
       setPreview(file);
@@ -43,7 +42,7 @@ function FileImageUpload({
         width={100}
         height={100}
         className={cn(
-          "rounded-full object-cover w-[132px] h-[130px] border border-gray-200",
+          "rounded-md object-cover w-full h-full border border-gray-200",
           imageClassName
         )}
       />

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import Button from "./Button";
 import { Download } from "lucide-react";
 import Tags from "@/features/shared/components/Tags";
 import EditBtn from "@/features/admin/components/EditBtn";
@@ -24,6 +23,49 @@ const IssueCard = ({
   handleDelete = () => {},
 }: IssueCardProps) => {
   const keywords = topic.keyword.split(",");
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      // For external URLs, we need to fetch the file first
+      if (topic.paperUrl.startsWith("http")) {
+        const response = await fetch(topic.paperUrl);
+        if (!response.ok) {
+          throw new Error("Failed to fetch file");
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${topic.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Clean up the object URL
+        window.URL.revokeObjectURL(url);
+      } else {
+        // For relative URLs, use the direct download approach
+        const link = document.createElement("a");
+        link.href = topic.paperUrl;
+        link.download = `${topic.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      // Fallback: open in new tab if download fails
+      window.open(topic.paperUrl, "_blank");
+    }
+  };
+
   return (
     <div className="relative">
       <div
@@ -70,14 +112,14 @@ const IssueCard = ({
             ))}
           </div>
           <p className="font-playfair-display my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
-            {topic.doi}
+            {topic.paperUrl}
           </p>
-          <Button
-            className="!max-w-full w-full flex justify-center items-center"
-            icon={<Download className="w-[18px] h-[18px]" />}
+          <button
+            onClick={handleDownload}
+            className="w-full max-w-lg bg-[#2325360D] py-[15px] px-[20px] flex items-center justify-center gap-2 text-[14px] lg:text-[16px] leading-[100%] font-semibold capitalize text-[#232536] rounded-[100px] hover:bg-[#232536] hover:text-white transition-all duration-300 cursor-pointer"
           >
-            Download PDF
-          </Button>
+            Download PDF <Download className="w-[18px] h-[18px]" />
+          </button>
         </div>
       </div>
     </div>

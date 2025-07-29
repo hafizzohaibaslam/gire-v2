@@ -19,6 +19,7 @@ import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
 import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
+import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
 
 const URL = "/api/reviewers";
 const AdminReviewersPage = () => {
@@ -58,10 +59,12 @@ const AdminReviewersPage = () => {
     });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
+  const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isCreating || isUpdating || isGenerating || isDeleting) return;
+    if (isCreating || isUpdating || isGenerating || isUploading || isDeleting)
+      return;
     if (!image) {
       toast.error("Please upload an image");
       return;
@@ -71,6 +74,8 @@ const AdminReviewersPage = () => {
       contentType: image.type,
       key: `reviewers/${image.name}-${Date.now()}`,
     });
+
+    await uploadToS3({ file: image, putUrl: response.putUrl });
 
     const formData = new FormData(e.target as HTMLFormElement);
     const rawData = Object.fromEntries(formData) as unknown as Reviewer;
@@ -177,11 +182,12 @@ const AdminReviewersPage = () => {
             className="flex flex-col lg:flex-row gap-[30px] w-full mt-[30px]"
           >
             {/* File Upload */}
-            <div className="relative">
+            <div className="relative w-full max-w-[150px]">
               <FileImageUpload
                 image={image}
                 onChange={(file) => setImage(file)}
-                defaultImage={"/about-us-page/person1.png"}
+                defaultImage={"/image-placeholder.svg"}
+                className="w-full rounded-md"
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">
@@ -228,7 +234,7 @@ const AdminReviewersPage = () => {
               <Button
                 type="submit"
                 className="self-end max-w-[200px]"
-                disabled={isCreating || isUpdating || isDeleting}
+                disabled={isCreating || isUpdating || isDeleting || isUploading}
               >
                 {selectedReviewer?.objId ? "Update" : "Add"}
               </Button>

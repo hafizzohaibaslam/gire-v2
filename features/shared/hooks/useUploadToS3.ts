@@ -10,15 +10,11 @@ export const useUploadToS3 = () => {
     },
     mutationFn: async ({ file, putUrl }: { file: File; putUrl: string }) => {
       try {
-        const response = await axios.put(
-          "https://corsproxy.io/?url=" + putUrl,
-          file,
-          {
-            headers: {
-              "Content-Type": file.type,
-            },
-          }
-        );
+        const response = await axios.put(putUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
         console.log("Response from useUploadToS3", response);
         return response.data;
       } catch (error) {

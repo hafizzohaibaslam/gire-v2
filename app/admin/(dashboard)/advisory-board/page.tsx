@@ -63,7 +63,8 @@ const AdminAdvisoryBoard = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isCreating || isUpdating || isGenerating || isUploading) return;
+    if (isCreating || isUpdating || isGenerating || isUploading || isDeleting)
+      return;
     if (!image) {
       toast.error("Please upload an image");
       return;
@@ -71,7 +72,7 @@ const AdminAdvisoryBoard = () => {
 
     const response = await generatePresignedUrl({
       contentType: image.type,
-      key: `advisory-board/${image.name}`,
+      key: `advisory-board/${image.name}-${Date.now()}`,
     });
 
     await uploadToS3({ file: image, putUrl: response.putUrl });
@@ -182,11 +183,12 @@ const AdminAdvisoryBoard = () => {
             className="flex flex-col lg:flex-row gap-[30px] w-full mt-[30px]"
           >
             {/* File Upload */}
-            <div className="relative">
+            <div className="relative w-full max-w-[150px]">
               <FileImageUpload
                 image={image}
                 onChange={(file) => setImage(file)}
-                defaultImage={"/about-us-page/university.png"}
+                defaultImage={"/image-placeholder.svg"}
+                className="w-full rounded-md"
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">
@@ -255,7 +257,7 @@ const AdminAdvisoryBoard = () => {
               <Button
                 type="submit"
                 className="self-end max-w-[200px]"
-                disabled={isCreating || isUpdating || isDeleting}
+                disabled={isCreating || isUpdating || isDeleting || isUploading}
               >
                 {selectedAdvisoryBoard?.objId ? "Update" : "Add"}
               </Button>
