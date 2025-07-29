@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  rewrites: async () => [
+    {
+      source: "/api/:path*",
+      destination: "https://jqbuq22eaejghlipymyv7u5quq0fiuzm.lambda-url.us-west-1.on.aws/api/:path*"
+    }
+  ]
 };
 
 export default nextConfig;
