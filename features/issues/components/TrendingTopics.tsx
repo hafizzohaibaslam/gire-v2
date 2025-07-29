@@ -138,44 +138,6 @@ const TrendingTopics = () => {
             />
           </div>
 
-          {/* Volume */}
-          {/* <div className="flex flex-col gap-2">
-            <Label>Volume</Label>
-            <Select
-              value={selectedVolume}
-              onValueChange={(value) => setSelectedVolume(value)}
-            >
-              <SelectTrigger className="w-full lg:w-[180px]">
-                <SelectValue placeholder="Select a volume" />
-              </SelectTrigger>
-              <SelectContent>
-                {volumesList.map((volume) => (
-                  <SelectItem key={volume} value={volume}>
-                    {volume}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div> */}
-          {/* Number */}
-          {/* <div className="flex flex-col gap-2">
-            <Label>Number</Label>
-            <Select
-              value={selectedNumber}
-              onValueChange={(value) => setSelectedNumber(value)}
-            >
-              <SelectTrigger className="w-full lg:w-[180px]">
-                <SelectValue placeholder="Select a number" />
-              </SelectTrigger>
-              <SelectContent>
-                {numbersList.map((number) => (
-                  <SelectItem key={number} value={number}>
-                    {number}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div> */}
           <button
             className="bg-[#3385FF] text-white px-[20px] py-[10px] rounded-[100px] cursor-pointer self-end"
             onClick={() => {

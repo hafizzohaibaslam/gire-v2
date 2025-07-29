@@ -1,12 +1,21 @@
+"use client";
 import React from "react";
 import AdminHeader from "@/features/admin/components/Header";
 import Sidebar from "@/features/admin/components/Sidebar";
+import { useRouter } from "next/navigation";
 
 const AdminDashboardLayoutPage = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
+  const isAdmin = localStorage.getItem("isAdmin");
+  const router = useRouter();
+
+  if (!isAdmin) {
+    router.push("/");
+  }
+
   return (
     <div className="bg-[#F5F7FA] h-screen flex relative overflow-hidden">
       {/* Sidebar */}

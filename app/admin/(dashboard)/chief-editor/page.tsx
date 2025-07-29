@@ -13,6 +13,7 @@ import { Editor } from "@/features/admin/lib/types";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
 import { useGenericGet } from "@/features/shared/hooks/useGenericGet";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
+import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
 
 const initialProfile: Editor = {
   objId: "temp-id",
@@ -21,7 +22,7 @@ const initialProfile: Editor = {
   affiliation: "University of California, Los Angeles",
   bio: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
   letter: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-  imgUrl: "/about-us-page/person1.png",
+  imgUrl: "/image-placeholder.svg",
   level: "chief",
 };
 
@@ -39,8 +40,10 @@ const AdminChiefEditorPage = () => {
   } = useGenericGet<Editor>({
     url: URL,
   });
+
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
+  const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
   const { mutateAsync: updateEditor, isPending: isUpdating } =
     useGenericUpdate<Editor>({
       url: URL,
@@ -49,7 +52,7 @@ const AdminChiefEditorPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isGenerating || isUpdating) return;
+    if (isGenerating || isUpdating || isUploading) return;
     if (!image) {
       toast.error("Please upload an image");
       return;
@@ -57,8 +60,10 @@ const AdminChiefEditorPage = () => {
 
     const response = await generatePresignedUrl({
       contentType: image.type,
-      key: `${activeTab}/${image.name}`,
+      key: `${activeTab}/${image.name}-${Date.now()}`,
     });
+
+    await uploadToS3({ file: image, putUrl: response.putUrl });
 
     await updateEditor({
       ...selectedEditor,
@@ -117,7 +122,9 @@ const AdminChiefEditorPage = () => {
                 <FileImageUpload
                   image={image || null}
                   onChange={(file) => setImage(file)}
-                  defaultImage={"/about-us-page/person1.png"}
+                  defaultImage={
+                    selectedEditor?.imgUrl || "/image-placeholder.svg"
+                  }
                 />
               </div>
               <div className="w-full flex flex-col gap-[30px]">
@@ -217,7 +224,7 @@ const AdminChiefEditorPage = () => {
                 <Button
                   type="submit"
                   className="self-end max-w-[200px]"
-                  disabled={isGenerating || isUpdating}
+                  disabled={isGenerating || isUpdating || isUploading}
                 >
                   Update
                 </Button>

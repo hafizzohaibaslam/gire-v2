@@ -18,15 +18,14 @@ import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
 import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
+import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
 
 const URL = "/api/issues";
 const AdminIssuesPage = () => {
   const editorRef = useRef<Editor>(null);
-  const [pdfUpload, setPdfUpload] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedIssue, setSelectedIssue] = useState<
-    (Issue & { content: string }) | null
-  >(null);
+  const [fileUpload, setFileUpload] = useState<File | null>(null);
+  const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const [selectedVolume, setSelectedVolume] = useState<number>(1);
   const [selectedNumber, setSelectedNumber] = useState<number>(1);
@@ -64,11 +63,12 @@ const AdminIssuesPage = () => {
   });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
+  const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
 
   const handleReset = () => {
     setSelectedIssue(null);
     setImage(null);
-    setPdfUpload("");
+    setFileUpload(null);
     setContent("");
     setSelectedVolume(1);
     setSelectedNumber(1);
@@ -76,16 +76,18 @@ const AdminIssuesPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isCreating || isGenerating) return;
-    if (!image) {
-      toast.error("Please upload an image");
+    if (isCreating || isGenerating || isUploading || isDeleting) return;
+    if (!fileUpload) {
+      toast.error("Please upload a file");
       return;
     }
 
     const response = await generatePresignedUrl({
-      contentType: image.type,
-      key: `issues/${image.name}-${Date.now()}`,
+      contentType: fileUpload.type,
+      key: `issues/${fileUpload.name}-${Date.now()}`,
     });
+
+    await uploadToS3({ file: fileUpload, putUrl: response.putUrl });
 
     const formData = new FormData(e.target as HTMLFormElement);
     const rawData = Object.fromEntries(formData) as unknown as Issue;
@@ -117,20 +119,19 @@ const AdminIssuesPage = () => {
           </h1>
           <Button
             type="submit"
-            disabled={isCreating || isGenerating || isUpdating}
+            disabled={isCreating || isGenerating || isUpdating || isUploading}
             className="max-w-[150px]"
           >
             {selectedIssue.objId ? "Update" : "Add"}
           </Button>
         </div>
         <div className="lg:max-w-[80%] space-y-[50px]">
-          <div className="w-full">
+          <div className="relative w-full max-w-[400px]">
             <FileImageUpload
               image={image}
               onChange={(file) => setImage(file)}
-              defaultImage={"/issues-page/card1.svg"}
-              className="w-full max-w-[400px]"
-              imageClassName="w-full h-full rounded-xs"
+              defaultImage={"/issues-placeholder.png"}
+              className="w-full rounded-md"
             />
           </div>
           <div className="w-full space-y-[25px]">
@@ -261,7 +262,7 @@ const AdminIssuesPage = () => {
                 type="file"
                 className="hidden"
                 ref={fileInputRef}
-                onChange={(e) => setPdfUpload(e.target.files?.[0]?.name || "")}
+                onChange={(e) => setFileUpload(e.target.files?.[0] || null)}
               />
               <Button
                 type="button"
@@ -271,11 +272,11 @@ const AdminIssuesPage = () => {
               >
                 Upload PDF
               </Button>
-              {pdfUpload && (
+              {fileUpload && (
                 <div className="flex items-center gap-2">
                   <File className="w-4 h-4" />
                   <p className="text-[#718EBF] font-inter font-normal text-[15px]">
-                    {pdfUpload}
+                    {fileUpload.name}
                   </p>
                 </div>
               )}

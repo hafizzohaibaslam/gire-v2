@@ -13,6 +13,19 @@ export const useGenericPagination = <T extends { objId: string }>({
   const [isMoreDataAvailable, setIsMoreDataAvailable] = useState<boolean>(true);
   const SIZE = 6;
 
+  // Reset function to clear all data and reset pagination state
+  const resetPagination = () => {
+    setAllData([]);
+    setOffsetObjId("");
+    setIsLoadingMore(true);
+    setIsMoreDataAvailable(true);
+  };
+
+  // Reset pagination when component mounts or URL changes
+  useEffect(() => {
+    resetPagination();
+  }, [url]);
+
   const handleLoadMoreBtnClick = (lastItemObjId: string) => {
     setOffsetObjId(lastItemObjId);
     setIsLoadingMore(true);
@@ -64,5 +77,6 @@ export const useGenericPagination = <T extends { objId: string }>({
     isError,
     isLoadingMore,
     handleLoadMoreBtnClick,
+    resetPagination,
   };
 };
