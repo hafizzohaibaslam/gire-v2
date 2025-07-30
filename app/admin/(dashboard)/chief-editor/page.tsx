@@ -122,8 +122,9 @@ const AdminChiefEditorPage = () => {
                 <FileImageUpload
                   image={image || null}
                   onChange={(file) => setImage(file)}
-                  defaultImage={
-                    selectedEditor?.imgUrl || "/image-placeholder.svg"
+                  defaultImage={"/image-placeholder.svg"}
+                  existingImageUrl={
+                    selectedEditor?.objId ? selectedEditor.imgUrl : undefined
                   }
                   className="w-full rounded-md"
                 />

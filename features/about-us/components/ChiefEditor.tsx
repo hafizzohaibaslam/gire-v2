@@ -11,16 +11,17 @@ import { aboutUsTabs } from "../utils/aboutUsTabs";
 import EditorialTeam from "./Reviewers";
 import AdvisoryBoard from "./AdvisoryBoard";
 import { Editor as EditorType } from "@/features/admin/lib/types";
-import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
+import { useGenericGet } from "@/features/shared/hooks/useGenericGet";
 import Skeleton from "@/features/shared/components/Skeleton";
 
 const ChiefEditor = () => {
   const [activeTab, setActiveTab] = useState<string>("chief-editor");
 
-  const { allData, offsetObjId, isLoading, isError } =
-    useGenericPagination<EditorType>({ url: "/api/editors" });
-
-  console.log("All Data in Chief Editor", allData);
+  const {
+    data: allData,
+    isLoading,
+    isError,
+  } = useGenericGet<EditorType>({ url: "/api/editors" });
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -68,7 +69,7 @@ const ChiefEditor = () => {
             </p>
           </div>
 
-          {!offsetObjId && isLoading && (
+          {isLoading && (
             <div className="mt-[60px]">
               <Skeleton />
             </div>
