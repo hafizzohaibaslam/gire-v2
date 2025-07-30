@@ -1,7 +1,7 @@
 "use client";
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "@/features/shared/components/Button";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import IssueCard from "@/features/issues/components/IssueCard";
 import FileImageUpload from "@/features/admin/components/FileImageUpload";
 import InputField from "@/features/admin/components/InputField";
@@ -13,12 +13,11 @@ import Skeleton from "@/features/shared/components/Skeleton";
 import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { toast } from "sonner";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
-import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
-import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
 import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
 import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
+import { useGenericGet } from "@/features/shared/hooks/useGenericGet";
 
 const URL = "/api/issues";
 const AdminIssuesPage = () => {
@@ -31,39 +30,31 @@ const AdminIssuesPage = () => {
   const [selectedNumber, setSelectedNumber] = useState<number>(1);
   const [content, setContent] = useState<string>("");
 
+  // Pagination
+  const [paginatedItems, setPaginatedItems] = useState<Issue[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const SIZE = 6;
+
   const {
-    allData,
-    handleAddToAllData,
-    handleUpdateInAllData,
-    handleDeleteFromAllData,
-    offsetObjId,
+    data: allData,
     isLoading,
     isError,
-    isLoadingMore,
-    isMoreDataAvailable,
-    handleLoadMoreBtnClick,
-    hasNoMoreServerData,
-    getLastItemId,
-    refreshServerData,
-  } = useGenericPagination<Issue>({ url: URL });
-
+  } = useGenericGet<Issue>({
+    url: URL,
+  });
   const { mutate: createIssue, isPending: isCreating } =
     useGenericCreate<Issue>({
       url: URL,
       msgKeyValue: "Issue",
-      handleAddToAllData,
     });
   const { mutate: updateIssue, isPending: isUpdating } =
     useGenericUpdate<Issue>({
       url: URL,
       msgKeyValue: "Issue",
-      handleUpdateInAllData,
     });
   const { mutate: deleteIssue, isPending: isDeleting } = useGenericDelete({
     url: URL,
     msgKeyValue: "Issue",
-    handleDeleteFromAllData,
-    refreshServerData,
   });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
@@ -77,6 +68,21 @@ const AdminIssuesPage = () => {
     setSelectedVolume(1);
     setSelectedNumber(1);
   };
+
+  const hasMoreItems = allData ? paginatedItems.length < allData.length : false;
+  const handleLoadMoreClick = () => {
+    const startIndex = currentPage * SIZE;
+    const endIndex = startIndex + SIZE;
+    const newItems = allData?.slice(startIndex, endIndex) || [];
+    setPaginatedItems([...paginatedItems, ...newItems]);
+    setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
+    if (allData) {
+      setPaginatedItems(allData.slice(0, SIZE));
+    }
+  }, [allData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -303,7 +309,7 @@ const AdminIssuesPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px] h-full">
+    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[15px] rounded-[25px] h-full">
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Issues
@@ -330,20 +336,24 @@ const AdminIssuesPage = () => {
         </Button>
       </div>
 
-      {!offsetObjId && isLoading && (
-        <div className="mt-[60px]">
-          <Skeleton />
+      {isLoading && (
+        <div className="mt-[40px] text-center">
+          <div className="mt-[60px]">
+            <Skeleton />
+          </div>
         </div>
       )}
 
       {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-          Error loading issues
+          Error loading advisory boards
         </div>
       )}
+
       <div className="grid grid-cols-1 gap-x-[30px] gap-y-[16px] overflow-y-auto">
-        {allData.length > 0 ? (
-          allData.map((topic, index) => (
+        {paginatedItems &&
+          paginatedItems.length > 0 &&
+          paginatedItems.map((topic, index) => (
             <IssueCard
               key={index}
               topic={topic}
@@ -359,40 +369,28 @@ const AdminIssuesPage = () => {
                 handleDelete(topic.objId, isDeleting, deleteIssue)
               }
             />
-          ))
-        ) : hasNoMoreServerData ? (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No issues found. All data has been loaded from the server.
-          </div>
+          ))}
+        {!isLoading &&
+          !isError &&
+          paginatedItems &&
+          paginatedItems.length === 0 && (
+            <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+              No issues found
+            </div>
+          )}
+        {hasMoreItems ? (
+          <Button
+            onClick={handleLoadMoreClick}
+            className="max-w-[200px] mx-auto"
+          >
+            Load More
+          </Button>
         ) : (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No issues found
+          <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
+            All issues have been loaded.
           </div>
         )}
       </div>
-      {allData && allData.length > 0 && (
-        <div className="mt-[40px] text-center">
-          {isLoading && (
-            <div className="mt-[60px]">
-              <Skeleton />
-            </div>
-          )}
-          {isMoreDataAvailable ? (
-            <LoadMoreBtn
-              isLoadingMore={isLoadingMore}
-              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
-            />
-          ) : hasNoMoreServerData ? (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All issues have been loaded from the server.
-            </p>
-          ) : (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All issues have been loaded.
-            </p>
-          )}
-        </div>
-      )}
     </div>
   );
 };

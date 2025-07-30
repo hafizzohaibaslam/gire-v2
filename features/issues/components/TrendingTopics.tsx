@@ -20,8 +20,8 @@ import Link from "next/link";
 import Label from "@/features/admin/components/Label";
 import { Issue } from "@/features/admin/lib/types";
 import Skeleton from "@/features/shared/components/Skeleton";
-import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
 import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
+import { useClientPagination } from "@/features/shared/hooks/useClientPagination";
 
 const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,15 +32,12 @@ const TrendingTopics = () => {
   const [selectedResearchField, setSelectedResearchField] = useState("All");
 
   const {
-    allData,
-    offsetObjId,
+    paginatedItems,
+    hasMoreItems,
+    handleLoadMoreClick,
     isLoading,
     isError,
-    isLoadingMore,
-    isMoreDataAvailable,
-    handleLoadMoreBtnClick,
-    getLastItemId,
-  } = useGenericPagination<Issue>({
+  } = useClientPagination<Issue>({
     url: "/api/issues",
   });
 
@@ -150,7 +147,7 @@ const TrendingTopics = () => {
         </div>
       </div>
 
-      {!offsetObjId && isLoading && (
+      {isLoading && (
         <div className="mt-[60px]">
           <Skeleton />
         </div>
@@ -164,8 +161,8 @@ const TrendingTopics = () => {
 
       {/* Profile Section */}
       <div className="flex flex-col gap-[30px] lg:gap-[60px]">
-        {allData.length > 0 ? (
-          allData.map((topic) => (
+        {paginatedItems.length > 0 ? (
+          paginatedItems.map((topic) => (
             <Link href={`/issues/${topic.objId}`} key={topic.objId}>
               <TrendingTopicCard topic={topic} />
             </Link>
@@ -176,23 +173,21 @@ const TrendingTopics = () => {
           </div>
         )}
       </div>
-      {allData && allData.length > 0 && (
+      {hasMoreItems ? (
         <div className="mt-[40px] text-center">
           {isLoading && (
             <div className="mt-[60px]">
               <Skeleton />
             </div>
           )}
-          {isMoreDataAvailable ? (
-            <LoadMoreBtn
-              isLoadingMore={isLoadingMore}
-              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
-            />
-          ) : (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All advisory board members have been loaded.
-            </p>
-          )}
+          <LoadMoreBtn
+            isLoadingMore={isLoading}
+            handleClick={handleLoadMoreClick}
+          />
+        </div>
+      ) : (
+        <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
+          All issues have been loaded.
         </div>
       )}
     </div>

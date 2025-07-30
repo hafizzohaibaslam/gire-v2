@@ -6,11 +6,9 @@ import { AxiosError } from "axios";
 export const useGenericUpdate = <T extends { objId: string }>({
   url,
   msgKeyValue,
-  handleUpdateInAllData,
 }: {
   url: string;
   msgKeyValue: string;
-  handleUpdateInAllData?: (data: T) => void;
 }) => {
   const queryClient = useQueryClient();
   const queryKey = url.split("/").pop();
@@ -35,13 +33,11 @@ export const useGenericUpdate = <T extends { objId: string }>({
         );
       }
     },
-    onSuccess: (_, variables, context) => {
+    onSuccess: (_, __, context) => {
       toast.success(`${msgKeyValue} updated successfully`, {
         id: context?.toastId,
       });
-      handleUpdateInAllData?.(variables);
 
-      // Invalidate all queries that start with "queryKey" and match the URL
       queryClient.invalidateQueries({
         queryKey: [queryKey],
         exact: false,

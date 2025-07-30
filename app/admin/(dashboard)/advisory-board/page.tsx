@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdvisoryBoardCard from "@/features/about-us/components/AdvisoryBoardCard";
 import Form from "@/features/admin/components/Form";
 import InputField from "@/features/admin/components/InputField";
@@ -14,56 +14,60 @@ import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePres
 import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { handleEdit } from "@/features/shared/utils/handleEdit";
 import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
-import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
-import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
 import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
+import { useGenericGet } from "@/features/shared/hooks/useGenericGet";
 
 const URL = "/api/advisories";
 const AdminAdvisoryBoard = () => {
   const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
     useState<AdvisoryBoard | null>(null);
   const [image, setImage] = useState<File | null>(null);
+  const [paginatedItems, setPaginatedItems] = useState<AdvisoryBoard[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const SIZE = 6;
 
   const {
-    allData,
-    handleAddToAllData,
-    handleUpdateInAllData,
-    handleDeleteFromAllData,
-    offsetObjId,
+    data: allData,
     isLoading,
     isError,
-    isLoadingMore,
-    isMoreDataAvailable,
-    handleLoadMoreBtnClick,
-    hasNoMoreServerData,
-    getLastItemId,
-    refreshServerData,
-  } = useGenericPagination<AdvisoryBoard>({ url: URL });
-
+  } = useGenericGet<AdvisoryBoard>({
+    url: URL,
+  });
   const { mutate: createAdvisoryBoard, isPending: isCreating } =
     useGenericCreate<AdvisoryBoard>({
       url: URL,
       msgKeyValue: "Advisory Board",
-      handleAddToAllData,
     });
   const { mutate: deleteAdvisoryBoard, isPending: isDeleting } =
     useGenericDelete({
       url: URL,
       msgKeyValue: "Advisory Board",
-      handleDeleteFromAllData,
-      refreshServerData,
     });
   const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
     useGenericUpdate<AdvisoryBoard>({
       url: URL,
       msgKeyValue: "Advisory Board",
-      handleUpdateInAllData,
     });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
   const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
+
+  const hasMoreItems = allData ? paginatedItems.length < allData.length : false;
+  const handleLoadMoreClick = () => {
+    const startIndex = currentPage * SIZE;
+    const endIndex = startIndex + SIZE;
+    const newItems = allData?.slice(startIndex, endIndex) || [];
+    setPaginatedItems([...paginatedItems, ...newItems]);
+    setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
+    if (allData) {
+      setPaginatedItems(allData.slice(0, SIZE));
+    }
+  }, [allData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -109,7 +113,7 @@ const AdminAdvisoryBoard = () => {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[37px] rounded-[25px] h-full">
+    <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[15px] rounded-[25px] h-full">
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Advisory Board
@@ -132,9 +136,11 @@ const AdminAdvisoryBoard = () => {
         </Button>
       </div>
 
-      {!offsetObjId && isLoading && (
-        <div className="mt-[60px]">
-          <Skeleton />
+      {isLoading && (
+        <div className="mt-[40px] text-center">
+          <div className="mt-[60px]">
+            <Skeleton />
+          </div>
         </div>
       )}
 
@@ -144,8 +150,9 @@ const AdminAdvisoryBoard = () => {
         </div>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] overflow-y-auto">
-        {allData.length > 0 ? (
-          allData.map((board) => (
+        {paginatedItems &&
+          paginatedItems.length > 0 &&
+          paginatedItems.map((board) => (
             <AdvisoryBoardCard
               key={board.objId}
               board={board}
@@ -156,40 +163,23 @@ const AdminAdvisoryBoard = () => {
                 handleDelete(board.objId, isDeleting, deleteAdvisoryBoard)
               }
             />
-          ))
-        ) : hasNoMoreServerData ? (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No advisory board members found. All data has been loaded from the
-            server.
-          </div>
-        ) : (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No advisory boards found
-          </div>
-        )}
-      </div>
-
-      {allData && allData.length > 0 && (
-        <div className="mt-[40px] text-center">
-          {isLoading && (
-            <div className="mt-[60px]">
-              <Skeleton />
+          ))}
+        {!isLoading &&
+          !isError &&
+          paginatedItems &&
+          paginatedItems.length === 0 && (
+            <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+              No advisory boards found
             </div>
           )}
-          {isMoreDataAvailable ? (
-            <LoadMoreBtn
-              isLoadingMore={isLoadingMore}
-              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
-            />
-          ) : hasNoMoreServerData ? (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All advisory board members have been loaded from the server.
-            </p>
-          ) : (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All advisory board members have been loaded.
-            </p>
-          )}
+      </div>
+      {hasMoreItems ? (
+        <Button onClick={handleLoadMoreClick} className="max-w-[200px] mx-auto">
+          Load More
+        </Button>
+      ) : (
+        <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
+          All advisory boards have been loaded.
         </div>
       )}
 
