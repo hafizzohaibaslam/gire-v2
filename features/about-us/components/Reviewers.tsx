@@ -15,6 +15,7 @@ const EditorialTeam = () => {
     isLoadingMore,
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
+    getLastItemId,
   } = useGenericPagination<ReviewerType>({ url: "/api/reviewers" });
 
   return (
@@ -46,6 +47,12 @@ const EditorialTeam = () => {
         </div>
       )}
 
+      {!isLoading && !isError && allData && allData.length === 0 && (
+        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+          No advisory board members found
+        </div>
+      )}
+
       {/* Editorial Team Members */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] mt-[60px] w-full">
         {allData &&
@@ -64,9 +71,7 @@ const EditorialTeam = () => {
           {isMoreDataAvailable ? (
             <LoadMoreBtn
               isLoadingMore={isLoadingMore}
-              handleClick={() =>
-                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
-              }
+              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
             />
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal disabled:opacity-50">

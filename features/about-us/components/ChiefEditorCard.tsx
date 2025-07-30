@@ -14,8 +14,8 @@ type ChiefEditorCardProps = {
     affiliation: string;
   };
 
+  bio: string;
   additionalInfo: string;
-  signature: string;
 };
 
 const ChiefEditorCard = ({
@@ -23,7 +23,8 @@ const ChiefEditorCard = ({
   personalInfo,
   personalInfoIcon,
   additionalInfo,
-  signature,
+
+  bio,
 }: ChiefEditorCardProps) => {
   return (
     <div className="w-full space-y-[40px]">
@@ -79,19 +80,7 @@ const ChiefEditorCard = ({
         <div className="h-[3px] w-[200px] bg-[#5C6168]"></div>
       </div>
       <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] sm:w-[90%] xl:max-w-lg">
-        <p>
-          Daniel Caesar brings extensive experience in academic publishing and
-          education.
-        </p>
-        <p>
-          As a current professor at a top-tier university, he possesses a deep
-          understanding of the academic landscape and the challenges faced by
-          young researchers.
-        </p>
-        <p>
-          With a passion for nurturing talent, he leads our editorial team in
-          promoting high-quality research.
-        </p>
+        <p>{bio}</p>
       </div>
 
       {/* Additional Information */}
@@ -106,7 +95,7 @@ const ChiefEditorCard = ({
       </div>
 
       {/* Signature */}
-      <div className="mx-[45px]">
+      {/* <div className="mx-[45px]">
         <p className="capitalize text-black text-[18px] lg:text-[22px] leading-[24px] lg:leading-[28px] font-semibold">
           signature
         </p>
@@ -117,7 +106,7 @@ const ChiefEditorCard = ({
           height={100}
           className="w-[250px] h-[100px]"
         />
-      </div>
+      </div> */}
     </div>
   );
 };

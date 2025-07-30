@@ -28,6 +28,7 @@ export type Issue = {
   paperNumber: number;
   content?: string;
   date?: string;
+  imgUrl?: string;
 };
 
 export type Editor = {

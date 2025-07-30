@@ -25,13 +25,13 @@ const AdvisoryBoardCard = ({
         {showEditBtn && <EditBtn handleEdit={handleEdit} />}
         {showDeleteBtn && <DeleteBtn handleDelete={handleDelete} />}
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center max-w-[180px] max-h-[175px] mx-auto">
         <Image
           src={board.imgUrl}
           alt="Advisory Board Image"
           width={100}
           height={100}
-          className="w-[180px] h-[175px]"
+          className="w-full h-full object-cover"
         />
       </div>
       <div className="bg-white space-y-[10px] p-[20px] capitalize rounded-[12px]">

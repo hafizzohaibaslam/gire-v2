@@ -37,6 +37,9 @@ const AdminAdvisoryBoard = () => {
     isLoadingMore,
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
+    hasNoMoreServerData,
+    getLastItemId,
+    refreshServerData,
   } = useGenericPagination<AdvisoryBoard>({ url: URL });
 
   const { mutate: createAdvisoryBoard, isPending: isCreating } =
@@ -50,6 +53,7 @@ const AdminAdvisoryBoard = () => {
       url: URL,
       msgKeyValue: "Advisory Board",
       handleDeleteFromAllData,
+      refreshServerData,
     });
   const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
     useGenericUpdate<AdvisoryBoard>({
@@ -65,23 +69,32 @@ const AdminAdvisoryBoard = () => {
     e.preventDefault();
     if (isCreating || isUpdating || isGenerating || isUploading || isDeleting)
       return;
-    if (!image) {
-      toast.error("Please upload an image");
+    const isEditing = selectedAdvisoryBoard?.objId !== "";
+
+    if (!isEditing && !image) {
+      toast.error("Please upload an image for the new advisory board member");
       return;
     }
 
-    const response = await generatePresignedUrl({
-      contentType: image.type,
-      key: `advisory-board/${image.name}-${Date.now()}`,
-    });
-
-    await uploadToS3({ file: image, putUrl: response.putUrl });
+    let response;
+    if (image) {
+      response = await generatePresignedUrl({
+        contentType: image.type,
+        key: `advisory-board/${image.name}-${Date.now()}`,
+      });
+      await uploadToS3({ file: image, putUrl: response.putUrl });
+    }
 
     const formData = new FormData(e.target as HTMLFormElement);
     const rawData = Object.fromEntries(formData) as unknown as AdvisoryBoard;
-    rawData.imgUrl = response.getUrl;
 
-    const isEditing = selectedAdvisoryBoard?.objId !== "";
+    if (isEditing) {
+      rawData.imgUrl = image
+        ? (response?.getUrl as string)
+        : (selectedAdvisoryBoard?.imgUrl as string);
+    } else {
+      rawData.imgUrl = (response?.getUrl as string) || "";
+    }
 
     if (isEditing) {
       updateAdvisoryBoard({
@@ -144,6 +157,11 @@ const AdminAdvisoryBoard = () => {
               }
             />
           ))
+        ) : hasNoMoreServerData ? (
+          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+            No advisory board members found. All data has been loaded from the
+            server.
+          </div>
         ) : (
           <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
             No advisory boards found
@@ -161,10 +179,12 @@ const AdminAdvisoryBoard = () => {
           {isMoreDataAvailable ? (
             <LoadMoreBtn
               isLoadingMore={isLoadingMore}
-              handleClick={() =>
-                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
-              }
+              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
             />
+          ) : hasNoMoreServerData ? (
+            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
+              All advisory board members have been loaded from the server.
+            </p>
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
               All advisory board members have been loaded.
@@ -188,6 +208,11 @@ const AdminAdvisoryBoard = () => {
                 image={image}
                 onChange={(file) => setImage(file)}
                 defaultImage={"/image-placeholder.svg"}
+                existingImageUrl={
+                  selectedAdvisoryBoard?.objId
+                    ? selectedAdvisoryBoard.imgUrl
+                    : undefined
+                }
                 className="w-full rounded-md"
               />
             </div>

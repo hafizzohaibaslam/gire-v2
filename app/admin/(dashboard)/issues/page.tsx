@@ -42,6 +42,9 @@ const AdminIssuesPage = () => {
     isLoadingMore,
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
+    hasNoMoreServerData,
+    getLastItemId,
+    refreshServerData,
   } = useGenericPagination<Issue>({ url: URL });
 
   const { mutate: createIssue, isPending: isCreating } =
@@ -60,6 +63,7 @@ const AdminIssuesPage = () => {
     url: URL,
     msgKeyValue: "Issue",
     handleDeleteFromAllData,
+    refreshServerData,
   });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
@@ -91,18 +95,29 @@ const AdminIssuesPage = () => {
 
     const formData = new FormData(e.target as HTMLFormElement);
     const rawData = Object.fromEntries(formData) as unknown as Issue;
-    rawData.paperUrl = response.getUrl;
-    rawData.content = content;
+
+    // Ensure proper data types and only send required fields
+    const requestData = {
+      name: rawData.name,
+      area: rawData.area,
+      link: rawData.link,
+      title: rawData.title,
+      content: content,
+      keyword: rawData.keyword,
+      paperVolume: Number(selectedVolume),
+      paperNumber: Number(selectedNumber),
+      paperUrl: response.getUrl,
+    };
 
     const isEditing = selectedIssue?.objId !== "";
 
     if (isEditing) {
       updateIssue({
-        ...rawData,
+        ...requestData,
         objId: selectedIssue?.objId || "",
       });
     } else {
-      createIssue(rawData);
+      createIssue(requestData);
     }
     handleReset();
   };
@@ -345,6 +360,10 @@ const AdminIssuesPage = () => {
               }
             />
           ))
+        ) : hasNoMoreServerData ? (
+          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+            No issues found. All data has been loaded from the server.
+          </div>
         ) : (
           <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
             No issues found
@@ -361,10 +380,12 @@ const AdminIssuesPage = () => {
           {isMoreDataAvailable ? (
             <LoadMoreBtn
               isLoadingMore={isLoadingMore}
-              handleClick={() =>
-                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
-              }
+              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
             />
+          ) : hasNoMoreServerData ? (
+            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
+              All issues have been loaded from the server.
+            </p>
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
               All issues have been loaded.

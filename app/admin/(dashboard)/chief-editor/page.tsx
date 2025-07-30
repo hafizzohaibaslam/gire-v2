@@ -118,13 +118,14 @@ const AdminChiefEditorPage = () => {
               className="flex flex-col lg:flex-row gap-[30px] w-full mt-[30px]"
             >
               {/* File Upload */}
-              <div className="relative">
+              <div className="relative w-full max-w-[100px]">
                 <FileImageUpload
                   image={image || null}
                   onChange={(file) => setImage(file)}
                   defaultImage={
                     selectedEditor?.imgUrl || "/image-placeholder.svg"
                   }
+                  className="w-full rounded-md"
                 />
               </div>
               <div className="w-full flex flex-col gap-[30px]">

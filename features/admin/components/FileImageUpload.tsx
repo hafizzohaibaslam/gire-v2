@@ -10,6 +10,7 @@ type FileImageUploadProps = {
   className?: string;
   imageClassName?: string;
   defaultImage: string;
+  existingImageUrl?: string;
 };
 
 function FileImageUpload({
@@ -18,9 +19,17 @@ function FileImageUpload({
   className,
   imageClassName,
   defaultImage,
+  existingImageUrl,
 }: FileImageUploadProps) {
   const [preview, setPreview] = useState<File | null>(image || null);
-  const blobUrl = preview ? URL.createObjectURL(preview) : defaultImage;
+
+  // Determine which image to show
+  let displayImage = defaultImage;
+  if (preview) {
+    displayImage = URL.createObjectURL(preview);
+  } else if (existingImageUrl) {
+    displayImage = existingImageUrl;
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -37,7 +46,7 @@ function FileImageUpload({
   return (
     <div className={cn("self-start relative w-fit", className)}>
       <Image
-        src={blobUrl || defaultImage}
+        src={displayImage}
         alt="Profile"
         width={100}
         height={100}

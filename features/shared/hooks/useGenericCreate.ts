@@ -1,7 +1,7 @@
 import api from "@/lib/api";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useGenericCreate = <T>({
   url,
@@ -12,6 +12,9 @@ export const useGenericCreate = <T>({
   msgKeyValue: string;
   handleAddToAllData: (data: T) => void;
 }) => {
+  const queryClient = useQueryClient();
+  const queryKey = url.split("/").pop();
+
   return useMutation({
     onMutate: () => {
       const toastId = toast.loading(`Creating ${msgKeyValue}...`);
@@ -34,6 +37,12 @@ export const useGenericCreate = <T>({
         id: context?.toastId,
       });
       handleAddToAllData(data);
+
+      // Invalidate all queries that start with "queryKey" and match the URL
+      queryClient.invalidateQueries({
+        queryKey: [queryKey],
+        exact: false,
+      });
     },
 
     onError: (error, _, context) => {
