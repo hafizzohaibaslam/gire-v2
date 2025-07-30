@@ -39,6 +39,7 @@ const TrendingTopics = () => {
     isLoadingMore,
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
+    getLastItemId,
   } = useGenericPagination<Issue>({
     url: "/api/issues",
   });
@@ -185,9 +186,7 @@ const TrendingTopics = () => {
           {isMoreDataAvailable ? (
             <LoadMoreBtn
               isLoadingMore={isLoadingMore}
-              handleClick={() =>
-                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
-              }
+              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
             />
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">

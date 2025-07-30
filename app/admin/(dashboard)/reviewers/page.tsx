@@ -38,6 +38,9 @@ const AdminReviewersPage = () => {
     isLoadingMore,
     isMoreDataAvailable,
     handleLoadMoreBtnClick,
+    hasNoMoreServerData,
+    getLastItemId,
+    refreshServerData,
   } = useGenericPagination<Reviewer>({ url: URL });
 
   const { mutate: createReviewer, isPending: isCreating } =
@@ -50,6 +53,7 @@ const AdminReviewersPage = () => {
     url: URL,
     msgKeyValue: "Reviewer",
     handleDeleteFromAllData,
+    refreshServerData: refreshServerData,
   });
   const { mutate: updateReviewer, isPending: isUpdating } =
     useGenericUpdate<Reviewer>({
@@ -65,23 +69,32 @@ const AdminReviewersPage = () => {
     e.preventDefault();
     if (isCreating || isUpdating || isGenerating || isUploading || isDeleting)
       return;
-    if (!image) {
-      toast.error("Please upload an image");
+    const isEditing = selectedReviewer?.objId !== "";
+
+    if (!isEditing && !image) {
+      toast.error("Please upload an image for the new reviewer");
       return;
     }
 
-    const response = await generatePresignedUrl({
-      contentType: image.type,
-      key: `reviewers/${image.name}-${Date.now()}`,
-    });
-
-    await uploadToS3({ file: image, putUrl: response.putUrl });
+    let response;
+    if (image) {
+      response = await generatePresignedUrl({
+        contentType: image.type,
+        key: `reviewers/${image.name}-${Date.now()}`,
+      });
+      await uploadToS3({ file: image, putUrl: response.putUrl });
+    }
 
     const formData = new FormData(e.target as HTMLFormElement);
     const rawData = Object.fromEntries(formData) as unknown as Reviewer;
-    rawData.imgUrl = response.getUrl;
 
-    const isEditing = selectedReviewer?.objId !== "";
+    if (isEditing) {
+      rawData.imgUrl = image
+        ? (response?.getUrl as string)
+        : (selectedReviewer?.imgUrl as string);
+    } else {
+      rawData.imgUrl = (response?.getUrl as string) || "";
+    }
 
     if (isEditing) {
       updateReviewer({
@@ -143,6 +156,10 @@ const AdminReviewersPage = () => {
               }
             />
           ))
+        ) : hasNoMoreServerData ? (
+          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+            No reviewers found. All data has been loaded from the server.
+          </div>
         ) : (
           <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
             No reviewers found
@@ -160,10 +177,12 @@ const AdminReviewersPage = () => {
           {isMoreDataAvailable ? (
             <LoadMoreBtn
               isLoadingMore={isLoadingMore}
-              handleClick={() =>
-                handleLoadMoreBtnClick(allData[allData.length - 1].objId)
-              }
+              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
             />
+          ) : hasNoMoreServerData ? (
+            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
+              All reviewers have been loaded from the server.
+            </p>
           ) : (
             <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
               All reviewers have been loaded.
@@ -187,6 +206,9 @@ const AdminReviewersPage = () => {
                 image={image}
                 onChange={(file) => setImage(file)}
                 defaultImage={"/image-placeholder.svg"}
+                existingImageUrl={
+                  selectedReviewer?.objId ? selectedReviewer.imgUrl : undefined
+                }
                 className="w-full rounded-md"
               />
             </div>

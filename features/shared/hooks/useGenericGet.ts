@@ -23,10 +23,11 @@ export const useGenericGet = <T>({
       const response = await api.get<{ data: T[] }>(
         `${url}?size=${size}&offsetObjId=${encodeURIComponent(offsetObjId)}`
       );
-
       return response.data.data;
     },
 
     enabled: !!accessToken,
+    refetchOnWindowFocus: false,
+    staleTime: 0, // Always consider data stale to force refetch
   });
 };

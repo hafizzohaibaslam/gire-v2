@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -12,6 +12,9 @@ export const useGenericUpdate = <T extends { objId: string }>({
   msgKeyValue: string;
   handleUpdateInAllData?: (data: T) => void;
 }) => {
+  const queryClient = useQueryClient();
+  const queryKey = url.split("/").pop();
+
   return useMutation({
     onMutate: () => {
       const toastId = toast.loading(`Updating ${msgKeyValue}...`);
@@ -37,6 +40,12 @@ export const useGenericUpdate = <T extends { objId: string }>({
         id: context?.toastId,
       });
       handleUpdateInAllData?.(variables);
+
+      // Invalidate all queries that start with "queryKey" and match the URL
+      queryClient.invalidateQueries({
+        queryKey: [queryKey],
+        exact: false,
+      });
     },
 
     onError: (error, _, context) => {

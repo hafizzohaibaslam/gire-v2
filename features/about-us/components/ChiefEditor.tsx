@@ -1,19 +1,26 @@
 "use client";
 import React, { useState } from "react";
-import ChiefEditorImage from "@/public/about-us-page/chief-editor.png";
 import Email from "@/public/about-us-page/email.svg";
 import Mobile from "@/public/about-us-page/mobile.svg";
 import Linkedin from "@/public/about-us-page/linkedin.svg";
-import Signature from "@/public/about-us-page/signature.svg";
+// import Signature from "@/public/about-us-page/signature.svg";
 import ChiefEditorCard from "./ChiefEditorCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
 import { aboutUsTabs } from "../utils/aboutUsTabs";
 import EditorialTeam from "./Reviewers";
 import AdvisoryBoard from "./AdvisoryBoard";
+import { Editor as EditorType } from "@/features/admin/lib/types";
+import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
+import Skeleton from "@/features/shared/components/Skeleton";
 
 const ChiefEditor = () => {
   const [activeTab, setActiveTab] = useState<string>("chief-editor");
+
+  const { allData, offsetObjId, isLoading, isError } =
+    useGenericPagination<EditorType>({ url: "/api/editors" });
+
+  console.log("All Data in Chief Editor", allData);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -61,30 +68,50 @@ const ChiefEditor = () => {
             </p>
           </div>
 
+          {!offsetObjId && isLoading && (
+            <div className="mt-[60px]">
+              <Skeleton />
+            </div>
+          )}
+
+          {!isLoading && isError && (
+            <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+              Error loading chief editors
+            </div>
+          )}
+
+          {!isLoading && !isError && allData && allData.length === 0 && (
+            <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+              No chief editors found
+            </div>
+          )}
+
           <TabsContent value={activeTab}>
             <div
               id="chief-editor"
               className="grid grid-cols-1 xl:grid-cols-2 gap-[50px]"
             >
               {/* Card 1 */}
-              {Array.from({ length: 2 }).map((_, index) => (
-                <ChiefEditorCard
-                  key={index}
-                  image={ChiefEditorImage.src}
-                  personalInfoIcon={{
-                    name: Email.src,
-                    title: Mobile.src,
-                    affiliation: Linkedin.src,
-                  }}
-                  personalInfo={{
-                    name: "Daniel Caesar",
-                    title: "Chief Editor",
-                    affiliation: "University of California, Los Angeles",
-                  }}
-                  additionalInfo="Our Chief Editors are dedicated educators and scholars from prestigious institutions, ensuring that our journal maintains the highest academic standards. Their expertise not only enhances the quality of the submissions we receive but also provides invaluable mentorship to our authors, guiding them through the publication process and fostering their development as researchers."
-                  signature={Signature}
-                />
-              ))}
+              {allData &&
+                allData.length > 0 &&
+                allData.map((editor, index) => (
+                  <ChiefEditorCard
+                    key={index}
+                    image={editor.imgUrl}
+                    personalInfoIcon={{
+                      name: Email.src,
+                      title: Mobile.src,
+                      affiliation: Linkedin.src,
+                    }}
+                    bio={editor.bio}
+                    personalInfo={{
+                      name: editor.name,
+                      title: editor.title,
+                      affiliation: editor.affiliation,
+                    }}
+                    additionalInfo="Our Chief Editors are dedicated educators and scholars from prestigious institutions, ensuring that our journal maintains the highest academic standards. Their expertise not only enhances the quality of the submissions we receive but also provides invaluable mentorship to our authors, guiding them through the publication process and fostering their development as researchers."
+                  />
+                ))}
             </div>
           </TabsContent>
         </Tabs>
