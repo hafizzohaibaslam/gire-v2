@@ -9,7 +9,6 @@ import DeleteBtn from "@/features/admin/components/DeleteBtn";
 import { areaValues } from "@/lib/areaValues";
 import Link from "next/link";
 import { splitKeywords } from "@/lib/splitKeywords";
-import { useAuthContext } from "@/lib/AuthProvider";
 import { handleDownload } from "@/features/shared/utils/downloadFile";
 
 export type IssueCardProps = {
@@ -18,6 +17,7 @@ export type IssueCardProps = {
   handleEdit?: () => void;
   showDeleteBtn?: boolean;
   handleDelete?: () => void;
+  isAdmin?: boolean;
 };
 
 const IssueCard = ({
@@ -26,8 +26,8 @@ const IssueCard = ({
   showEditBtn = false,
   showDeleteBtn = false,
   handleDelete = () => {},
+  isAdmin = false,
 }: IssueCardProps) => {
-  const { isAdmin } = useAuthContext();
   const keywords = splitKeywords(issue.keyword);
 
   const cardContent = (

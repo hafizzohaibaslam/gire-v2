@@ -368,6 +368,7 @@ const AdminIssuesPage = () => {
               issue={issue}
               showEditBtn={true}
               showDeleteBtn={true}
+              isAdmin={true}
               handleEdit={() => {
                 handleEditIssue(issue as Issue & { content: string });
               }}
