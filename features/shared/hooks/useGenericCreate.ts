@@ -6,11 +6,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export const useGenericCreate = <T>({
   url,
   msgKeyValue,
-  handleAddToAllData,
 }: {
   url: string;
   msgKeyValue: string;
-  handleAddToAllData: (data: T) => void;
 }) => {
   const queryClient = useQueryClient();
   const queryKey = url.split("/").pop();
@@ -32,13 +30,11 @@ export const useGenericCreate = <T>({
         );
       }
     },
-    onSuccess: (data, __, context) => {
+    onSuccess: (_, __, context) => {
       toast.success(`${msgKeyValue} created successfully`, {
         id: context?.toastId,
       });
-      handleAddToAllData(data);
 
-      // Invalidate all queries that start with "queryKey" and match the URL
       queryClient.invalidateQueries({
         queryKey: [queryKey],
         exact: false,

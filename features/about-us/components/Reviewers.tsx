@@ -3,20 +3,17 @@ import React from "react";
 import ReviewersCard from "./ReviewersCard";
 import Skeleton from "@/features/shared/components/Skeleton";
 import { Reviewer as ReviewerType } from "@/features/admin/lib/types";
-import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
+import { useClientPagination } from "@/features/shared/hooks/useClientPagination";
 import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 
 const EditorialTeam = () => {
   const {
-    allData,
-    offsetObjId,
+    paginatedItems,
+    hasMoreItems,
+    handleLoadMoreClick,
     isLoading,
     isError,
-    isLoadingMore,
-    isMoreDataAvailable,
-    handleLoadMoreBtnClick,
-    getLastItemId,
-  } = useGenericPagination<ReviewerType>({ url: "/api/reviewers" });
+  } = useClientPagination<ReviewerType>({ url: "/api/reviewers" });
 
   return (
     <div
@@ -35,7 +32,7 @@ const EditorialTeam = () => {
         </p>
       </div>
 
-      {!offsetObjId && isLoading && (
+      {isLoading && (
         <div className="mt-[60px]">
           <Skeleton />
         </div>
@@ -47,37 +44,39 @@ const EditorialTeam = () => {
         </div>
       )}
 
-      {!isLoading && !isError && allData && allData.length === 0 && (
-        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-          No advisory board members found
-        </div>
-      )}
+      {!isLoading &&
+        !isError &&
+        paginatedItems &&
+        paginatedItems.length === 0 && (
+          <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+            No advisory board members found
+          </div>
+        )}
 
       {/* Editorial Team Members */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] mt-[60px] w-full">
-        {allData &&
-          allData.length > 0 &&
-          allData.map((reviewer, index) => (
+        {paginatedItems &&
+          paginatedItems.length > 0 &&
+          paginatedItems.map((reviewer, index) => (
             <ReviewersCard key={index} reviewer={reviewer} />
           ))}
       </div>
-      {allData && allData.length > 0 && (
+      {paginatedItems.length > 0 && hasMoreItems && (
         <div className="mt-[40px] text-center">
           {isLoading && (
             <div className="mt-[60px]">
               <Skeleton />
             </div>
           )}
-          {isMoreDataAvailable ? (
-            <LoadMoreBtn
-              isLoadingMore={isLoadingMore}
-              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
-            />
-          ) : (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal disabled:opacity-50">
-              All reviewers have been loaded.
-            </p>
-          )}
+          <LoadMoreBtn
+            isLoadingMore={isLoading}
+            handleClick={handleLoadMoreClick}
+          />
+        </div>
+      )}
+      {paginatedItems.length > 0 && !hasMoreItems && (
+        <div className="mt-8 text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
+          All reviewers have been loaded.
         </div>
       )}
     </div>

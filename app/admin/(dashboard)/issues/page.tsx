@@ -3,22 +3,22 @@ import { Editor } from "@tinymce/tinymce-react";
 import Button from "@/features/shared/components/Button";
 import React, { useState, useRef } from "react";
 import IssueCard from "@/features/issues/components/IssueCard";
-import FileImageUpload from "@/features/admin/components/FileImageUpload";
+// import FileImageUpload from "@/features/admin/components/FileImageUpload";
+import FilePreview from "@/features/admin/components/FilePreview";
 import InputField from "@/features/admin/components/InputField";
 import Label from "@/features/admin/components/Label";
 import { Issue } from "@/features/admin/lib/types";
-import { File } from "lucide-react";
 import { handleEdit } from "@/features/shared/utils/handleEdit";
 import Skeleton from "@/features/shared/components/Skeleton";
 import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { toast } from "sonner";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
-import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
-import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
 import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
 import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
+import { useClientPagination } from "@/features/shared/hooks/useClientPagination";
+import { areaValues } from "@/lib/areaValues";
 
 const URL = "/api/issues";
 const AdminIssuesPage = () => {
@@ -26,44 +26,36 @@ const AdminIssuesPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileUpload, setFileUpload] = useState<File | null>(null);
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
-  const [image, setImage] = useState<File | null>(null);
+  // const [image, setImage] = useState<File | null>(null);
   const [selectedVolume, setSelectedVolume] = useState<number>(1);
   const [selectedNumber, setSelectedNumber] = useState<number>(1);
   const [content, setContent] = useState<string>("");
+  // const [isImageUploading, setIsImageUploading] = useState(false);
 
+  // Pagination
   const {
-    allData,
-    handleAddToAllData,
-    handleUpdateInAllData,
-    handleDeleteFromAllData,
-    offsetObjId,
+    paginatedItems,
+    hasMoreItems,
+    handleLoadMoreClick,
     isLoading,
     isError,
-    isLoadingMore,
-    isMoreDataAvailable,
-    handleLoadMoreBtnClick,
-    hasNoMoreServerData,
-    getLastItemId,
-    refreshServerData,
-  } = useGenericPagination<Issue>({ url: URL });
+  } = useClientPagination<Issue>({
+    url: URL,
+  });
 
   const { mutate: createIssue, isPending: isCreating } =
     useGenericCreate<Issue>({
       url: URL,
       msgKeyValue: "Issue",
-      handleAddToAllData,
     });
   const { mutate: updateIssue, isPending: isUpdating } =
     useGenericUpdate<Issue>({
       url: URL,
       msgKeyValue: "Issue",
-      handleUpdateInAllData,
     });
   const { mutate: deleteIssue, isPending: isDeleting } = useGenericDelete({
     url: URL,
     msgKeyValue: "Issue",
-    handleDeleteFromAllData,
-    refreshServerData,
   });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
@@ -71,55 +63,71 @@ const AdminIssuesPage = () => {
 
   const handleReset = () => {
     setSelectedIssue(null);
-    setImage(null);
+    // setImage(null);
     setFileUpload(null);
     setContent("");
     setSelectedVolume(1);
     setSelectedNumber(1);
   };
 
+  const handleEditIssue = (issue: Issue & { content: string }) => {
+    handleEdit(issue, setSelectedIssue);
+    setContent(issue.content);
+    setSelectedVolume(issue.paperVolume || 1);
+    setSelectedNumber(issue.paperNumber || 1);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isCreating || isGenerating || isUploading || isDeleting) return;
-    if (!fileUpload) {
-      toast.error("Please upload a file");
+    if (isCreating || isUpdating || isGenerating || isUploading || isDeleting)
+      return;
+    const isEditing = selectedIssue?.objId !== "";
+
+    if (!isEditing && !fileUpload) {
+      toast.error("Please upload a file for the new issue");
       return;
     }
 
-    const response = await generatePresignedUrl({
-      contentType: fileUpload.type,
-      key: `issues/${fileUpload.name}-${Date.now()}`,
-    });
+    if (!content) {
+      toast.error("Please add some content for the new issue");
+      return;
+    }
 
-    await uploadToS3({ file: fileUpload, putUrl: response.putUrl });
+    const newContent = content || selectedIssue?.content;
+
+    let response;
+    if (fileUpload) {
+      response = await generatePresignedUrl({
+        contentType: fileUpload.type,
+        key: `issues/${fileUpload.name}-${Date.now()}`,
+      });
+      await uploadToS3({ file: fileUpload, putUrl: response.putUrl });
+    }
 
     const formData = new FormData(e.target as HTMLFormElement);
     const rawData = Object.fromEntries(formData) as unknown as Issue;
+    rawData.content = newContent as string;
 
-    // Ensure proper data types and only send required fields
-    const requestData = {
-      name: rawData.name,
-      area: rawData.area,
-      link: rawData.link,
-      title: rawData.title,
-      content: content,
-      keyword: rawData.keyword,
-      paperVolume: Number(selectedVolume),
-      paperNumber: Number(selectedNumber),
-      paperUrl: response.getUrl,
-    };
+    console.log("Raw Data", rawData);
 
-    const isEditing = selectedIssue?.objId !== "";
+    if (isEditing) {
+      rawData.paperUrl = fileUpload
+        ? (response?.getUrl as string)
+        : (selectedIssue?.paperUrl as string);
+    } else {
+      rawData.paperUrl = (response?.getUrl as string) || "";
+    }
 
     if (isEditing) {
       updateIssue({
-        ...requestData,
+        ...rawData,
         objId: selectedIssue?.objId || "",
       });
     } else {
-      createIssue(requestData);
+      createIssue(rawData);
     }
     handleReset();
+    // setIsImageUploading(false);
   };
 
   if (selectedIssue) {
@@ -141,14 +149,15 @@ const AdminIssuesPage = () => {
           </Button>
         </div>
         <div className="lg:max-w-[80%] space-y-[50px]">
-          <div className="relative w-full max-w-[400px]">
+          {/* <div className="relative w-full max-w-[400px]">
             <FileImageUpload
               image={image}
               onChange={(file) => setImage(file)}
               defaultImage={"/issues-placeholder.png"}
               className="w-full rounded-md"
+              isLoading={isImageUploading}
             />
-          </div>
+          </div> */}
           <div className="w-full space-y-[25px]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px] w-full">
               {/* Volume */}
@@ -161,6 +170,7 @@ const AdminIssuesPage = () => {
                   placeholder="Enter Volume"
                   value={selectedVolume}
                   onChange={(e) => setSelectedVolume(Number(e.target.value))}
+                  required
                   className="text-black placeholder:text-black"
                 />
               </div>
@@ -175,6 +185,7 @@ const AdminIssuesPage = () => {
                   placeholder="Enter Number"
                   value={selectedNumber}
                   onChange={(e) => setSelectedNumber(Number(e.target.value))}
+                  required
                   className="text-black placeholder:text-black"
                 />
               </div>
@@ -189,12 +200,13 @@ const AdminIssuesPage = () => {
                   name="name"
                   placeholder="Enter Full Name"
                   defaultValue={selectedIssue?.name}
+                  required
                   className="text-black placeholder:text-black"
                 />
               </div>
 
               {/* Date */}
-              <div className="flex flex-col gap-[11px] w-full">
+              {/* <div className="flex flex-col gap-[11px] w-full">
                 <Label htmlFor="date">Date</Label>
                 <InputField
                   type="date"
@@ -202,35 +214,40 @@ const AdminIssuesPage = () => {
                   name="date"
                   placeholder="Enter Date"
                   defaultValue={selectedIssue?.date}
+                  required
+                  className="text-black placeholder:text-black"
+                />
+              </div> */}
+              {/* Title */}
+              <div className="flex flex-col gap-[11px] w-full">
+                <Label htmlFor="title">Title</Label>
+                <InputField
+                  type="text"
+                  id="title"
+                  name="title"
+                  placeholder="Enter Title"
+                  defaultValue={selectedIssue?.title}
+                  required
                   className="text-black placeholder:text-black"
                 />
               </div>
             </div>
 
-            {/* Title */}
-            <div className="flex flex-col gap-[11px] w-full">
-              <Label htmlFor="title">Title</Label>
-              <InputField
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Enter Title"
-                defaultValue={selectedIssue?.title}
-                className="text-black placeholder:text-black"
-              />
-            </div>
-
-            {/* Research Field */}
+            {/* Area */}
             <div className="flex flex-col gap-[11px] w-full">
               <Label htmlFor="area">Area</Label>
-              <InputField
-                type="text"
+              <select
                 id="area"
                 name="area"
-                placeholder="Enter Area"
                 defaultValue={selectedIssue?.area}
-                className="text-black placeholder:text-black"
-              />
+                className="border-[1px] border-[#DFEAF2] rounded-[15px] px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-200 hover:border-gray-400  font-inter font-normal text-[15px] transition-all duration-200 text-black placeholder:text-black"
+              >
+                {Object.entries(areaValues).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Research Keywords */}
@@ -242,6 +259,7 @@ const AdminIssuesPage = () => {
                 name="keyword"
                 placeholder="Enter Research Keywords"
                 defaultValue={selectedIssue?.keyword}
+                required
                 className="text-black placeholder:text-black"
               />
             </div>
@@ -255,6 +273,7 @@ const AdminIssuesPage = () => {
                 name="link"
                 placeholder="Enter Link"
                 defaultValue={selectedIssue?.link}
+                required
                 className="text-black placeholder:text-black"
               />
             </div>
@@ -277,24 +296,27 @@ const AdminIssuesPage = () => {
                 type="file"
                 className="hidden"
                 ref={fileInputRef}
+                accept="application/pdf"
                 onChange={(e) => setFileUpload(e.target.files?.[0] || null)}
               />
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-full"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                Upload PDF
-              </Button>
-              {fileUpload && (
-                <div className="flex items-center gap-2">
-                  <File className="w-4 h-4" />
-                  <p className="text-[#718EBF] font-inter font-normal text-[15px]">
-                    {fileUpload.name}
-                  </p>
-                </div>
-              )}
+              <div className="flex items-center gap-3">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="flex-1"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {fileUpload ? "Change PDF" : "Upload PDF"}
+                </Button>
+              </div>
+
+              {/* File Preview */}
+              <FilePreview
+                file={fileUpload}
+                existingUrl={selectedIssue?.paperUrl}
+                onRemove={fileUpload ? () => setFileUpload(null) : undefined}
+                className="mt-4"
+              />
             </div>
           </div>
         </div>
@@ -303,7 +325,7 @@ const AdminIssuesPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[30px] rounded-[25px] h-full">
+    <div className="flex flex-col gap-[20px] bg-white px-[37px] py-[15px] rounded-[25px] h-full">
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Issues
@@ -330,69 +352,53 @@ const AdminIssuesPage = () => {
         </Button>
       </div>
 
-      {!offsetObjId && isLoading && (
-        <div className="mt-[60px]">
-          <Skeleton />
+      {isLoading && <Skeleton />}
+      {!isLoading && isError && (
+        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
+          Error loading advisory boards
         </div>
       )}
 
-      {!isLoading && isError && (
-        <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-          Error loading issues
-        </div>
-      )}
       <div className="grid grid-cols-1 gap-x-[30px] gap-y-[16px] overflow-y-auto">
-        {allData.length > 0 ? (
-          allData.map((topic, index) => (
+        {paginatedItems &&
+          paginatedItems.length > 0 &&
+          paginatedItems.map((issue, index) => (
             <IssueCard
               key={index}
-              topic={topic}
+              issue={issue}
               showEditBtn={true}
               showDeleteBtn={true}
-              handleEdit={() =>
-                handleEdit(
-                  topic as Issue & { content: string },
-                  setSelectedIssue
-                )
-              }
+              isAdmin={true}
+              handleEdit={() => {
+                handleEditIssue(issue as Issue & { content: string });
+              }}
               handleDelete={() =>
-                handleDelete(topic.objId, isDeleting, deleteIssue)
+                handleDelete(issue.objId, isDeleting, deleteIssue)
               }
             />
-          ))
-        ) : hasNoMoreServerData ? (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No issues found. All data has been loaded from the server.
-          </div>
-        ) : (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No issues found
+          ))}
+        {!isLoading &&
+          !isError &&
+          paginatedItems &&
+          paginatedItems.length === 0 && (
+            <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+              No issues found
+            </div>
+          )}
+        {hasMoreItems && (
+          <Button
+            onClick={handleLoadMoreClick}
+            className="max-w-[200px] mx-auto"
+          >
+            Load More
+          </Button>
+        )}{" "}
+        {paginatedItems.length > 0 && !hasMoreItems && (
+          <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
+            All issues have been loaded.
           </div>
         )}
       </div>
-      {allData && allData.length > 0 && (
-        <div className="mt-[40px] text-center">
-          {isLoading && (
-            <div className="mt-[60px]">
-              <Skeleton />
-            </div>
-          )}
-          {isMoreDataAvailable ? (
-            <LoadMoreBtn
-              isLoadingMore={isLoadingMore}
-              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
-            />
-          ) : hasNoMoreServerData ? (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All issues have been loaded from the server.
-            </p>
-          ) : (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All issues have been loaded.
-            </p>
-          )}
-        </div>
-      )}
     </div>
   );
 };

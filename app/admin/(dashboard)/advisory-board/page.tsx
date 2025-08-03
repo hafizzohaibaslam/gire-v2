@@ -14,52 +14,42 @@ import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePres
 import { handleDelete } from "@/features/shared/utils/handleDelete";
 import { handleEdit } from "@/features/shared/utils/handleEdit";
 import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
-import { useGenericPagination } from "@/features/shared/hooks/useGenericPagination";
-import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
 import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
+import { useClientPagination } from "@/features/shared/hooks/useClientPagination";
 
 const URL = "/api/advisories";
 const AdminAdvisoryBoard = () => {
   const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
     useState<AdvisoryBoard | null>(null);
   const [image, setImage] = useState<File | null>(null);
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   const {
-    allData,
-    handleAddToAllData,
-    handleUpdateInAllData,
-    handleDeleteFromAllData,
-    offsetObjId,
+    paginatedItems,
+    hasMoreItems,
+    handleLoadMoreClick,
     isLoading,
     isError,
-    isLoadingMore,
-    isMoreDataAvailable,
-    handleLoadMoreBtnClick,
-    hasNoMoreServerData,
-    getLastItemId,
-    refreshServerData,
-  } = useGenericPagination<AdvisoryBoard>({ url: URL });
+  } = useClientPagination<AdvisoryBoard>({
+    url: URL,
+  });
 
   const { mutate: createAdvisoryBoard, isPending: isCreating } =
     useGenericCreate<AdvisoryBoard>({
       url: URL,
       msgKeyValue: "Advisory Board",
-      handleAddToAllData,
     });
   const { mutate: deleteAdvisoryBoard, isPending: isDeleting } =
     useGenericDelete({
       url: URL,
       msgKeyValue: "Advisory Board",
-      handleDeleteFromAllData,
-      refreshServerData,
     });
   const { mutate: updateAdvisoryBoard, isPending: isUpdating } =
     useGenericUpdate<AdvisoryBoard>({
       url: URL,
       msgKeyValue: "Advisory Board",
-      handleUpdateInAllData,
     });
   const { mutateAsync: generatePresignedUrl, isPending: isGenerating } =
     useGeneratePresignedUrl();
@@ -76,6 +66,7 @@ const AdminAdvisoryBoard = () => {
       return;
     }
 
+    setIsImageUploading(true);
     let response;
     if (image) {
       response = await generatePresignedUrl({
@@ -106,10 +97,11 @@ const AdminAdvisoryBoard = () => {
     }
     setSelectedAdvisoryBoard(null);
     setImage(null);
+    setIsImageUploading(false);
   };
 
   return (
-    <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[37px] rounded-[25px] h-full">
+    <div className="flex flex-col gap-[20px] bg-white px-[30px] py-[15px] rounded-[25px] h-full">
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-inter font-semibold text-[28px] text-[#343C6A]">
           Advisory Board
@@ -131,21 +123,16 @@ const AdminAdvisoryBoard = () => {
           Add New
         </Button>
       </div>
-
-      {!offsetObjId && isLoading && (
-        <div className="mt-[60px]">
-          <Skeleton />
-        </div>
-      )}
-
+      {isLoading && <Skeleton />}
       {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
           Error loading advisory boards
         </div>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] overflow-y-auto">
-        {allData.length > 0 ? (
-          allData.map((board) => (
+        {paginatedItems &&
+          paginatedItems.length > 0 &&
+          paginatedItems.map((board) => (
             <AdvisoryBoardCard
               key={board.objId}
               board={board}
@@ -156,43 +143,26 @@ const AdminAdvisoryBoard = () => {
                 handleDelete(board.objId, isDeleting, deleteAdvisoryBoard)
               }
             />
-          ))
-        ) : hasNoMoreServerData ? (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No advisory board members found. All data has been loaded from the
-            server.
-          </div>
-        ) : (
-          <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
-            No advisory boards found
-          </div>
-        )}
-      </div>
-
-      {allData && allData.length > 0 && (
-        <div className="mt-[40px] text-center">
-          {isLoading && (
-            <div className="mt-[60px]">
-              <Skeleton />
+          ))}
+        {!isLoading &&
+          !isError &&
+          paginatedItems &&
+          paginatedItems.length === 0 && (
+            <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
+              No advisory boards found
             </div>
           )}
-          {isMoreDataAvailable ? (
-            <LoadMoreBtn
-              isLoadingMore={isLoadingMore}
-              handleClick={() => handleLoadMoreBtnClick(getLastItemId())}
-            />
-          ) : hasNoMoreServerData ? (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All advisory board members have been loaded from the server.
-            </p>
-          ) : (
-            <p className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal">
-              All advisory board members have been loaded.
-            </p>
-          )}
+      </div>
+      {hasMoreItems && (
+        <Button onClick={handleLoadMoreClick} className="max-w-[200px] mx-auto">
+          Load More
+        </Button>
+      )}{" "}
+      {paginatedItems.length > 0 && !hasMoreItems && (
+        <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
+          All issues have been loaded.
         </div>
       )}
-
       {selectedAdvisoryBoard && (
         <EditModal
           title="Advisory Board Details"
@@ -214,6 +184,7 @@ const AdminAdvisoryBoard = () => {
                     : undefined
                 }
                 className="w-full rounded-md"
+                isLoading={isImageUploading}
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">
@@ -227,6 +198,7 @@ const AdminAdvisoryBoard = () => {
                     name="name"
                     placeholder="Enter Name"
                     defaultValue={selectedAdvisoryBoard?.name}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -239,6 +211,7 @@ const AdminAdvisoryBoard = () => {
                     name="title"
                     placeholder="Enter Title"
                     defaultValue={selectedAdvisoryBoard?.title}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -251,6 +224,7 @@ const AdminAdvisoryBoard = () => {
                     name="department"
                     placeholder="Enter Department"
                     defaultValue={selectedAdvisoryBoard?.department}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -263,6 +237,7 @@ const AdminAdvisoryBoard = () => {
                     name="affiliation"
                     placeholder="Enter Affiliation"
                     defaultValue={selectedAdvisoryBoard?.affiliation}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -275,6 +250,7 @@ const AdminAdvisoryBoard = () => {
                     name="field"
                     placeholder="Enter Field"
                     defaultValue={selectedAdvisoryBoard?.field}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
