@@ -3,33 +3,31 @@ import { Search } from "lucide-react";
 import React, { useState } from "react";
 import TrendingTopicCard from "./IssueCard";
 import {
-  categoriesList,
-  // numbersList,
-  // trendingTopics,
-  // volumesList,
-  yearsList,
-} from "../utils/trendingTopics";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Link from "next/link";
 import Label from "@/features/admin/components/Label";
 import { Issue } from "@/features/admin/lib/types";
 import Skeleton from "@/features/shared/components/Skeleton";
 import LoadMoreBtn from "@/features/shared/components/LoadMoreBtn";
 import { useClientPagination } from "@/features/shared/hooks/useClientPagination";
+import { areaValues } from "@/lib/areaValues";
+import InputField from "@/features/admin/components/InputField";
+import { filterTopics } from "../utils/filterTopics";
 
 const TrendingTopics = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedYear, setSelectedYear] = useState("All");
-  const [selectedArea, setSelectedArea] = useState("");
-  // const [selectedVolume, setSelectedVolume] = useState("All");
-  // const [selectedNumber, setSelectedNumber] = useState("All");
-  const [selectedResearchField, setSelectedResearchField] = useState("All");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedArea, setSelectedArea] = useState("All");
+  const [selectedKeywords, setSelectedKeywords] = useState("");
+
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
+  const [appliedYear, setAppliedYear] = useState("");
+  const [appliedArea, setAppliedArea] = useState("All");
+  const [appliedKeywords, setAppliedKeywords] = useState("");
 
   const {
     paginatedItems,
@@ -41,38 +39,36 @@ const TrendingTopics = () => {
     url: "/api/issues",
   });
 
-  // const filterTopics = (topics: Issue[]) => {
-  //   let filteredData = [...topics];
+  const filteredTopics = filterTopics(
+    paginatedItems,
+    appliedSearchTerm,
+    appliedYear,
+    appliedArea,
+    appliedKeywords
+  );
 
-  //   if (searchTerm && searchTerm !== "") {
-  //     filteredData = filteredData.filter((topic) =>
-  //       topic.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //     );
-  //   }
-  //   if (selectedYear && selectedYear !== "All") {
-  //     filteredData = filteredData.filter((topic) =>
-  //       topic.date.includes(selectedYear)
-  //     );
-  //   }
-  //   if (selectedResearchField && selectedResearchField !== "All") {
-  //     filteredData = filteredData.filter(
-  //       (topic) =>
-  //         topic.researchField.includes(selectedResearchField) ||
-  //         topic.researchKeywords.some((keyword: string) =>
-  //           keyword.toLowerCase().includes(selectedResearchField.toLowerCase())
-  //         )
-  //     );
-  //   }
+  const handleApplyFilters = () => {
+    setAppliedSearchTerm(searchTerm);
+    setAppliedYear(selectedYear);
+    setAppliedArea(selectedArea);
+    setAppliedKeywords(selectedKeywords);
+  };
 
-  //   return filteredData;
-  // };
-
-  const handleApplyFilters = () => {};
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setSelectedYear("");
+    setSelectedArea("All");
+    setSelectedKeywords("");
+    setAppliedSearchTerm("");
+    setAppliedYear("");
+    setAppliedArea("All");
+    setAppliedKeywords("");
+  };
 
   return (
     <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] lg:pt-[100px] max-w-[1440px] mx-auto">
       {/* Introduction */}
-      <div>
+      <div className="">
         <div className="w-full flex items-center gap-2 relative px-[16px] py-[12px] rounded-[100px] border-[1px] border-[#E8EAEE]">
           <Search className="w-[20px] h-[20px] absolute left-[10px] text-[#858C95]" />
           <input
@@ -87,63 +83,61 @@ const TrendingTopics = () => {
           {/* Years */}
           <div className="flex flex-col gap-2">
             <Label>Years</Label>
-            <Select
+            <InputField
+              type="text"
+              placeholder="Enter a year"
               value={selectedYear}
-              onValueChange={(value) => setSelectedYear(value)}
-            >
-              <SelectTrigger className="w-full lg:w-[180px]">
-                <SelectValue placeholder="Select a year" />
-              </SelectTrigger>
-              <SelectContent>
-                {yearsList.map((year) => (
-                  <SelectItem key={year} value={year}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="px-3 py-2 text-[#858C95] placeholder:text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full rounded-[10px] border-[1px] border-[#E8EAEE] hover:border-[#DFEAF2] focus:ring-0"
+            />
           </div>
-          {/* Categories */}
+          {/* Keywords */}
           <div className="flex flex-col gap-2">
-            <Label>Fields</Label>
-            <Select
-              value={selectedResearchField}
-              onValueChange={(value) => setSelectedResearchField(value)}
-            >
-              <SelectTrigger className="w-full lg:w-[180px]">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categoriesList.map((field) => (
-                  <SelectItem key={field} value={field}>
-                    {field}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label>Keywords</Label>
+            <InputField
+              type="text"
+              placeholder="Enter a keyword"
+              value={selectedKeywords}
+              onChange={(e) => setSelectedKeywords(e.target.value)}
+              className="px-3 py-2 text-[#858C95] placeholder:text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full rounded-[10px] border-[1px] border-[#E8EAEE] hover:border-[#DFEAF2] focus:ring-0"
+            />
           </div>
 
           {/* Area */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="area">Fields</Label>
-            <input
-              id="area"
-              type="text"
-              placeholder="Enter area"
+            <Label htmlFor="area">Area</Label>
+            <Select
               value={selectedArea}
-              onChange={(e) => setSelectedArea(e.target.value)}
-              className="w-full lg:w-[180px] border-[1px] border-[#E8EAEE] rounded-[10px] px-[10px] py-[10px] outline-none"
-            />
+              onValueChange={(value) => setSelectedArea(value)}
+            >
+              <SelectTrigger className="w-full lg:w-[180px]">
+                <SelectValue placeholder="Select an area" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All</SelectItem>
+                {Object.keys(areaValues).map((area) => (
+                  <SelectItem key={area} value={area}>
+                    {areaValues[area as keyof typeof areaValues]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
-          <button
-            className="bg-[#3385FF] text-white px-[20px] py-[10px] rounded-[100px] cursor-pointer self-end"
-            onClick={() => {
-              handleApplyFilters();
-            }}
-          >
-            Apply Filters
-          </button>
+          <div className="flex gap-2 self-end">
+            <button
+              className="bg-[#3385FF] text-white px-[20px] py-[10px] rounded-[100px] cursor-pointer self-end"
+              onClick={handleApplyFilters}
+            >
+              Apply Filters
+            </button>
+            <button
+              className="bg-gray-500 text-white px-[20px] py-[10px] rounded-[100px] cursor-pointer self-end"
+              onClick={handleClearFilters}
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
       </div>
 
@@ -155,17 +149,15 @@ const TrendingTopics = () => {
 
       {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-          Error loading advisory boards
+          Error loading issues
         </div>
       )}
 
       {/* Profile Section */}
       <div className="flex flex-col gap-[30px] lg:gap-[60px]">
-        {paginatedItems.length > 0 ? (
-          paginatedItems.map((topic) => (
-            <Link href={`/issues/${topic.objId}`} key={topic.objId}>
-              <TrendingTopicCard topic={topic} />
-            </Link>
+        {filteredTopics.length > 0 ? (
+          filteredTopics.map((issue) => (
+            <TrendingTopicCard key={issue.objId} issue={issue} />
           ))
         ) : (
           <div className="text-[#858C95] text-[15px] font-normal leading-[22px]">
@@ -173,7 +165,7 @@ const TrendingTopics = () => {
           </div>
         )}
       </div>
-      {hasMoreItems ? (
+      {filteredTopics.length > 0 && hasMoreItems && (
         <div className="mt-[40px] text-center">
           {isLoading && (
             <div className="mt-[60px]">
@@ -184,10 +176,6 @@ const TrendingTopics = () => {
             isLoadingMore={isLoading}
             handleClick={handleLoadMoreClick}
           />
-        </div>
-      ) : (
-        <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
-          All issues have been loaded.
         </div>
       )}
     </div>

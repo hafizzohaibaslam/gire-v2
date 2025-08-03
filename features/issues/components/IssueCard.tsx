@@ -1,14 +1,19 @@
 import Image from "next/image";
 import React from "react";
-import { Download } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import Tags from "@/features/shared/components/Tags";
 import EditBtn from "@/features/admin/components/EditBtn";
 import { cn } from "@/lib/utils";
 import { Issue } from "@/features/admin/lib/types";
 import DeleteBtn from "@/features/admin/components/DeleteBtn";
+import { areaValues } from "@/lib/areaValues";
+import Link from "next/link";
+import { splitKeywords } from "@/lib/splitKeywords";
+import { useAuthContext } from "@/lib/AuthProvider";
+import { handleDownload } from "@/features/shared/utils/downloadFile";
 
 export type IssueCardProps = {
-  topic: Issue;
+  issue: Issue;
   showEditBtn?: boolean;
   handleEdit?: () => void;
   showDeleteBtn?: boolean;
@@ -16,57 +21,16 @@ export type IssueCardProps = {
 };
 
 const IssueCard = ({
-  topic,
+  issue,
   handleEdit = () => {},
   showEditBtn = false,
   showDeleteBtn = false,
   handleDelete = () => {},
 }: IssueCardProps) => {
-  const keywords = topic.keyword.split(",");
+  const { isAdmin } = useAuthContext();
+  const keywords = splitKeywords(issue.keyword);
 
-  const handleDownload = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    try {
-      // For external URLs, we need to fetch the file first
-      if (topic.paperUrl.startsWith("http")) {
-        const response = await fetch(topic.paperUrl);
-        if (!response.ok) {
-          throw new Error("Failed to fetch file");
-        }
-
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `${topic.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        // Clean up the object URL
-        window.URL.revokeObjectURL(url);
-      } else {
-        // For relative URLs, use the direct download approach
-        const link = document.createElement("a");
-        link.href = topic.paperUrl;
-        link.download = `${topic.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } catch (error) {
-      console.error("Error downloading file:", error);
-      // Fallback: open in new tab if download fails
-      window.open(topic.paperUrl, "_blank");
-    }
-  };
-
-  return (
+  const cardContent = (
     <div className="relative">
       <div
         className={cn(
@@ -86,11 +50,15 @@ const IssueCard = ({
         <div>
           <div className="flex flex-col lg:flex-row gap-[10px] lg:justify-between lg:items-center">
             <p className="font-playfair-display text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[3px] font-semibold">
-              {topic.name}
+              {issue.name}
             </p>
             <div className="flex items-center gap-[10px]">
               <p className="mr-4 font-playfair-display text-[#6D6E76] text-[16px] leading-[28px] font-normal">
-                {topic.date}
+                {new Date(issue.date || "").toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </p>
               <div className="flex gap-2">
                 {showEditBtn && (
@@ -101,21 +69,34 @@ const IssueCard = ({
             </div>
           </div>
           <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
-            {topic.title}
+            {issue.title}
           </h1>
 
           {/* Research Keywords */}
           <div className="flex flex-wrap gap-[10px]">
-            <Tags tag={topic.area} className="bg-blue-800" />
+            <Tags
+              tag={areaValues[issue.area as keyof typeof areaValues]}
+              className="bg-blue-800"
+            />
             {keywords.map((keyword) => (
               <Tags key={keyword} tag={keyword} />
             ))}
           </div>
-          <p className="font-playfair-display my-[20px] text-[#6D6E76] text-[20px] leading-[28px] font-normal">
-            {topic.paperUrl}
-          </p>
+          {issue.paperUrl && (
+            <div className="my-[20px] gap-4 p-2 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-blue-500" />
+                <span className="font-playfair-display text-[#6D6E76] text-[16px] font-normal">
+                  PDF uploaded
+                </span>
+              </div>
+              <p className="font-playfair-display text-[#6D6E76] text-[16px] font-normal">
+                {issue.paperUrl}
+              </p>
+            </div>
+          )}
           <button
-            onClick={handleDownload}
+            onClick={(e) => handleDownload(e, issue)}
             className="w-full max-w-lg bg-[#2325360D] py-[15px] px-[20px] flex items-center justify-center gap-2 text-[14px] lg:text-[16px] leading-[100%] font-semibold capitalize text-[#232536] rounded-[100px] hover:bg-[#232536] hover:text-white transition-all duration-300 cursor-pointer"
           >
             Download PDF <Download className="w-[18px] h-[18px]" />
@@ -123,6 +104,16 @@ const IssueCard = ({
         </div>
       </div>
     </div>
+  );
+
+  return isAdmin ? (
+    <div className="relative" key={issue.objId}>
+      {cardContent}
+    </div>
+  ) : (
+    <Link href={`/issues/${encodeURIComponent(issue.objId)}`} key={issue.objId}>
+      {cardContent}
+    </Link>
   );
 };
 

@@ -62,7 +62,7 @@ const AdvisoryBoard = () => {
             <AdvisoryBoardCard key={index} board={board} />
           ))}
       </div>
-      {hasMoreItems ? (
+      {paginatedItems.length > 0 && hasMoreItems && (
         <div className="mt-[40px] text-center">
           {isLoading && (
             <div className="mt-[60px]">
@@ -74,8 +74,9 @@ const AdvisoryBoard = () => {
             handleClick={handleLoadMoreClick}
           />
         </div>
-      ) : (
-        <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
+      )}
+      {paginatedItems.length > 0 && !hasMoreItems && (
+        <div className="mt-8 text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
           All advisory boards have been loaded.
         </div>
       )}

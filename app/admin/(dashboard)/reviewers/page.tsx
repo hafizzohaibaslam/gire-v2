@@ -26,6 +26,7 @@ const AdminReviewersPage = () => {
     null
   );
   const [image, setImage] = useState<File | null>(null);
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   // Pagination
   const {
@@ -67,6 +68,7 @@ const AdminReviewersPage = () => {
       return;
     }
 
+    setIsImageUploading(true);
     let response;
     if (image) {
       response = await generatePresignedUrl({
@@ -97,6 +99,7 @@ const AdminReviewersPage = () => {
     }
     setSelectedReviewer(null);
     setImage(null);
+    setIsImageUploading(false);
   };
 
   return (
@@ -121,14 +124,7 @@ const AdminReviewersPage = () => {
         </Button>
       </div>
 
-      {isLoading && (
-        <div className="mt-[40px] text-center">
-          <div className="mt-[60px]">
-            <Skeleton />
-          </div>
-        </div>
-      )}
-
+      {isLoading && <Skeleton />}
       {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
           Error loading advisory boards
@@ -188,6 +184,7 @@ const AdminReviewersPage = () => {
                   selectedReviewer?.objId ? selectedReviewer.imgUrl : undefined
                 }
                 className="w-full rounded-md"
+                isLoading={isImageUploading}
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">
@@ -202,6 +199,7 @@ const AdminReviewersPage = () => {
                       name="name"
                       placeholder="Enter Full Name"
                       defaultValue={selectedReviewer?.name}
+                      required
                       className="text-black placeholder:text-black"
                     />
                   </div>
@@ -214,6 +212,7 @@ const AdminReviewersPage = () => {
                       name="department"
                       placeholder="Enter Department"
                       defaultValue={selectedReviewer?.department}
+                      required
                       className="text-black placeholder:text-black"
                     />
                   </div>
@@ -227,6 +226,7 @@ const AdminReviewersPage = () => {
                     name="role"
                     placeholder="Enter Editorial Role"
                     defaultValue={selectedReviewer?.role}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>

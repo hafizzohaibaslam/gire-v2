@@ -26,7 +26,7 @@ export type Issue = {
   paperUrl: string;
   paperVolume: number;
   paperNumber: number;
-  content?: string;
+  content: string;
   date?: string;
   imgUrl?: string;
 };

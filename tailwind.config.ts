@@ -1,6 +1,7 @@
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 import animate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
 
 module.exports = {
   content: [
@@ -15,6 +16,9 @@ module.exports = {
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+      },
+      gridTemplateColumns: {
+        "18": "repeat(18, minmax(0, 1fr))",
       },
       keyframes: {
         "accordion-down": {
@@ -32,5 +36,5 @@ module.exports = {
       },
     },
   },
-  plugins: [animate],
+  plugins: [animate, typography],
 };

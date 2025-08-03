@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AdvisoryBoardCard from "@/features/about-us/components/AdvisoryBoardCard";
 import Form from "@/features/admin/components/Form";
 import InputField from "@/features/admin/components/InputField";
@@ -17,24 +17,25 @@ import { useUploadToS3 } from "@/features/shared/hooks/useUploadToS3";
 import { useGenericDelete } from "@/features/shared/hooks/useGenericDelete";
 import { useGenericCreate } from "@/features/shared/hooks/useGenericCreate";
 import { useGenericUpdate } from "@/features/shared/hooks/useGenericUpdate";
-import { useGenericGet } from "@/features/shared/hooks/useGenericGet";
+import { useClientPagination } from "@/features/shared/hooks/useClientPagination";
 
 const URL = "/api/advisories";
 const AdminAdvisoryBoard = () => {
   const [selectedAdvisoryBoard, setSelectedAdvisoryBoard] =
     useState<AdvisoryBoard | null>(null);
   const [image, setImage] = useState<File | null>(null);
-  const [paginatedItems, setPaginatedItems] = useState<AdvisoryBoard[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const SIZE = 6;
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   const {
-    data: allData,
+    paginatedItems,
+    hasMoreItems,
+    handleLoadMoreClick,
     isLoading,
     isError,
-  } = useGenericGet<AdvisoryBoard>({
+  } = useClientPagination<AdvisoryBoard>({
     url: URL,
   });
+
   const { mutate: createAdvisoryBoard, isPending: isCreating } =
     useGenericCreate<AdvisoryBoard>({
       url: URL,
@@ -54,21 +55,6 @@ const AdminAdvisoryBoard = () => {
     useGeneratePresignedUrl();
   const { mutateAsync: uploadToS3, isPending: isUploading } = useUploadToS3();
 
-  const hasMoreItems = allData ? paginatedItems.length < allData.length : false;
-  const handleLoadMoreClick = () => {
-    const startIndex = currentPage * SIZE;
-    const endIndex = startIndex + SIZE;
-    const newItems = allData?.slice(startIndex, endIndex) || [];
-    setPaginatedItems([...paginatedItems, ...newItems]);
-    setCurrentPage(currentPage + 1);
-  };
-
-  useEffect(() => {
-    if (allData) {
-      setPaginatedItems(allData.slice(0, SIZE));
-    }
-  }, [allData]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isCreating || isUpdating || isGenerating || isUploading || isDeleting)
@@ -80,6 +66,7 @@ const AdminAdvisoryBoard = () => {
       return;
     }
 
+    setIsImageUploading(true);
     let response;
     if (image) {
       response = await generatePresignedUrl({
@@ -110,6 +97,7 @@ const AdminAdvisoryBoard = () => {
     }
     setSelectedAdvisoryBoard(null);
     setImage(null);
+    setIsImageUploading(false);
   };
 
   return (
@@ -135,15 +123,7 @@ const AdminAdvisoryBoard = () => {
           Add New
         </Button>
       </div>
-
-      {isLoading && (
-        <div className="mt-[40px] text-center">
-          <div className="mt-[60px]">
-            <Skeleton />
-          </div>
-        </div>
-      )}
-
+      {isLoading && <Skeleton />}
       {!isLoading && isError && (
         <div className="mt-[60px] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
           Error loading advisory boards
@@ -173,16 +153,16 @@ const AdminAdvisoryBoard = () => {
             </div>
           )}
       </div>
-      {hasMoreItems ? (
+      {hasMoreItems && (
         <Button onClick={handleLoadMoreClick} className="max-w-[200px] mx-auto">
           Load More
         </Button>
-      ) : (
+      )}{" "}
+      {paginatedItems.length > 0 && !hasMoreItems && (
         <div className="text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
-          All advisory boards have been loaded.
+          All issues have been loaded.
         </div>
       )}
-
       {selectedAdvisoryBoard && (
         <EditModal
           title="Advisory Board Details"
@@ -204,6 +184,7 @@ const AdminAdvisoryBoard = () => {
                     : undefined
                 }
                 className="w-full rounded-md"
+                isLoading={isImageUploading}
               />
             </div>
             <div className="w-full flex flex-col gap-[30px]">
@@ -217,6 +198,7 @@ const AdminAdvisoryBoard = () => {
                     name="name"
                     placeholder="Enter Name"
                     defaultValue={selectedAdvisoryBoard?.name}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -229,6 +211,7 @@ const AdminAdvisoryBoard = () => {
                     name="title"
                     placeholder="Enter Title"
                     defaultValue={selectedAdvisoryBoard?.title}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -241,6 +224,7 @@ const AdminAdvisoryBoard = () => {
                     name="department"
                     placeholder="Enter Department"
                     defaultValue={selectedAdvisoryBoard?.department}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -253,6 +237,7 @@ const AdminAdvisoryBoard = () => {
                     name="affiliation"
                     placeholder="Enter Affiliation"
                     defaultValue={selectedAdvisoryBoard?.affiliation}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
@@ -265,6 +250,7 @@ const AdminAdvisoryBoard = () => {
                     name="field"
                     placeholder="Enter Field"
                     defaultValue={selectedAdvisoryBoard?.field}
+                    required
                     className="text-black placeholder:text-black"
                   />
                 </div>
