@@ -28,21 +28,43 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
-    const isAdmin = localStorage.getItem("isAdmin");
+    const accessToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
+    const refreshToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("refreshToken="))
+      ?.split("=")[1];
+    const isAdmin = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("isAdmin="))
+      ?.split("=")[1];
     setAccessToken(accessToken || null);
     setRefreshToken(refreshToken || null);
-    setIsAdmin(isAdmin === "true");
+    setIsAdmin(isAdmin === "true" || false);
+
+    // Also set cookies for middleware access
+    if (accessToken) {
+      document.cookie = `accessToken=${accessToken}; path=/; max-age=${
+        60 * 60 * 24 * 7
+      }`; // 7 days
+    }
+    if (isAdmin === "true") {
+      document.cookie = `isAdmin=true; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
+    }
   }, []);
 
   const signOut = () => {
     setAccessToken(null);
     setRefreshToken(null);
     setIsAdmin(false);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("isAdmin");
+
+    // Clear cookies
+    document.cookie =
+      "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    document.cookie = "isAdmin=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
     router.push("/admin/sign-in");
   };
 

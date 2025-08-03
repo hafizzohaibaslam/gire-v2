@@ -33,12 +33,16 @@ export const useSigninAdmin = () => {
         id: context?.toastId,
       });
 
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("isAdmin", "true");
       setAccessToken(data.accessToken);
       setRefreshToken(data.refreshToken);
       setIsAdmin(true);
+
+      // Set cookies for middleware access
+      document.cookie = `accessToken=${data.accessToken}; path=/; max-age=${
+        60 * 60 * 24 * 7
+      }`; // 7 days
+      document.cookie = `isAdmin=true; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
+
       router.push("/admin/chief-editor");
     },
     onError: (_, __, context) => {
