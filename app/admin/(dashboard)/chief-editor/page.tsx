@@ -7,7 +7,7 @@ import InputField from "@/features/admin/components/InputField";
 import Button from "@/features/shared/components/Button";
 import Label from "@/features/admin/components/Label";
 import Textarea from "@/features/admin/components/Textarea";
-import Skeleton from "@/features/shared/components/Skeleton";
+import Skeleton from "./components/Skeleton";
 import { toast } from "sonner";
 import { Editor } from "@/features/admin/lib/types";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";
@@ -31,6 +31,7 @@ const AdminChiefEditorPage = () => {
   const [activeTab, setActiveTab] = useState<"chief" | "co-chief">("chief");
   const [selectedEditor, setSelectedEditor] = useState<Editor>(initialProfile);
   const [image, setImage] = useState<File | null>();
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   const {
     data: editors,
@@ -53,35 +54,56 @@ const AdminChiefEditorPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isGenerating || isUpdating || isUploading) return;
-    if (!image) {
-      toast.error("Please upload an image");
+    const isEditing = selectedEditor?.objId !== "";
+
+    if (!isEditing && !image) {
+      toast.error("Please upload an image for the new reviewer");
       return;
     }
 
-    const response = await generatePresignedUrl({
-      contentType: image.type,
-      key: `${activeTab}/${image.name}-${Date.now()}`,
-    });
-
-    await uploadToS3({ file: image, putUrl: response.putUrl });
+    setIsImageUploading(true);
+    let response;
+    if (image) {
+      response = await generatePresignedUrl({
+        contentType: image.type,
+        key: `editors/${image.name}-${Date.now()}`,
+      });
+      await uploadToS3({ file: image, putUrl: response.putUrl });
+    }
 
     await updateEditor({
       ...selectedEditor,
-      imgUrl: response.getUrl,
+      imgUrl: image
+        ? (response?.getUrl as string)
+        : (selectedEditor?.imgUrl as string),
       objId: selectedEditor.objId,
       level: activeTab,
     });
 
     setImage(null);
+    setIsImageUploading(false);
   };
 
   useEffect(() => {
-    setSelectedEditor(
-      editors?.find((editor) => editor.level === activeTab) || initialProfile
-    );
+    if (editors) {
+      setSelectedEditor(
+        editors?.find((editor) => editor.level === activeTab) || initialProfile
+      );
+    }
   }, [editors, activeTab]);
 
-  if (isLoading) return <Skeleton />;
+  // Reset image when switching tabs
+  useEffect(() => {
+    setImage(null);
+  }, [activeTab]);
+
+  if (isLoading)
+    return (
+      <div className="mt-[30px]">
+        <Skeleton />
+      </div>
+    );
+
   if (isError)
     return (
       <div className="text-red-500 text-center text-[20px] font-bold">
@@ -124,9 +146,10 @@ const AdminChiefEditorPage = () => {
                   onChange={(file) => setImage(file)}
                   defaultImage={"/image-placeholder.svg"}
                   existingImageUrl={
-                    selectedEditor?.objId ? selectedEditor.imgUrl : undefined
+                    selectedEditor.objId && selectedEditor.imgUrl
                   }
                   className="w-full rounded-md"
+                  isLoading={isImageUploading}
                 />
               </div>
               <div className="w-full flex flex-col gap-[30px]">
@@ -147,6 +170,7 @@ const AdminChiefEditorPage = () => {
                             name: e.target.value,
                           }))
                         }
+                        required
                       />
                     </div>
                     {/* Title */}
@@ -164,6 +188,7 @@ const AdminChiefEditorPage = () => {
                             title: e.target.value,
                           }))
                         }
+                        required
                       />
                     </div>
                     {/* Affiliation */}
@@ -181,6 +206,7 @@ const AdminChiefEditorPage = () => {
                             affiliation: e.target.value,
                           }))
                         }
+                        required
                       />
                     </div>
                   </div>
@@ -200,6 +226,7 @@ const AdminChiefEditorPage = () => {
                           bio: e.target.value,
                         }))
                       }
+                      required
                       className="text-black placeholder:text-black"
                     />
                   </div>
@@ -218,6 +245,7 @@ const AdminChiefEditorPage = () => {
                           letter: e.target.value,
                         }))
                       }
+                      required
                       className="text-black placeholder:text-black"
                     />
                   </div>

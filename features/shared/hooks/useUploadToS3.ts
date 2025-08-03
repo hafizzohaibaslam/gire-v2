@@ -15,7 +15,6 @@ export const useUploadToS3 = () => {
             "Content-Type": file.type,
           },
         });
-        console.log("Response from useUploadToS3", response);
         return response.data;
       } catch (error) {
         console.log("Error in useUploadToS3", error);

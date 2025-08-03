@@ -8,7 +8,6 @@ export const useClientPagination = <T extends { objId: string }>({
   url: string;
 }) => {
   const [paginatedItems, setPaginatedItems] = useState<T[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const SIZE = 6;
 
   const {
@@ -19,20 +18,26 @@ export const useClientPagination = <T extends { objId: string }>({
     url,
   });
 
-  const hasMoreItems = allData ? paginatedItems.length < allData.length : false;
-  const handleLoadMoreClick = () => {
-    const startIndex = currentPage * SIZE;
-    const endIndex = startIndex + SIZE;
-    const newItems = allData?.slice(startIndex, endIndex) || [];
-    setPaginatedItems([...paginatedItems, ...newItems]);
-    setCurrentPage(currentPage + 1);
-  };
-
+  // Reset pagination state when allData changes
   useEffect(() => {
     if (allData) {
       setPaginatedItems(allData.slice(0, SIZE));
     }
   }, [allData]);
+
+  const hasMoreItems = allData ? paginatedItems.length < allData.length : false;
+
+  const handleLoadMoreClick = () => {
+    if (!allData) return;
+
+    const startIndex = paginatedItems.length;
+    const endIndex = startIndex + SIZE;
+    const newItems = allData.slice(startIndex, endIndex);
+
+    if (newItems.length > 0) {
+      setPaginatedItems([...paginatedItems, ...newItems]);
+    }
+  };
 
   return {
     paginatedItems,
