@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useGetIssuesDetails } from "@/features/shared/hooks/useGetIssuesDetails";
 import { Issue } from "@/features/admin/lib/types";
-import Skeleton from "./components/Skeleton";
+import Skeleton from "../../../features/open-issues/components/Skeleton";
 
 const OpenIssuesPage = () => {
   const { id } = useParams();

@@ -7,7 +7,7 @@ import InputField from "@/features/admin/components/InputField";
 import Button from "@/features/shared/components/Button";
 import Label from "@/features/admin/components/Label";
 import Textarea from "@/features/admin/components/Textarea";
-import Skeleton from "./components/Skeleton";
+import Skeleton from "@/features/admin/components/ChiefEditorSkeleton";
 import { toast } from "sonner";
 import { Editor } from "@/features/admin/lib/types";
 import { useGeneratePresignedUrl } from "@/features/shared/hooks/useGeneratePresignedUrl";

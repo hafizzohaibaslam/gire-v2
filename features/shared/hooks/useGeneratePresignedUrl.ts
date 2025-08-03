@@ -39,7 +39,6 @@ export const useGeneratePresignedUrl = () => {
       });
     },
     onError: (error, _, context) => {
-      console.log("Error in useGeneratePresignedUrl", error);
       toast.error(error.message || "Failed to generate presigned url", {
         id: context?.toastId,
       });
