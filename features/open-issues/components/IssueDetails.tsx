@@ -1,9 +1,9 @@
 import Button from "@/features/issues/components/Button";
 import Tags from "@/features/shared/components/Tags";
 import { Download } from "lucide-react";
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
-import PeriodicTable from "@/public/issues-open-page/periodic-table.svg";
+// import PeriodicTable from "@/public/issues-open-page/periodic-table.svg";
 import { Issue } from "@/features/admin/lib/types";
 import { splitKeywords } from "@/lib/splitKeywords";
 import { areaValues } from "@/lib/areaValues";
@@ -61,7 +61,7 @@ const IssueDetails = ({ issue }: IssueDetailsProps) => {
         </Button>
       </div>
       {/* Abstract Study */}
-      <div className="rounded-[20px] flex flex-col justify-center items-center gap-[10px] space-y-[70px]">
+      {/* <div className="rounded-[20px] flex flex-col justify-center items-center gap-[10px] space-y-[70px]">
         <Image
           src={PeriodicTable}
           alt="abstract"
@@ -69,7 +69,7 @@ const IssueDetails = ({ issue }: IssueDetailsProps) => {
           height={100}
           className="w-full h-full object-cover"
         />
-      </div>
+      </div> */}
       <div
         className="prose max-w-none"
         dangerouslySetInnerHTML={{ __html: issue.content }}
