@@ -20,7 +20,9 @@ const AdvisoryBoardCard = ({
   handleDelete = () => {},
 }: AdvisoryBoardCardProps) => {
   return (
-    <div className="relative bg-[#E8EAEE] space-y-[30px] p-[16px] rounded-md">
+    <div className="relative bg-[#E8EAEE] p-[16px] rounded-md flex flex-col">
+      {" "}
+      {/* changed here */}
       <div className="absolute top-4 right-4 flex gap-2">
         {showEditBtn && <EditBtn handleEdit={handleEdit} />}
         {showDeleteBtn && <DeleteBtn handleDelete={handleDelete} />}
@@ -34,7 +36,9 @@ const AdvisoryBoardCard = ({
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="bg-white space-y-[10px] p-[20px] capitalize rounded-[12px]">
+      <div className="mt-auto bg-white space-y-[10px] p-[20px] capitalize rounded-[12px]">
+        {" "}
+        {/* added mt-auto */}
         <h2 className="text-[#19191B] text-[18px] font-semibold leading-[28px]">
           {board.title}
         </h2>
@@ -42,7 +46,6 @@ const AdvisoryBoardCard = ({
           <p className="text-[#787A82] text-[16px] font-normal leading-[25px]">
             {board.department}, {board.affiliation}
           </p>
-
           <p className="text-[#787A82] text-[16px] font-normal leading-[25px]">
             <b>field: </b> {board.field}
           </p>
