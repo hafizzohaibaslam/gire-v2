@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
+import { getAuthCookies, setAuthCookies, clearAuthCookies } from "./utils";
 
 type AuthContextType = {
   accessToken: string | null;
@@ -8,6 +9,7 @@ type AuthContextType = {
   setRefreshToken: (refreshToken: string | null) => void;
   isAdmin: boolean;
   setIsAdmin: (isAdmin: boolean) => void;
+  isLoading: boolean;
   signOut: () => void;
 };
 
@@ -25,34 +27,33 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const accessToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("accessToken="))
-      ?.split("=")[1];
-    const refreshToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("refreshToken="))
-      ?.split("=")[1];
-    const isAdmin = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("isAdmin="))
-      ?.split("=")[1];
-    setAccessToken(accessToken || null);
-    setRefreshToken(refreshToken || null);
-    setIsAdmin(isAdmin === "true" || false);
+    const initializeAuth = () => {
+      try {
+        // Read cookies using utility function
+        const { accessToken, refreshToken, isAdmin } = getAuthCookies();
 
-    // Also set cookies for middleware access
-    if (accessToken) {
-      document.cookie = `accessToken=${accessToken}; path=/; max-age=${
-        60 * 60 * 24 * 7
-      }`; // 7 days
-    }
-    if (isAdmin === "true") {
-      document.cookie = `isAdmin=true; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
-    }
+        setAccessToken(accessToken || null);
+        setRefreshToken(refreshToken || null);
+        setIsAdmin(isAdmin);
+
+        // Set cookies with proper configuration if they exist
+        if (accessToken && refreshToken) {
+          setAuthCookies(accessToken, refreshToken, isAdmin);
+        }
+      } catch (error) {
+        console.error("Error initializing auth:", error);
+      } finally {
+        // Mark as loaded after ensuring cookies are read
+        setIsLoading(false);
+      }
+    };
+
+    // Initialize auth immediately
+    initializeAuth();
   }, []);
 
   const signOut = () => {
@@ -60,11 +61,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setRefreshToken(null);
     setIsAdmin(false);
 
-    // Clear cookies
-    document.cookie =
-      "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    document.cookie = "isAdmin=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-
+    // Clear cookies using utility function
+    clearAuthCookies();
     router.push("/admin/sign-in");
   };
 
@@ -75,6 +73,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setRefreshToken,
     isAdmin,
     setIsAdmin,
+    isLoading,
     signOut,
   };
 
