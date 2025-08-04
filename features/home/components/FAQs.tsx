@@ -52,8 +52,8 @@ const FAQs = () => {
                     {faq.question}
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="mt-[13px] overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
-                  {faq.answer}
+                <AccordionContent className="mt-[13px] text-[#5A7184] text-[16px] lg:text-[18px] leading-[24px] lg:leading-[28px] font-inter font-normal">
+                  <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
                 </AccordionContent>
               </AccordionItem>
             );
