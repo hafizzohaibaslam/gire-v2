@@ -4,6 +4,7 @@ import { useAuthContext } from "@/lib/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { setAuthCookies } from "@/lib/utils";
 
 export const useSigninAdmin = () => {
   const router = useRouter();
@@ -37,12 +38,8 @@ export const useSigninAdmin = () => {
       setRefreshToken(data.refreshToken);
       setIsAdmin(true);
 
-      // Set cookies for middleware access
-      document.cookie = `accessToken=${data.accessToken}; path=/; max-age=${
-        60 * 60 * 24 * 7
-      }`; // 7 days
-      document.cookie = `isAdmin=true; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
-
+      // Set cookies using utility function
+      setAuthCookies(data.accessToken, data.refreshToken, true);
       router.push("/admin/chief-editor");
     },
     onError: (_, __, context) => {
