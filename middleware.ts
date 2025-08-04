@@ -13,9 +13,9 @@ export function middleware(request: NextRequest) {
     const isAdmin = request.cookies.get("isAdmin")?.value === "true";
     const accessToken = request.cookies.get("accessToken")?.value;
 
-    // If not admin or no access token, redirect to sign-in
+    // If not admin or no access token, redirect to sign-in page
     if (!isAdmin || !accessToken) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/admin/sign-in", request.url));
     }
   }
 
