@@ -49,11 +49,11 @@ const IssueCard = ({
         {/* RIGHT SIDE */}
         <div>
           <div className="flex flex-col lg:flex-row gap-[10px] lg:justify-between lg:items-center">
-            <p className="font-playfair-display text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-[3px] font-semibold">
+            <p className="font-playfair-display text-[#3385FF] text-[16px] lg:text-[18px] leading-[20px] tracking-0 font-semibold">
               {issue.name}
             </p>
             <div className="flex items-center gap-[10px]">
-              <p className="mr-4 font-playfair-display text-[#6D6E76] text-[16px] leading-[28px] font-normal">
+              <p className="mr-4 font-playfair-display text-[#6D6E76] text-[16px] leading-[28px] tracking-0 font-normal">
                 {new Date(issue.date || "").toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -68,7 +68,7 @@ const IssueCard = ({
               </div>
             </div>
           </div>
-          <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold -tracking-[2px]">
+          <h1 className="font-playfair-display my-[14px] text-[#232536] text-[24px] lg:text-[36px] leading-[32px] lg:leading-[42px] font-semibold tracking-0">
             {issue.title}
           </h1>
 
@@ -86,18 +86,18 @@ const IssueCard = ({
             <div className="my-[20px] gap-4 p-2 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-blue-500" />
-                <span className="font-playfair-display text-[#6D6E76] text-[16px] font-normal">
+                <span className="font-playfair-display text-[#6D6E76] text-[16px] font-normal tracking-0">
                   PDF uploaded
                 </span>
               </div>
-              <p className="font-playfair-display text-[#6D6E76] text-[16px] font-normal">
+              <p className="font-playfair-display text-[#6D6E76] text-[16px] font-normal tracking-0">
                 {issue.paperUrl}
               </p>
             </div>
           )}
           <button
             onClick={(e) => handleDownload(e, issue)}
-            className="w-full max-w-lg bg-[#2325360D] py-[15px] px-[20px] flex items-center justify-center gap-2 text-[14px] lg:text-[16px] leading-[100%] font-semibold capitalize text-[#232536] rounded-[100px] hover:bg-[#232536] hover:text-white transition-all duration-300 cursor-pointer"
+            className="w-full max-w-lg bg-[#2325360D] py-[15px] px-[20px] flex items-center justify-center gap-2 text-[14px] lg:text-[16px] leading-[100%] tracking-0 font-semibold capitalize text-[#232536] rounded-[100px] hover:bg-[#232536] hover:text-white transition-all duration-300 cursor-pointer"
           >
             Download PDF <Download className="w-[18px] h-[18px]" />
           </button>

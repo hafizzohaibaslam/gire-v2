@@ -1,5 +1,4 @@
 "use client";
-import { Search } from "lucide-react";
 import React, { useState } from "react";
 import TrendingTopicCard from "./IssueCard";
 import {
@@ -19,15 +18,11 @@ import InputField from "@/features/admin/components/InputField";
 import { filterTopics } from "../utils/filterTopics";
 
 const TrendingTopics = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedArea, setSelectedArea] = useState("All");
-  const [selectedKeywords, setSelectedKeywords] = useState("");
 
-  const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
   const [appliedYear, setAppliedYear] = useState("");
   const [appliedArea, setAppliedArea] = useState("All");
-  const [appliedKeywords, setAppliedKeywords] = useState("");
 
   const {
     paginatedItems,
@@ -39,46 +34,24 @@ const TrendingTopics = () => {
     url: "/api/issues",
   });
 
-  const filteredTopics = filterTopics(
-    paginatedItems,
-    appliedSearchTerm,
-    appliedYear,
-    appliedArea,
-    appliedKeywords
-  );
+  const filteredTopics = filterTopics(paginatedItems, appliedYear, appliedArea);
 
   const handleApplyFilters = () => {
-    setAppliedSearchTerm(searchTerm);
     setAppliedYear(selectedYear);
     setAppliedArea(selectedArea);
-    setAppliedKeywords(selectedKeywords);
   };
 
   const handleClearFilters = () => {
-    setSearchTerm("");
     setSelectedYear("");
     setSelectedArea("All");
-    setSelectedKeywords("");
-    setAppliedSearchTerm("");
     setAppliedYear("");
     setAppliedArea("All");
-    setAppliedKeywords("");
   };
 
   return (
     <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] lg:pt-[100px] max-w-[1440px] mx-auto">
       {/* Introduction */}
       <div className="">
-        <div className="w-full flex items-center gap-2 relative px-[16px] py-[12px] rounded-[100px] border-[1px] border-[#E8EAEE]">
-          <Search className="w-[20px] h-[20px] absolute left-[10px] text-[#858C95]" />
-          <input
-            type="search"
-            placeholder="Search"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="ml-[20px] text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full"
-          />
-        </div>
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-[20px]">
           {/* Years */}
           <div className="flex flex-col gap-2">
@@ -88,17 +61,6 @@ const TrendingTopics = () => {
               placeholder="Enter a year"
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="px-3 py-2 text-[#858C95] placeholder:text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full rounded-[10px] border-[1px] border-[#E8EAEE] hover:border-[#DFEAF2] focus:ring-0"
-            />
-          </div>
-          {/* Keywords */}
-          <div className="flex flex-col gap-2">
-            <Label>Keywords</Label>
-            <InputField
-              type="text"
-              placeholder="Enter a keyword"
-              value={selectedKeywords}
-              onChange={(e) => setSelectedKeywords(e.target.value)}
               className="px-3 py-2 text-[#858C95] placeholder:text-[#858C95] text-[15px] font-normal leading-[22px] outline-none w-full rounded-[10px] border-[1px] border-[#E8EAEE] hover:border-[#DFEAF2] focus:ring-0"
             />
           </div>

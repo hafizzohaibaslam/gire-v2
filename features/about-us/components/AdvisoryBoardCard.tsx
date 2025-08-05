@@ -19,6 +19,7 @@ const AdvisoryBoardCard = ({
   showDeleteBtn = false,
   handleDelete = () => {},
 }: AdvisoryBoardCardProps) => {
+  const description = `${board.department}, ${board.affiliation}`;
   return (
     <div className="relative bg-[#E8EAEE] p-[16px] rounded-md flex flex-col">
       {" "}
@@ -36,17 +37,19 @@ const AdvisoryBoardCard = ({
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="mt-auto bg-white space-y-[10px] p-[20px] capitalize rounded-[12px]">
+      <div className="flex-1 mt-auto bg-white flex flex-col gap-[10px] p-[20px] capitalize rounded-[12px]">
         {" "}
         {/* added mt-auto */}
         <h2 className="text-[#19191B] text-[18px] font-semibold leading-[28px]">
           {board.title}
         </h2>
-        <div className="flex flex-col gap-[10px]">
+        <div className="flex flex-col gap-[10px] flex-1">
           <p className="text-[#787A82] text-[16px] font-normal leading-[25px]">
-            {board.department}, {board.affiliation}
+            {description.length > 100
+              ? description.slice(0, 100) + "..."
+              : description}
           </p>
-          <p className="text-[#787A82] text-[16px] font-normal leading-[25px]">
+          <p className="text-[#787A82] text-[16px] font-normal leading-[25px] ">
             <b>field: </b> {board.field}
           </p>
         </div>

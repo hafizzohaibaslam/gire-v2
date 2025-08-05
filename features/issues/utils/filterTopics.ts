@@ -1,22 +1,13 @@
 import { Issue } from "@/features/admin/lib/types";
 import { areaValues } from "@/lib/areaValues";
-import { splitKeywords } from "@/lib/splitKeywords";
+// import { splitKeywords } from "@/lib/splitKeywords";
 
 export const filterTopics = (
   topics: Issue[],
-  appliedSearchTerm: string,
   appliedYear: string,
-  appliedArea: string,
-  appliedKeywords: string
+  appliedArea: string
 ) => {
   let filteredData = [...topics];
-
-  // Search term filter - search in title and match with applied search term
-  if (appliedSearchTerm && appliedSearchTerm.trim() !== "") {
-    filteredData = filteredData.filter((topic) =>
-      topic.title.toLowerCase().includes(appliedSearchTerm.toLowerCase().trim())
-    );
-  }
 
   // Year filter - extract year from date string and match with applied year
   if (appliedYear && appliedYear.trim() !== "") {
@@ -33,17 +24,17 @@ export const filterTopics = (
   }
 
   // Keywords filter - search in area and keywords
-  if (appliedKeywords && appliedKeywords.trim() !== "") {
-    const searchTerm = appliedKeywords.toLowerCase().trim();
-    filteredData = filteredData.filter((topic) => {
-      const keywords = splitKeywords(topic.keyword);
-      const keywordMatch = keywords.some((keyword) =>
-        keyword.toLowerCase().includes(searchTerm)
-      );
+  // if (appliedArea && appliedArea !== "All") {
+  //   const searchTerm = appliedArea.toLowerCase().trim();
+  //   filteredData = filteredData.filter((topic) => {
+  //     const keywords = splitKeywords(topic.keyword);
+  //     const keywordMatch = keywords.some((keyword) =>
+  //       keyword.toLowerCase().includes(searchTerm)
+  //     );
 
-      return keywordMatch;
-    });
-  }
+  //     return keywordMatch;
+  //   });
+  // }
 
   // Area filter - exact match with area values
   if (appliedArea && appliedArea !== "All") {
