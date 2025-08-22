@@ -109,10 +109,13 @@ const OurProcess = () => {
                     }}
                   ></div>
                 </div>
-                <div>
-                  <h1 className="font-playfair-display font-semibold text-[24px] mb-[25px]">
+                <div className="space-y-[25px]">
+                  <h1 className="font-playfair-display font-semibold text-[24px]">
                     {step.title}
                   </h1>
+                  <p className="font-figree font-normal text-[16px] leading-[24px] text-[#061C3D]">
+                    {step.subtitle}
+                  </p>
                   {step.sections.map((section, index) => (
                     <div
                       key={index}
@@ -143,18 +146,20 @@ const steps = [
     number: "01",
     title: "Preparation (Before You Submit)",
     color: "#FCD1D2",
+    subtitle:
+      "Ensure your manuscript is ready to meet our journal’s standards.",
     sections: [
       {
         subtitle: "Read the Author Guidelines",
-        text: "Confirm topic relevance, word count (2000–3000 words), formatting (Vancouver Style), and file types (DOC, DOCX).",
+        text: "Confirm topic relevance, word count (2000-3000 words), formatting (Vancouver Style), and file types (DOC, DOCX).",
       },
       {
-        subtitle: "Choose a Cover",
-        text: "Run a plagiarism scan (≤10% similarity) and confirm the work hasn't been published elsewhere.",
+        subtitle: "Originality Check",
+        text: "Run a plagiarism scan (≤10% similarity) and confirm the work hasn’t been published elsewhere.",
       },
       {
         subtitle: "Compose a Cover Letter",
-        text: "Run a plagiarism scan (≤10% similarity) and confirm the work hasn't been published elsewhere.",
+        text: "Briefly introduce yourself, summarize your research question, and explain why it fits our journal.",
       },
     ],
   },
@@ -162,6 +167,7 @@ const steps = [
     number: "02",
     title: "Submission",
     color: "#FCD1D2",
+    subtitle: "Send us a complete package in a single, organized upload.",
     sections: [
       {
         subtitle: "Online Submission Form",
@@ -181,6 +187,8 @@ const steps = [
     number: "03",
     title: "Initial Editorial Screening (1–2 Weeks)",
     color: "#D8C79A",
+    subtitle:
+      "Verify scope alignment, formatting compliance, and basic quality.",
     sections: [
       {
         subtitle: "Scope Check",
@@ -200,6 +208,7 @@ const steps = [
     number: "04",
     title: "Peer Review (4–6 Weeks)",
     color: "#D8C79A",
+    subtitle: "Receive expert, constructive feedback to improve your work.",
     sections: [
       {
         subtitle: "Reviewer Assignment",
@@ -219,10 +228,11 @@ const steps = [
     number: "05",
     title: "Revision (2–4 Weeks)",
     color: "#D8C79A",
+    subtitle: "Strengthen your manuscript based on reviewer feedback.",
     sections: [
       {
-        subtitle: "Editor Check",
-        text: "Ensure revisions satisfy reviewer concerns.",
+        subtitle: "Revise Thoroughly",
+        text: "Address every comment; add explanations, new data, or clarifications as needed.",
       },
       {
         subtitle: "Response Letter",
@@ -238,18 +248,19 @@ const steps = [
     number: "06",
     title: "Final Editorial Review & Copyediting (1–2 Weeks)",
     color: "#D8C79A",
+    subtitle: "Polish language, style, and formatting before publication.",
     sections: [
       {
         subtitle: "Editor Check",
         text: "Ensure revisions satisfy reviewer concerns.",
       },
       {
-        subtitle: "Response Letter",
-        text: "Submit a point-by-point table showing how each reviewer comment was addressed (or politely justify why not).",
+        subtitle: "Copyediting",
+        text: "Professional proofreader corrects grammar, punctuation, citation style, and consistency.",
       },
       {
-        subtitle: "Resubmission",
-        text: "Upload revised manuscript and response letter via the submission portal.",
+        subtitle: "Author Proof Review",
+        text: "You’ll receive page proofs to review one last time for minor errors.",
       },
     ],
   },
@@ -257,18 +268,19 @@ const steps = [
     number: "07",
     title: "Publication",
     color: "#8DA8D1",
+    subtitle: "Share your work with the world!",
     sections: [
       {
-        subtitle: "Revise Thoroughly",
-        text: "Address every comment; add explanations, new data, or clarifications as needed.",
+        subtitle: "Online Publication",
+        text: "Articles go live on our open‑access platform with a DOI.",
       },
       {
-        subtitle: "Response Letter",
-        text: "Submit a point-by-point table showing how each reviewer comment was addressed (or politely justify why not).",
+        subtitle: "Indexing",
+        text: " Your paper is indexed in Google Scholar and other academic databases.",
       },
       {
-        subtitle: "Resubmission",
-        text: "Upload revised manuscript and response letter via the submission portal.",
+        subtitle: "Promotion",
+        text: "We highlight new publications via social media, newsletters, and press releases to boost visibility.",
       },
     ],
   },

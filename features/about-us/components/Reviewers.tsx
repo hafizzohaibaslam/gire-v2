@@ -16,19 +16,18 @@ const EditorialTeam = () => {
   } = useClientPagination<ReviewerType>({ url: "/api/reviewers" });
 
   return (
-    <div
-      id="reviewers"
-      className="w-full max-w-[1440px] mx-auto px-[40px] lg:px-[100px] mt-[100px]"
-    >
+    <div id="reviewers">
       {/* Introduction */}
       <div className="space-y-[16px] capitalize">
         <h1 className="font-playfair-display text-black text-[30px] text-center lg:text-[48px] leading-[38px] lg:leading-[46px] font-semibold -tracking-[1px]">
           Reviewers
         </h1>
         <p className="text-[#52525B] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s.
+          Our reviewers are distinguished academics and professionals from a
+          wide range of prestigious institutions, bringing diverse perspectives
+          and expertise to the evaluation process. Their contributions ensure
+          that each submission receives a thorough and expert review, upholding
+          the academic standards of our journal.
         </p>
       </div>
 

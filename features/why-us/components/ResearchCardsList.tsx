@@ -4,7 +4,7 @@ import { researchCards } from "../utils/researchCards";
 
 const ResearchCardsList = () => {
   return (
-    <div className="px-[40px] py-[40px] lg:px-[100px] lg:py-[100px] max-w-[1440px] mx-auto space-y-[20px]">
+    <div className="space-y-[20px]">
       {/* 1st Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[20px]">
         {researchCards.slice(0, 3).map((card) => (

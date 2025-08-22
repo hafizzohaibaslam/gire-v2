@@ -35,7 +35,7 @@ const Templates = () => {
       <div className="space-y-[20px]">
         <p className="text-[#52525B] font-normal text-[18px] leading-[32px] max-w-lg">
           If you have questions about formatting or file types, please refer to
-          our Author.
+          our guidelines or contact us.
         </p>
         <div className="flex items-start justify-start gap-[20px]">
           <button className="capitalize font-semibold text-[#3385FF] hover:bg-[#3385FF] hover:text-white text-[16px] leading-[100%] gap-[8px] flex items-center px-[36px] py-[18px] border-[2px] border-[#3385FF] bg-white rounded-[38px] cursor-pointer transition-all duration-300 ease-in-out">

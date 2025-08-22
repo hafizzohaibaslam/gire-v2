@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const ResearchFields = () => {
   return (
-    <div className="my-[140px] w-full max-w-[1440px] mx-auto px-[40px] lg:px-[144px] space-y-[50px]">
+    <div className="my-[140px] w-full max-w-[1440px] mx-auto px-[20px] sm:px-[40px] lg:px-[144px] space-y-[50px]">
       <div className="space-y-[20px]">
         <h1 className="font-playfair-display font-semibold text-[30px] lg:text-[48px] leaidng-[30px] lg:leading-[46px]">
           Research Fields

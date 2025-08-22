@@ -2,6 +2,7 @@ import AuthorGuidelines from "../components/AuthorGuidelines";
 import Templates from "../components/Templates";
 import ReviewProcess from "../components/ReviewProcess";
 import PublishingPolicy from "../components/PublishingPolicy";
+import ArticleProcessingFee from "../components/ArticleProcessingFee";
 
 export type TabHeader = {
   label: string;
@@ -29,5 +30,10 @@ export const tabHeaders: TabHeader[] = [
     label: "Publishing Policy",
     value: "publishing-policy",
     component: <PublishingPolicy />,
+  },
+  {
+    label: "Article Processing Fee",
+    value: "article-processing-fee",
+    component: <ArticleProcessingFee />,
   },
 ];

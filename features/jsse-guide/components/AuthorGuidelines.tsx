@@ -27,9 +27,9 @@ const AuthorGuidelines = () => {
             Author Guidelines
           </h1>
           <p className="text-normal text-[#52525B] text-[16px] leading-[24px] lg:text-[22px] lg:leading-[32px]">
-            The submission process at JSSE is designed to be clear and
-            accessible, ensuring that all authors can navigate it with ease.
-            Below are the key components of the submission process:
+            Before submitting your manuscript, please review the following
+            guidelines. They are designed to help student authors prepare
+            high-quality submissions that meet the standards of our journal.
           </p>
         </div>
         <Button className="flex items-center gap-[10px]">
@@ -75,9 +75,9 @@ const AuthorGuidelines = () => {
             Ready to Submit Your Work?
           </h1>
           <p className="font-figtree font-normal w-full max-w-2xl mx-auto text-[16px] lg:text-[18px] leading-[22px] lg:leading-[26px]">
-            Complete your submission by sending your files through the form
-            below. If you have any questions about formatting or the submission
-            process, feel free to contact us we&apos;re here to help!
+            Once complete, send your files via email. If you have any questions
+            about formatting or submission, please contact the editorial office
+            at EMAIL.
           </p>
         </div>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-[20px]">

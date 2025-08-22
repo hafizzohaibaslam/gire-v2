@@ -4,7 +4,7 @@ import { brands } from "../utils/brands";
 
 const Brands = () => {
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-[20px] lg:px-[149px]">
+    <div className="w-full max-w-[1440px] mx-auto px-[20px] sm:px-[40px] lg:px-[149px]">
       <div className="mt-[76px] space-y-[76px]">
         <div className="space-y-[56px]">
           <h1 className="font-playfair-display capitalize text-center text-[#080A47] text-[24px] lg:text-[36px] leading-[30px] lg:leading-[43px] -tracking-[0.5px] font-semibold">

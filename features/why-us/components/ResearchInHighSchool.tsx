@@ -4,7 +4,7 @@ import ResearchImg from "@/public/why-us-page/research.png";
 
 const ResearchInHighSchool = () => {
   return (
-    <div className="px-[40px] py-[40px] lg:px-[100px] max-w-[1440px] mx-auto space-y-[80px]">
+    <div className="space-y-[80px]">
       {/* Heading */}
       <div className="space-y-[16px]">
         <h1 className="font-playfair-display text-black text-[30px] lg:text-[48px] leading-[38px] lg:leading-[46px] font-semibold -tracking-[1px]">

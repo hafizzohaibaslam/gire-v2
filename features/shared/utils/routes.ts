@@ -3,6 +3,6 @@ export const routes = {
   aboutUs: "/about-us",
   ourMission: "/our-mission",
   issues: "/issues",
-  submit: "/submit",
+  jsseGuide: "/jsse-guide",
   contactUs: "/contact-us",
 };

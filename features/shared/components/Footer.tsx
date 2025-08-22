@@ -14,7 +14,7 @@ const Footer = () => {
       {/* Blue Section */}
       <div className="border-b-[8px] border-[#3385FF]"></div>
       {/* Footer Content */}
-      <div className="py-[60px] px-[40px] lg:px-[100px] w-full max-w-[1440px] mx-auto">
+      <div className="py-[60px] px-[20px] sm:px-[40px] lg:px-[100px] w-full max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-8 items-center justify-between">
           {/* Logo Section */}
           <div className="text-white">

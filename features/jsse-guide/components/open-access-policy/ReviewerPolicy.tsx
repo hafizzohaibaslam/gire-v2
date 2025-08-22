@@ -1,6 +1,6 @@
 import React from "react";
 
-const ReviewPolicy = () => {
+const ReviewerPolicy = () => {
   return (
     <div>
       <p className="font-inter text-[16px] leading-[24px]">
@@ -104,4 +104,4 @@ const ReviewPolicy = () => {
   );
 };
 
-export default ReviewPolicy;
+export default ReviewerPolicy;

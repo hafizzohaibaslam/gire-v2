@@ -4,7 +4,6 @@ const SubmissionChecklist = () => {
   return (
     <div>
       <div className="font-figtree text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] font-medium text-[#6F6C90]">
-        <h4>Submission Checklist</h4>
         <ol className="list-decimal list-inside">
           <li>Manuscript file (.doc/.docx) follows template exactly</li>
           <li>

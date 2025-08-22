@@ -58,9 +58,9 @@ const CustomerService = () => {
           </div>
 
           <div>
-            <p className="text-[24px] leading-[32px] font-medium capitalize">
+            <p className="text-[24px] leading-[32px] font-medium">
               {" "}
-              You can also contact us via email at contact@email.com if you
+              You can also contact us via email at [contact@email.com] if you
               prefer.
             </p>
           </div>

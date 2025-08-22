@@ -9,8 +9,8 @@ export const faqsData = [
     id: "2",
     question: "Are there any submission or publication fees?",
     answer: `
-      <strong>Submission:</strong> Free (<em>Fast Track Submission: $250</em>)<br />
-      <strong>Publication:</strong> There is a $300 publication fee for accepted papers.
+      <strong>Submission:</strong> Free (*Fast Track Submission: $[TBD])<br />
+      <strong>Publication:</strong> There is a $[TBD] publication fee for accepted papers.
     `,
   },
   {
@@ -37,8 +37,8 @@ export const faqsData = [
     id: "6",
     question: "How long will it take for my paper to be published?",
     answer: `
-      The publication time typically takes <strong>16–24 weeks</strong>, depending on the complexity of revisions and review process. Please note that publication times may vary based on the revision process.<br /><br />
-      <strong>Fast Track:</strong> If you opt for the Fast Track option, your paper will be published within <strong>8–12 weeks</strong>.
+     The publication time typically takes 16-24 weeks, depending on the complexity of revisions and review process. Please note that publication times may vary based on the revision process.<br />
+      <strong>Fast Track:</strong> If you opt for the <strong>Fast Track</strong> option, your paper will be published within <strong>8–12 weeks</strong>.
     `,
   },
 ];

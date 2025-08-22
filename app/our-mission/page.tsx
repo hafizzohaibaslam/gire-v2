@@ -1,11 +1,7 @@
 import HeroSection from "@/features/shared/components/HeroSection";
 import Footer from "@/features/shared/components/Footer";
 import React from "react";
-import Benefits from "@/features/why-us/components/Benefits";
-import Benefits2 from "@/features/why-us/components/Benefits2";
-import ResearchInHighSchool from "@/features/why-us/components/ResearchInHighSchool";
-import ResearchCardsList from "@/features/why-us/components/ResearchCardsList";
-import PublishDetails from "@/features/why-us/components/PublishDetails";
+import MainSection from "@/features/why-us/components/MainSection";
 
 const OurMissionPage = () => {
   return (
@@ -22,11 +18,7 @@ const OurMissionPage = () => {
           research from an early stage.
         </HeroSection.Description>
       </HeroSection.Root>
-      <Benefits />
-      <PublishDetails />
-      <Benefits2 />
-      <ResearchInHighSchool />
-      <ResearchCardsList />
+      <MainSection />
       <Footer />
     </div>
   );

@@ -29,7 +29,7 @@ const ChiefEditorCard = ({
   return (
     <div className="w-full space-y-[40px]">
       {/* Profile Card */}
-      <div className="mt-[72px] flex flex-col items-start sm:flex-row sm:items-center gap-[30px]">
+      <div className=" flex flex-col items-start sm:flex-row sm:items-center gap-[30px]">
         <Image
           src={image}
           alt="Chief Editor"

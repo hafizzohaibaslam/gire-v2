@@ -3,12 +3,37 @@ import OurProcess from "./OurProcess";
 import Image from "next/image";
 import Arrow from "@/public/submit-page/arrow.png";
 import clsx from "clsx";
+import Button from "@/features/issues/components/Button";
+import { Download } from "lucide-react";
 
 const ReviewProcess = () => {
   return (
     <div>
+      {/* Introduction */}
+      <div className="space-y-[30px]">
+        <div className="space-y-[25px]">
+          <h1 className="font-playfair-display font-semibold text-[32px] lg:text-[48px] leading-[36px] lg:leading-[46px] -tracking-[1px]">
+            Review Process
+          </h1>
+          <p className="text-normal text-[#52525B] text-[16px] leading-[24px] lg:text-[22px] lg:leading-[32px]">
+            The publication process at JSSE offers high school researchers a
+            clear, step‑by‑step roadmap for transforming their ideas into a
+            professionally published article. Designed with both rigor and
+            accessibility in mind, this process guides you from initial
+            manuscript preparation through peer review, revision, and final
+            publication—ensuring your work meets the highest academic standards
+            while fostering your growth as a scholar. Our goal is to empower you
+            with the tools, support, and confidence needed to contribute
+            original research to the global academic community.
+          </p>
+        </div>
+        <Button className="flex items-center gap-[10px]">
+          Download Guidelines
+          <Download className="w-[20px] h-[20px]" />
+        </Button>
+      </div>
       {/* Submission Process */}
-      <div className="flex items-center justify-center w-full">
+      <div className="flex items-center justify-center w-full my-[50px]">
         <div className="flex flex-col md:flex-row md:items-center md:justify-center rounded-[12px] md:rounded-full border border-gray-200 overflow-hidden shadow-sm w-full lg:w-[80%]">
           {/* Step 1 */}
           <div className="flex items-center px-6 py-4 space-x-3 w-full relative">
@@ -70,7 +95,7 @@ const ReviewProcess = () => {
         </div>
       </div>
       {/* Progress Steps */}
-      <div className="w-full lg:w-[80%] md:mx-auto px-[16px] py-[12px] grid grid-cols-1 md:grid-cols-[1fr_2fr_2fr_1fr] gap-[10px] border-[1px] border-[#00000012] rounded-[12px] lg:rounded-full my-[50px]">
+      <div className="w-full lg:w-[80%] md:mx-auto px-[16px] py-[12px] grid grid-cols-1 md:grid-cols-[1fr_2fr_2fr_1fr] gap-[10px] border-[1px] border-[#00000012] rounded-[12px] lg:rounded-full">
         {Object.entries(progressSteps).map(([key, value], index) => {
           return (
             <div
@@ -112,7 +137,7 @@ const ReviewProcess = () => {
         })}
       </div>
       {/* Our Process */}
-      <div className="space-y-[50px]">
+      <div className="space-y-[50px] mt-[50px]">
         <h1 className="font-playfair-display font-semibold text-[24px] lg:text-[48px] leading-[24px] lg:leading-[46px] text-black">
           Our Process
         </h1>

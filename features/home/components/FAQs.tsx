@@ -18,7 +18,7 @@ const FAQs = () => {
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-[40px] lg:px-[100px] mb-[120px]">
+    <div className="w-full max-w-[1440px] mx-auto px-[20px] sm:px-[40px] lg:px-[144px] mb-[120px]">
       <div className="space-y-[20px] flex flex-col items-center justify-center text-center">
         <h1 className="font-playfair-display font-semibold text-[25px] lg:text-[48px] leading-[24px] lg:leading-[46px]">
           FAQs

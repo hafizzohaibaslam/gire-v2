@@ -31,6 +31,16 @@ const FeaturesCard = ({ feature }: FeaturesCardProps) => {
         <p className="text-[#52525B] text-[20px] leading-[20px] lg:leading-[28px] font-normal">
           {feature.description}
         </p>
+        <ul className="list-disc list-inside">
+          {feature.list.map((item, index) => (
+            <li
+              key={index}
+              className="text-[#52525B] text-[20px] leading-[20px] lg:leading-[28px] font-normal"
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

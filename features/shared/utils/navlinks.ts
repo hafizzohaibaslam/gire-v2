@@ -20,6 +20,6 @@ export const navlinks = [
   },
   {
     label: "JSSE Guide",
-    href: routes.submit,
+    href: routes.jsseGuide,
   },
 ];

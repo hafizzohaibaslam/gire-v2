@@ -3,7 +3,7 @@ import React from "react";
 const CriteriaForSelectionOfManuscripts = () => {
   return (
     <div>
-      <h4 className="font-inter font-semibold text-[20px] leading-[28px]">
+      <h4 className="font-inter font-normal text-[20px] leading-[28px]">
         Manuscripts submitted to JSSE should meet the following criteria:
       </h4>
       <div className="space-y-[20px] my-[20px] ml-6">

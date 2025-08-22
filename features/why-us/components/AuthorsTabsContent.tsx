@@ -1,15 +1,17 @@
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
 import Lines from "@/public/why-us-page/lines.svg";
 import BenefitsImage from "@/public/why-us-page/benefits.png";
 import BenefitsCard from "./BenefitsCard";
-import { benefits } from "../utils/benefits";
+import Features from "./Features";
+import ResearchInHighSchool from "./ResearchInHighSchool";
+import ResearchCardsList from "./ResearchCardsList";
 import clsx from "clsx";
+import { benefits } from "../utils/benefits";
 
-const Benefits = () => {
+const AuthorsTabsContent = () => {
   return (
-    <div className="bg-white -mt-[150px] lg:-mt-[355px] px-[40px] py-[40px] lg:px-[100px] lg:py-[100px] max-w-[1440px] mx-auto">
-      {/* Heading */}
+    <div className="space-y-[50px]">
       <div className="flex flex-col items-center justify-center space-y-[16px]">
         <div className="w-fit">
           <h1 className="font-playfair-display text-black text-[30px] lg:text-[48px] leading-[38px] lg:leading-[46px] font-semibold -tracking-[1px]">
@@ -32,7 +34,7 @@ const Benefits = () => {
         </p>
       </div>
       {/* Benefits */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[20px] lg:gap-[50px] px-[40px] pt-[40px] lg:px-[100px] lg:pt-[50px] max-w-[1440px] mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[20px] lg:gap-[50px]  pt-[40px] lg:pt-[50px]">
         {/* Left Side */}
         <div>
           <Image
@@ -57,8 +59,11 @@ const Benefits = () => {
           ))}
         </div>
       </div>
+      <Features />
+      <ResearchInHighSchool />
+      <ResearchCardsList />
     </div>
   );
 };
 
-export default Benefits;
+export default AuthorsTabsContent;

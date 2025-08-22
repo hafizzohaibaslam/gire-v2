@@ -3,7 +3,7 @@ import React from "react";
 const OpenAccessPolicy = () => {
   return (
     <div>
-      <p>
+      <p className="text-normal text-[#52525B] text-[16px] leading-[24px] lg:text-[22px] lg:leading-[32px]">
         At JSSE, we follow the principle of open access by making all published
         content freely available to the public. We believe that providing
         immediate access to research accelerates global knowledge exchange and

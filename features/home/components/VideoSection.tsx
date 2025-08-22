@@ -2,7 +2,7 @@ import React from "react";
 
 const VideoSection = () => {
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-[20px] lg:px-[149px]">
+    <div className="w-full max-w-[1440px] mx-auto px-[20px] sm:px-[40px] lg:px-[149px]">
       <div className="space-y-[20px] flex flex-col items-center justify-center text-center">
         <h1 className="font-playfair-display font-semibold text-[25px] lg:text-[48px] leading-[24px] lg:leading-[46px]">
           Video Title

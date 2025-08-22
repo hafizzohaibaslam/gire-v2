@@ -37,8 +37,8 @@ const ChiefEditor = () => {
   };
 
   return (
-    <>
-      <div className="space-y-[50px] bg-white -mt-[200px] px-[40px] py-[40px] lg:px-[100px] lg:pt-[100px] max-w-[1440px] mx-auto">
+    <div className="space-y-[50px] bg-white -mt-[200px] px-[20px] py-[40px] sm:px-[40px] lg:px-[100px] lg:pt-[100px] max-w-[1440px] mx-auto">
+      <div>
         {/* Chief Editor Tabs */}
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList className="flex flex-col lg:flex-row gap-[15px] lg:items-center lg:justify-center">
@@ -56,18 +56,6 @@ const ChiefEditor = () => {
               </TabsTrigger>
             ))}
           </TabsList>
-
-          {/* Introduction */}
-          <div className="space-y-[16px] capitalize mt-[50px]">
-            <h1 className="font-playfair-display text-black text-[30px] text-center lg:text-[48px] leading-[38px] lg:leading-[46px] font-semibold -tracking-[1px]">
-              chief editor
-            </h1>
-            <p className="text-[#52525B] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry&apos;s standard dummy
-              text ever since the 1500s.
-            </p>
-          </div>
 
           {isLoading && (
             <div className="mt-[60px]">
@@ -90,7 +78,7 @@ const ChiefEditor = () => {
           <TabsContent value={activeTab}>
             <div
               id="chief-editor"
-              className="grid grid-cols-1 xl:grid-cols-2 gap-[50px]"
+              className="grid grid-cols-1 xl:grid-cols-2 gap-[20px] mt-[72px]"
             >
               {/* Card 1 */}
               {allData &&
@@ -119,7 +107,7 @@ const ChiefEditor = () => {
       </div>
       <AdvisoryBoard />
       <EditorialTeam />
-    </>
+    </div>
   );
 };
 

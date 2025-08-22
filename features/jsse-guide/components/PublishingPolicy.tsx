@@ -28,9 +28,10 @@ const PublishingPolicy = () => {
             Publishing Policy
           </h1>
           <p className="text-normal text-[#52525B] text-[16px] leading-[24px] lg:text-[22px] lg:leading-[32px]">
-            The submission process at JSSE is designed to be clear and
-            accessible, ensuring that all authors can navigate it with ease.
-            Below are the key components of the submission process:
+            Our Publishing Policy presents the core publishing policies of our
+            journal. We encourage all contributors and readers to review these
+            policies to ensure a clear understanding of our publishing
+            principles.
           </p>
         </div>
         <Button className="flex items-center gap-[10px]">

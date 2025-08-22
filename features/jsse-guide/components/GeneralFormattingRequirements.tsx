@@ -3,13 +3,8 @@ import React from "react";
 const GeneralFormattingRequirements = () => {
   return (
     <div>
-      <p className="text-[#6F6C90] text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] font-figtree font-normal">
-        Vitae congue eu consequat ac felis placerat vestibulum lectus mauris
-        ultrices. Cursus sit amet dictum sit amet justo donec enim diam
-        porttitor lacus luctus accumsan tortor posuere.
-      </p>
       {/* Table */}
-      <table className="w-full table-fixed border-collapse mt-[20px] bg-[#FCFCFC]">
+      <table className="w-full table-fixed border-collapse bg-[#FCFCFC]">
         <thead>
           <tr>
             <th className="font-poppins text-left font-medium text-[#222222] text-[20px] leading-[100%] px-[22px] py-[22px] w-1/2 border-r border-b border-gray-200">

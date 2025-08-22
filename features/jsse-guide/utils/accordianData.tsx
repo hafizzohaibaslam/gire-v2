@@ -5,7 +5,7 @@ import References from "../components/References";
 import SubmissionChecklist from "../components/SubmissionChecklist";
 import OpenAccessPolicy from "../components/open-access-policy/OpenAccessPolicy";
 import CriteriaForSelectionOfManuscripts from "../components/open-access-policy/CriteriaForSelectionOfManuscripts";
-import ReviewPolicy from "../components/open-access-policy/ReviewPolicy";
+import ReviewerPolicy from "../components/open-access-policy/ReviewerPolicy";
 import RecordKeepingAndResearchPolicy from "../components/open-access-policy/RecordKeepingAndResearchPolicy";
 import TrademarksAndServiceMarksPolicy from "../components/open-access-policy/TrademarksAndServiceMarksPolicy";
 import CopyrightNotice from "../components/open-access-policy/CopyrightNotice";
@@ -57,9 +57,9 @@ export const publishingPolicyAccordianData: AccordianData[] = [
     content: <CriteriaForSelectionOfManuscripts />,
   },
   {
-    id: "review-policy",
-    question: "Review Policy",
-    content: <ReviewPolicy />,
+    id: "reviewer-policy",
+    question: "Reviewer Policy",
+    content: <ReviewerPolicy />,
   },
   {
     id: "record-keeping-and-research-policy",

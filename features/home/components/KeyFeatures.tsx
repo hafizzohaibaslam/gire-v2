@@ -8,7 +8,7 @@ import FeaturesPopUp from "./FeaturesPopUp";
 const KeyFeatures = () => {
   const [openPopUp, setOpenPopUp] = useState<boolean>(false);
   return (
-    <div className="mt-[140px] w-full max-w-[1440px] mx-auto px-[40px] lg:px-[144px]">
+    <div className="mt-[140px] w-full max-w-[1440px] mx-auto px-[20px] sm:px-[40px] lg:px-[144px]">
       {/* Heading */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[2fr_auto] items-center justify-between">
         <div className="flex flex-col gap-[20px] w-full">
