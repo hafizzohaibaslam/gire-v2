@@ -15,10 +15,10 @@ const VideoSection = () => {
       </div>
       <div className="mt-[40px] rounded-[14px] overflow-hidden">
         <iframe
-          src="https://www.youtube.com/embed/mNzenfB3OuY"
+          src="/jsse-rev.4.m4v"
           title="YouTube video player"
           className="w-full aspect-video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         />
       </div>

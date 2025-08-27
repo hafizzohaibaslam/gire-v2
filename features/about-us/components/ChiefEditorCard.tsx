@@ -3,11 +3,6 @@ import React from "react";
 
 type ChiefEditorCardProps = {
   image: string;
-  personalInfoIcon: {
-    name: string;
-    title: string;
-    affiliation: string;
-  };
   personalInfo: {
     name: string;
     title: string;
@@ -21,7 +16,6 @@ type ChiefEditorCardProps = {
 const ChiefEditorCard = ({
   image,
   personalInfo,
-  personalInfoIcon,
   additionalInfo,
 
   bio,
@@ -39,36 +33,15 @@ const ChiefEditorCard = ({
         />
 
         <div className="w-full space-y-[8px]">
-          <div className="text-[#5C6168] text-[18px] font-normal leading-[100%] flex items-center gap-2 w-full">
-            <Image
-              src={personalInfoIcon.name}
-              alt="Email"
-              width={20}
-              height={20}
-              className="w-[20px] h-[20px] flex-shrink-0"
-            />
-            <p className="break-all">{personalInfo.name}</p>
-          </div>
-          <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%] w-full">
-            <Image
-              src={personalInfoIcon.title}
-              alt="Mobile"
-              width={20}
-              height={20}
-              className="flex-shrink-0"
-            />
-            <p className="break-all">{personalInfo.title}</p>
-          </div>
-          <div className="flex items-center gap-2 text-[#5C6168] text-[18px] font-normal leading-[100%] w-full">
-            <Image
-              src={personalInfoIcon.affiliation}
-              alt="Linkedin"
-              width={20}
-              height={20}
-              className="flex-shrink-0"
-            />
-            <p className="break-all">{personalInfo.affiliation}</p>
-          </div>
+          <p className="break-all text-[#5C6168] text-[22px] font-semibold leading-[100%] w-full font-be-vietnam-pro">
+            {personalInfo.name}
+          </p>
+          <p className="break-all text-[#5C6168] text-[20px] font-medium leading-[100%] w-full font-playfair-display">
+            {personalInfo.title}
+          </p>
+          <p className="break-all text-[#5C6168] text-[18px] font-normal leading-[100%] w-full font-poppins">
+            {personalInfo.affiliation}
+          </p>
         </div>
       </div>
 

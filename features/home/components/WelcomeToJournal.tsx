@@ -10,10 +10,12 @@ const WelcomeToJournal = () => {
             Welcome to Journal of Student Science Exploration (JSSE)
           </h2>
           <p className="text-[16px] lg:text-[24px] leading-[20px] lg:leading-[32px] font-normal">
-            A premier platform dedicated to fostering academic excellence among
+            Submit your research paper and contribute to shaping the future of
+            scientific discovery.
+            {/* A premier platform dedicated to fostering academic excellence among
             high school students from all over the world. Our journal provides a
             space for young scholars to publish their research, share innovative
-            ideas, and engage with the academic community.
+            ideas, and engage with the academic community. */}
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { publishDetails } from "../utils/publishDetails";
+import Image from "next/image";
 // import Image from "next/image";
 
 const PublishDetails = () => {
@@ -19,18 +20,15 @@ const PublishDetails = () => {
             </p>
           </div>
           <div className="flex-1">
-            <div className="w-full h-[350px] flex items-center justify-center bg-gray-200">
-              <h1 className="text-black text-[24px] lg:text-[32px] leading-[32px] lg:leading-[40px] font-semibold -tracking-[1px]">
-                Image
-              </h1>
-            </div>
-            {/* <Image
-                src={detail.image}
+            <div className="w-full h-[350px] flex items-center justify-center bg-gray-200 overflow-hidden rounded-[10px]">
+              <Image
+                src={detail.imgUrl}
                 alt={detail.title}
                 width={100}
                 height={100}
                 className="w-full h-full object-cover"
-              /> */}
+              />
+            </div>
           </div>
         </div>
       ))}

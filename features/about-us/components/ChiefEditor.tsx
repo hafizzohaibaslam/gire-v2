@@ -1,9 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Email from "@/public/about-us-page/email.svg";
-import Mobile from "@/public/about-us-page/mobile.svg";
-import Linkedin from "@/public/about-us-page/linkedin.svg";
-// import Signature from "@/public/about-us-page/signature.svg";
 import ChiefEditorCard from "./ChiefEditorCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
@@ -87,11 +83,6 @@ const ChiefEditor = () => {
                   <ChiefEditorCard
                     key={index}
                     image={editor.imgUrl}
-                    personalInfoIcon={{
-                      name: Email.src,
-                      title: Mobile.src,
-                      affiliation: Linkedin.src,
-                    }}
                     bio={editor.bio}
                     personalInfo={{
                       name: editor.name,

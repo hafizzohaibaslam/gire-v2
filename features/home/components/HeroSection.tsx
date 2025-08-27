@@ -2,15 +2,13 @@ import Header from "@/features/shared/components/Header";
 import React from "react";
 import clsx from "clsx";
 import { ArrowRight } from "lucide-react";
-import { Issue } from "./Issue";
-import { formatNumber } from "@/features/shared/utils/formatNumber";
-import { issuesData } from "@/features/home/utils/issuesData";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
     <div
       className={clsx(
-        "bg-[url('/home-page/hero-section.png')] bg-cover bg-black/50 bg-center bg-no-repeat [background-blend-mode:darken]"
+        "bg-[url('/home-page/hero-section.png')] bg-cover bg-black/50 bg-center bg-no-repeat [background-blend-mode:darken] h-[100vh] flex flex-col"
       )}
     >
       {/* Header */}
@@ -18,36 +16,28 @@ const HeroSection = () => {
       {/* Main Content */}
       <div
         className={clsx(
-          "flex-1 flex flex-col items-start justify-center pt-[150px] pb-[50px] px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
+          "flex-1 flex flex-col items-start justify-center px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
         )}
       >
-        <h1 className="font-fairplay-display font-bold text-[30px] lg:text-[60px] capitalize leading-[100%] max-w-lg">
-          A Student Voice in the World of Science
+        <h1 className="font-fairplay-display font-bold text-[30px] lg:text-[60px] capitalize leading-[100%] max-w-2xl">
+          JSSE <br /> Journal of Student Science Exploration
         </h1>
-        <p className="text-[16px] lg:text-[18px] leading-[100%] font-medium">
-          Our journal is dedicated to promoting curiosity, critical thinking,
-          and student-led research.
+        <p className="text-[16px] lg:text-[26px] leading-[120%] font-medium">
+          JSSE is an international, peer-reviewed journal that dedicated to
+          publishing original student research across the sciences. We seek to
+          advance curiosity, critical thinking, and scholarly inquiry by
+          providing a platform for young researchers worldwide.
         </p>
-        <p className="text-[16px] lg:text-[30px] leading-[100%] font-medium max-w-lg">
-          Submit your research & be part of the future of science.
-        </p>
-        <button className="cursor-pointer px-[19px] py-[14px] lg:px-[25px] lg:py-[19px] flex items-center gap-2 text-[16px] lg:text-[20px] leading-[100%] font-semibold bg-[#3385FF] border-[2px] border-[#3385FF] rounded-[38px] hover:bg-white hover:border-transparent hover:text-black transition-all duration-300">
-          Submit Now <ArrowRight className="w-[17px] h-[17px]" />
-        </button>
-        {/* Issues Section */}
-        <div className="mt-[30px] lg:mt-[60px] w-full">
-          {/* Empty Div */}
-          <div className="border-b-[2px] border-white w-full"></div>
-          <div className="mt-[16px] flex flex-col lg:flex-row lg:items-start lg:justify-start gap-8 lg:gap-[88px]">
-            {issuesData.map((issue, index) => (
-              <Issue
-                key={index}
-                title={`${formatNumber(issue.title)}`}
-                description={issue.description}
-                buttonText={issue.buttonText}
-              />
-            ))}
-          </div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4">
+          <button className="cursor-pointer px-[19px] py-[14px] lg:px-[25px] lg:py-[19px] w-fit flex items-center gap-2 text-[16px] lg:text-[20px] leading-[100%] font-semibold bg-[#3385FF] border-[2px] border-[#3385FF] rounded-[38px] hover:bg-white hover:border-transparent hover:text-black transition-all duration-300">
+            Submit Now <ArrowRight className="w-[17px] h-[17px]" />
+          </button>
+          <Link
+            href="/jsse-guide"
+            className="cursor-pointer px-[19px] py-[14px] lg:px-[25px] lg:py-[19px] w-fit flex items-center gap-2 text-[16px] lg:text-[20px] leading-[100%] font-semibold bg-[#3385FF] border-[2px] border-[#3385FF] rounded-[38px] hover:bg-white hover:border-transparent hover:text-black transition-all duration-300"
+          >
+            Submission Guidelines <ArrowRight className="w-[17px] h-[17px]" />
+          </Link>
         </div>
       </div>
     </div>

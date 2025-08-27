@@ -26,11 +26,11 @@ const Header = () => {
   return (
     <div
       className={cn(
-        "border-b-[1px] border-[#f1f1f1] p-[10px] text-white hover:bg-white hover:text-black group/2 fixed top-0 left-0 right-0 z-10 transition-colors duration-300",
+        "border-b-[1px] border-[#f1f1f1] p-[10px] text-white hover:bg-white hover:text-black group/2 z-10 transition-colors duration-300",
         scrolled ? "bg-white text-black shadow-md" : "bg-transparent text-white"
       )}
     >
-      <div className="flex justify-between items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <Image
           src={Logo2}
           alt="Logo"
