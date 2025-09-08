@@ -2,19 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Mail, Phone } from "lucide-react";
-import Facebook from "@/public/home-page/fb.svg";
-import Twitter from "@/public/home-page/twitter.svg";
 import { MapPin } from "lucide-react";
-import LinkedIn from "@/public/home-page/linkedin.svg";
 import Logo2 from "@/public/logo2.svg";
 
 const Footer = () => {
   return (
-    <div className="mt-[100px] bg-[#1A1A1A]">
+    <div className="mt-[100px] bg-[#1A1A1A] ">
       {/* Blue Section */}
       <div className="border-b-[8px] border-[#3385FF]"></div>
       {/* Footer Content */}
-      <div className="py-[60px] px-[20px] sm:px-[40px] lg:px-[100px] w-full max-w-[1440px] mx-auto">
+      <div className="py-[60px] px-[20px] sm:px-[40px] lg:px-[100px] w-full max-w-[1440px] mx-auto ">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-8 items-center justify-between">
           {/* Logo Section */}
           <div className="text-white">
@@ -45,7 +42,7 @@ const Footer = () => {
             </div>
           </div>
           {/* Home Section */}
-          <div className="text-white capitalize space-y-2">
+          <div className="text-white self-start mt-2 capitalize space-y-2">
             <h1 className="text-[24px] font-semibold">home</h1>
             <p className="text-[16px] font-normal">why JSSE</p>
             <p className="text-[16px] font-normal">issues</p>
@@ -53,26 +50,11 @@ const Footer = () => {
             <p className="text-[16px] font-normal">call of paper</p>
           </div>
           {/* Other Section */}
-          <div className="text-white capitalize space-y-2">
+          <div className="text-white self-start mt-2 capitalize space-y-2">
             <h1 className="text-[24px] font-semibold">other</h1>
             <p className="text-[16px] font-normal">current issue</p>
             <p className="text-[16px] font-normal">about us</p>
             <p className="text-[16px] font-normal">contact us</p>
-          </div>
-          {/* Links Section */}
-          <div className="text-white capitalize space-y-2">
-            <h1 className="text-[24px] font-semibold">social profiles</h1>
-            <div className="flex items-center gap-4">
-              <div className="w-[40px] h-[40px] bg-[#F7F7F880] rounded-full flex items-center justify-center">
-                <Image src={Facebook} alt="facebook" />
-              </div>
-              <div className="w-[40px] h-[40px] bg-[#F7F7F880] rounded-full flex items-center justify-center">
-                <Image src={Twitter} alt="twitter" />
-              </div>
-              <div className="w-[40px] h-[40px] bg-[#F7F7F880] rounded-full flex items-center justify-center">
-                <Image src={LinkedIn} alt="linkedin" />
-              </div>
-            </div>
           </div>
         </div>
         {/* Copyright Section */}

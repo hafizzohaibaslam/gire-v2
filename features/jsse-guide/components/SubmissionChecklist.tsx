@@ -3,7 +3,7 @@ import React from "react";
 const SubmissionChecklist = () => {
   return (
     <div>
-      <div className="font-figtree text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] font-medium text-[#6F6C90]">
+      <div className="font-figtree text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] font-medium text-[#222222]">
         <ol className="list-decimal list-inside">
           <li>Manuscript file (.doc/.docx) follows template exactly</li>
           <li>

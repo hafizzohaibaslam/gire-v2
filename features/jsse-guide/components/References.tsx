@@ -3,10 +3,10 @@ import React from "react";
 const References = () => {
   return (
     <div>
-      <h4 className="text-[#6F6C90] font-figtree font-bold text-[18px] leading-[30px]">
+      <h4 className="text-[#222222] font-figtree font-bold text-[18px] leading-[30px]">
         References
       </h4>
-      <div className="font-figtree text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] font-normal text-[#6F6C90]">
+      <div className="font-figtree text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] font-normal text-[#222222]">
         <ol className="list-decimal list-inside">
           <li>Format:</li>
           <li>Vancouver style; should be numbered sequentially</li>

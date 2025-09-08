@@ -19,7 +19,7 @@ const HeroSection = () => {
           "flex-1 flex flex-col items-start justify-center px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
         )}
       >
-        <h1 className="font-fairplay-display font-bold text-[30px] lg:text-[60px] capitalize leading-[100%] max-w-2xl">
+        <h1 className="font-fairplay-display font-bold text-[30px] lg:text-[60px] leading-[100%] max-w-2xl">
           JSSE <br /> Journal of Student Science Exploration
         </h1>
         <p className="text-[16px] lg:text-[26px] leading-[120%] font-medium">

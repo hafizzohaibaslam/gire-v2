@@ -23,7 +23,7 @@ const HeroSectionComponent = ({
       <Header />
       <div
         className={clsx(
-          "flex flex-col items-start justify-start pt-[150px] pb-[50px] px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
+          "flex flex-col items-start justify-start pt-[50px] pb-[50px] px-[20px] lg:px-[149px] text-white space-y-[25px] w-full max-w-[1440px] mx-auto"
         )}
       >
         {children}

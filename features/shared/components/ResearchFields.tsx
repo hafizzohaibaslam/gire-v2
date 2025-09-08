@@ -9,9 +9,6 @@ const ResearchFields = () => {
         <h1 className="font-playfair-display font-semibold text-[30px] lg:text-[48px] leaidng-[30px] lg:leading-[46px]">
           Research Fields
         </h1>
-        <p className="text-[#5A7184] text-[18px] font-normal leading-[32px]">
-          We explore questions in four key areas of STEM fields.
-        </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[30px]">
         {researchFields.map((field) => (

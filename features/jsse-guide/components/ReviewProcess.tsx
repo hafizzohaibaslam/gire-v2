@@ -5,6 +5,7 @@ import Arrow from "@/public/submit-page/arrow.png";
 import clsx from "clsx";
 import Button from "@/features/issues/components/Button";
 import { Download } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const ReviewProcess = () => {
   return (
@@ -100,7 +101,11 @@ const ReviewProcess = () => {
           return (
             <div
               key={key}
-              className="flex flex-row md:flex-col items-center md:items-start gap-[10px] py-4"
+              className={cn(
+                "flex flex-row md:flex-col items-center md:items-start gap-[10px] py-4 w-fit mx-auto",
+                index === 2 && "-translate-x-[60px]",
+                index === 3 && "self-center"
+              )}
             >
               <div className="md:hidden flex flex-row items-center gap-[10px]">
                 <div

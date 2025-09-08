@@ -74,7 +74,7 @@ const ChiefEditor = () => {
           <TabsContent value={activeTab}>
             <div
               id="chief-editor"
-              className="grid grid-cols-1 xl:grid-cols-2 gap-[20px] mt-[72px]"
+              className="flex flex-col lg:flex-row-reverse gap-[20px] mt-[72px]"
             >
               {/* Card 1 */}
               {allData &&

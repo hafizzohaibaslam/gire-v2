@@ -227,7 +227,7 @@ const steps = [
   {
     number: "05",
     title: "Revision (2–4 Weeks)",
-    color: "#D8C79A",
+    color: "#5B9476",
     subtitle: "Strengthen your manuscript based on reviewer feedback.",
     sections: [
       {
@@ -247,7 +247,7 @@ const steps = [
   {
     number: "06",
     title: "Final Editorial Review & Copyediting (1–2 Weeks)",
-    color: "#D8C79A",
+    color: "#5B9476",
     subtitle: "Polish language, style, and formatting before publication.",
     sections: [
       {

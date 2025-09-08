@@ -11,16 +11,10 @@ const KeyFeatures = () => {
     <div className="mt-[140px] w-full max-w-[1440px] mx-auto px-[20px] sm:px-[40px] lg:px-[144px]">
       {/* Heading */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[2fr_auto] items-center justify-between">
-        <div className="flex flex-col gap-[20px] w-full">
-          <h1 className="font-playfair-display text-black text-[24px] lg:text-[48px] leading-[30px] lg:leading-[46px] -tracking-[1px] font-semibold">
-            Key Features
-          </h1>
-          <p className="text-[#5A7184] text-[16px] lg:text-[18px] leading-[32px] font-normal max-w-3xl">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry&apos;s standard dummy
-            text ever since the 1500s.
-          </p>
-        </div>
+        <h1 className="font-playfair-display text-black text-[24px] lg:text-[48px] leading-[30px] lg:leading-[46px] -tracking-[1px] font-semibold">
+          Key Features
+        </h1>
+
         <button
           className="w-fit self-end flex items-center gap-2 text-[16px] leading-[100%] font-medium text-[#3385FF] lg:px-[26px] lg:py-[21px] px-[16px] py-[12px] border-[1px] border-[#3385FF] rounded-[48px] hover:bg-[#3385FF] hover:text-white transition-all duration-300 cursor-pointer"
           onClick={() => setOpenPopUp(true)}

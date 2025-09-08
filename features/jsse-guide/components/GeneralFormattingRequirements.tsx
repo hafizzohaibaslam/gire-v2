@@ -21,7 +21,7 @@ const GeneralFormattingRequirements = () => {
               <td className="font-poppins text-[20px] leading-[100%] font-medium px-[22px] py-[26px] align-top border-r border-b border-gray-200">
                 {row.requirement}
               </td>
-              <td className="font-figtree text-[16px] font-medium leading-[100%] px-[22px] py-[26px] border-b border-gray-200">
+              <td className="font-figtree text-[18px] font-medium leading-[100%] px-[22px] py-[26px] border-b border-gray-200">
                 {row.specification}
               </td>
             </tr>

@@ -20,15 +20,15 @@ const AdvisoryBoard = () => {
   return (
     <div id="advisory-board">
       {/* Heading */}
-      <div className="space-y-[16px] capitalize">
+      <div className="space-y-[16px]">
         <h1 className="font-playfair-display text-black text-[30px] text-center lg:text-[48px] leading-[38px] lg:leading-[46px] font-semibold -tracking-[1px]">
           Advisory Board
         </h1>
         <p className="text-[#52525B] text-center text-[16px] lg:text-[20px] leading-[28px] lg:leading-[32px] font-normal max-w-4xl mx-auto">
-          Our Advisory Board is made up of respected professors who support our
+          Our advisory board is made up of respected professors who support our
           mission of giving high school students a platform to share their
-          voices and ideas. With their experience and dedication, our Advisory
-          Board helps shape the direction of the journal and supports the
+          voices and ideas. With their experience and dedication, our advisory
+          board helps shape the direction of the journal and supports the
           development of young scholars in a meaningful way.
         </p>
       </div>
@@ -73,11 +73,6 @@ const AdvisoryBoard = () => {
             isLoadingMore={isLoading}
             handleClick={handleLoadMoreClick}
           />
-        </div>
-      )}
-      {paginatedItems.length > 0 && !hasMoreItems && (
-        <div className="mt-8 text-[#52525B] text-[16px] lg:text-[18px] leading-[28px] lg:leading-[32px] font-normal text-center">
-          All advisory boards have been loaded.
         </div>
       )}
     </div>

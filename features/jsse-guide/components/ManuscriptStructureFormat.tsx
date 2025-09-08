@@ -2,7 +2,7 @@ import React from "react";
 
 const ManuscriptStructureFormat = () => {
   return (
-    <div className="font-figtree text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] space-y-[30px] font-normal text-[#6F6C90]">
+    <div className="font-figtree text-[16px] lg:text-[18px] leading-[24px] lg:leading-[30px] space-y-[30px] font-normal text-[#222222]">
       {/* Title Page */}
       <div>
         <h4 className="font-bold">

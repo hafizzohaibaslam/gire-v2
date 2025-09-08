@@ -33,13 +33,13 @@ const ChiefEditorCard = ({
         />
 
         <div className="w-full space-y-[8px]">
-          <p className="break-all text-[#5C6168] text-[22px] font-semibold leading-[100%] w-full font-be-vietnam-pro">
+          <p className="break-all text-[#5C6168] text-[22px] font-semibold leading-[100%] w-full font-playfair-display">
             {personalInfo.name}
           </p>
           <p className="break-all text-[#5C6168] text-[20px] font-medium leading-[100%] w-full font-playfair-display">
             {personalInfo.title}
           </p>
-          <p className="break-all text-[#5C6168] text-[18px] font-normal leading-[100%] w-full font-poppins">
+          <p className="break-all text-[#5C6168] text-[18px] font-normal leading-[100%] w-full font-playfair-display">
             {personalInfo.affiliation}
           </p>
         </div>
@@ -52,7 +52,7 @@ const ChiefEditorCard = ({
         </h3>
         <div className="h-[3px] w-[200px] bg-[#5C6168]"></div>
       </div>
-      <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] sm:w-[90%] xl:max-w-lg">
+      <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] sm:w-[90%] xl:max-w-lg min-h-[220px] flex items-start">
         <p>{bio}</p>
       </div>
 
@@ -66,20 +66,6 @@ const ChiefEditorCard = ({
       <div className="mx-[40px] mt-[25px] mb-[40px] space-y-[20px] text-[#30353D] text-[18px] font-normal leading-[24px] sm:w-[90%] xl:max-w-lg">
         <p>{additionalInfo}</p>
       </div>
-
-      {/* Signature */}
-      {/* <div className="mx-[45px]">
-        <p className="capitalize text-black text-[18px] lg:text-[22px] leading-[24px] lg:leading-[28px] font-semibold">
-          signature
-        </p>
-        <Image
-          src={signature}
-          alt="Signature"
-          width={100}
-          height={100}
-          className="w-[250px] h-[100px]"
-        />
-      </div> */}
     </div>
   );
 };
