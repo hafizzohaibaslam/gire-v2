@@ -89,13 +89,13 @@ const OurProcess = () => {
                 <div className="relative -top-[5px] w-12 h-12 mr-[10px]">
                   {/* Gradient ring with shadow */}
                   <div
-                    className="absolute inset-0 rounded-full shadow-lg flex items-center justify-center"
+                    className="w-12 h-12 rounded-full shadow-lg flex items-center justify-center"
                     style={{
                       background: `linear-gradient(135deg, ${step.color}66, ${step.color})`,
                     }}
                   >
                     {/* White inner circle */}
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center relative">
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                       <span className="text-sm font-semibold text-gray-800">
                         {step.number}
                       </span>

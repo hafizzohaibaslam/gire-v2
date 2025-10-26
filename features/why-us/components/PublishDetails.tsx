@@ -14,10 +14,12 @@ const PublishDetails = () => {
             <div className="flex gap-[10px] items-start">
               <div
                 className={cn(
-                  "relative top-[7px] w-[30px] h-[30px] aspect-square  rounded-full",
+                  "relative top-[7px] w-[30px] h-[30px] aspect-square rounded-full flex items-center justify-center",
                   detail.circleColor
                 )}
-              ></div>
+              >
+                <detail.icon className="w-4 h-4 text-gray-600" />
+              </div>
 
               <h2 className="font-playfair-display text-black text-[24px] lg:text-[32px] leading-[32px] lg:leading-[40px] font-semibold -tracking-[1px]">
                 {detail.title}
@@ -27,17 +29,6 @@ const PublishDetails = () => {
               {detail.details}
             </p>
           </div>
-          {/* <div className="flex-1">
-            <div className="w-full h-[350px] flex items-center justify-center bg-gray-200 overflow-hidden rounded-[10px]">
-              <Image
-                src={detail.imgUrl}
-                alt={detail.title}
-                width={100}
-                height={100}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div> */}
         </div>
       ))}
     </div>
